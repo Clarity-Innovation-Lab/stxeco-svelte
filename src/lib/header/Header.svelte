@@ -9,14 +9,39 @@ const logout = () => {
 }
 </script>
 
+<nav class="navbar sticky-top navbar-light bg-secondary py-4">
+	<div class="container">
+	  	<a class="navbar-brand" href="/"><img src="/img/logo.png" alt="" width="30" height="24"  class="d-inline-block align-text-top pr-3"> <span class="ml-4">EcosystemDAO</span></a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="#">Home</a>
+				</li>
+				<li class="nav-item">
+				<a class="nav-link" href="#">Features</a>
+				</li>
+				<li class="nav-item">
+				<a class="nav-link" href="#">Pricing</a>
+				</li>
+				<li class="nav-item">
+				<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+  
 <header>
     <nav>
 		<span class="title">
-			<a href="/"><img width="30px" src="img/logo.png" alt="stx ecosystem dao"/></a>
+			<a href="/"><img width="30px" src="/img/logo.png" alt="stx ecosystem dao"/></a>
 		</span>
 		<span class="links">
 			<a class:active={$page.url.pathname === '/dao'} href="/dao">DAO</a>
-			<a class:active={$page.url.pathname === '/sips'} href="/sips">SIPs</a>
+			<a class:active={$page.url.pathname === '/sip-landing'} href="/sip-landing">SIPs</a>
 			{#if $StacksAuthStore.loggedIn}
 				<a on:click|preventDefault={logout} href="/">Logout</a>
 			{:else}
