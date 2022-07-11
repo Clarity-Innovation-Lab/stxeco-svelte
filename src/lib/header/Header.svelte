@@ -1,7 +1,7 @@
 <script lang="ts">
 import { page } from '$app/stores';
 import StacksAuthStore from '../../stores/StacksAuthStore.js'
-import StacksAuthService from '$lib/service/StacksAuthService.js'
+import StacksAuthService from '$lib/service/StacksAuthService'
 import WalletConnectButton from './WalletConnectButton.svelte'
 
 const logout = () => {

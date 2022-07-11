@@ -1,5 +1,5 @@
 <script>
-import StacksAuthService from '$lib/service/StacksAuthService.js'
+import StacksAuthService from '$lib/service/StacksAuthService'
 
 const login = () => {
 	StacksAuthService.login()

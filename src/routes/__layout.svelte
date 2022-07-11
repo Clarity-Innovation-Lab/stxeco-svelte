@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Buffer } from 'buffer';
 	import { onMount } from 'svelte';
-    import StacksAuthService from '$lib/service/StacksAuthService.js';
+    import StacksAuthService from '$lib/service/StacksAuthService';
 	import Header from '$lib/header/Header.svelte';
 	import '../app.css';
 	import Footer from '$lib/header/Footer.svelte';
