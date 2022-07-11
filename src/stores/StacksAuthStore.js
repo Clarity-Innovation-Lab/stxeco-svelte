@@ -5,7 +5,8 @@ import { writable } from 'svelte/store'
 
 const profile = {
     username: '',
-    loggedIn: false
+    loggedIn: false,
+    stxAddress: null
 }
 
 const StacksAuthStore = writable(profile)

@@ -3,7 +3,7 @@
 import StacksAuthStore from '../../stores/StacksAuthStore.js'
 import { AppConfig, UserSession, showConnect } from '@stacks/connect'
 
-// const network = import.meta.env.VITE_NETWORK
+const network = import.meta.env.VITE_NETWORK
 let origin = import.meta.env.VITE_ORIGIN
 if (typeof window !== 'undefined') {
   origin = window.location.origin
@@ -19,13 +19,25 @@ const userSession = new UserSession({ appConfig })
 
 const getProfile = (userSession) => {
     if (userSession.isUserSignedIn()) {
-        const profile = userSession.loadUserData()
-        profile.loggedIn = true
+        const stacksProfile = userSession.loadUserData().profile
+        const profile = {
+            username: stacksProfile.name,
+            description: stacksProfile.description,
+            loggedIn: true    
+        }
+        profile.stxAddress = (stacksProfile.stxAddress.devnet) ? stacksProfile.stxAddress.devnet : stacksProfile.stxAddress.testnet
+        if (network === 'mainnet') {
+            profile.stxAddress = stacksProfile.stxAddress.mainnet
+        } else if (network === 'testnet') {
+            profile.stxAddress = stacksProfile.stxAddress.testnet
+        }
         return profile
     } else {
         return {
+            stxAddress: '',
             username: '',
-            loggedIn: false        
+            loggedIn: false,
+            description: null     
         }
     }
 }

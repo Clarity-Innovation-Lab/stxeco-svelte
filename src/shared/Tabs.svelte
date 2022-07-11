@@ -1,17 +1,10 @@
 <script>
+// @ts-nocheck
+
     import { createEventDispatcher } from 'svelte';
 	let dispatch = createEventDispatcher();
 	export let activeItem
 	export let items
-    const handleClick = () => {
-        const person = {
-            name,
-            beltColor,
-            age,
-            id: Math.random
-        }
-        dispatch('addPerson', person)
-    }
 </script>
 
 <div class="tabs">

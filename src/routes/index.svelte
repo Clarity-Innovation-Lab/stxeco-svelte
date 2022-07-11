@@ -1,9 +1,10 @@
-<script context="module" lang="ts">
+<script context="module" lang="js">
 	export const prerender = true;
 </script>
 
-<script lang="ts">
-	import Counter from '$lib/Counter.svelte';
+<script>
+	import Card from '../shared/Card.svelte'
+	import LayoutGrid, { Cell, InnerGrid } from '@smui/layout-grid';
 </script>
 
 <svelte:head>
@@ -11,51 +12,40 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset="svelte-welcome.webp" type="image/webp" />
-				<img src="svelte-welcome.png" alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/index.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
+<LayoutGrid>
+	<Cell span={6} class="text-center">
+		<Card>
+			<h4>Ecosystem DAO</h4>
+			<p>A Contributors DAO on Stacks</p>
+			<button><a href="/stxdao/membership">Learn More</a></button>
+		</Card>
+	</Cell>
+	<Cell span={6} class="text-center">
+		<Card>
+			<h4>Stacks Improvement Proposals</h4>
+			<p>Contribute to the growth of the Stacks Network</p>
+			<button><a href="/stxdao/sip-landing">More about SIPs</a></button>
+		</Card>
+	</Cell>
+	<Cell span={6} class="text-center">
+		<Card>
+			<h4>Cast Your Vote</h4>
+			<p>Vote on network upgrades and improvements</p>
+			<button><a href="/stxdao/proposals">Learn More</a></button>
+		</Card>
+	</Cell>
+	<Cell span={6} class="text-center">
+		<Card>
+			<h4>Make a Change</h4>
+			<p>Submit a proposal</p>
+			<button><a href="/stxdao/proposals">Learn More</a></button>
+		</Card>
+	</Cell>
+</LayoutGrid>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 1;
-	}
-
-	h1 {
+	h4 {
+		color: #000;
 		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
 	}
 </style>

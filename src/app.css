@@ -62,7 +62,7 @@ p {
 }
 
 a {
-	color: var(--accent-color);
+	color: #6f09b3;
 	text-decoration: none;
 }
 
@@ -105,3 +105,48 @@ button:focus:not(:focus-visible) {
 		font-size: 2.4rem;
 	}
 }
+
+.mx-2 {
+	margin: 0 10px;
+}
+.py-2 {
+	padding: 10px 0 ;
+}
+.p-3 {
+	padding: 5px 10px;
+}
+.flex-container {
+	display: flex;
+}
+.box {
+	height: 100px;
+	min-width: 100px;
+	flex-grow: 1;
+}
+.one {
+	background: red;
+	flex-grow: 2;
+}
+.two {
+	background: green;
+}
+.three {
+	background: blue;
+}
+
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+
+.text-primary {
+	color: #6f09b3;
+}
+.text-secondary {
+	color: #0d0d0e;
+}
+.text-danger {
+    color: #e82c0a;
+  }

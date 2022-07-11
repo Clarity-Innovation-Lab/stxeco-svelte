@@ -1,11 +1,20 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vite";
+// import { defineConfig } from "vite";
 import polyfillNode from "rollup-plugin-polyfill-node";
 import inject from "@rollup/plugin-inject";
 
-export default defineConfig({
+const config = {
+  kit: {
+    vite: {
+      optimizeDeps: {
+        entries: []
+      },
+      ssr: {
+        noExternal: ['@popperjs/core', 'dayjs']
+      }
+    }
+  },
   plugins: [polyfillNode(), sveltekit()],
-
   build: {
     rollupOptions: {
       plugins: [inject({ Buffer: ["buffer", "Buffer"] })],
@@ -23,4 +32,5 @@ export default defineConfig({
       },
     },
   },
-});
+};
+export default config
