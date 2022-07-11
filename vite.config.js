@@ -5,7 +5,6 @@ import inject from "@rollup/plugin-inject";
 
 export default defineConfig({
   plugins: [polyfillNode(), sveltekit()],
-
   build: {
     rollupOptions: {
       plugins: [inject({ Buffer: ["buffer", "Buffer"] })],
