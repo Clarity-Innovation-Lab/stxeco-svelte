@@ -23,6 +23,7 @@
     "rollup-plugin-polyfill-node": "^0.10.1",
     "sass": "^1.53.0",
     "svelte": "^3.46.0",
+    "svelte-bootstrap-icons": "^2.0.1",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.7",
     "tslib": "^2.3.1",
@@ -36,6 +37,7 @@
     "autoprefixer": "^10.4.7",
     "cookie": "^0.4.1",
     "jquery": "^3.6.0",
+    "luxon": "^3.0.1",
     "micro-stacks": "^0.6.1",
     "regenerator-runtime": "^0.13.9"
   }

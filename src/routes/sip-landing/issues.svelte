@@ -1,33 +1,103 @@
 <script context="module" lang="ts">
-	export const prerender = true;
+export async function load({ fetch }) {
+	const res = await fetch(import.meta.env.VITE_CLARITYLAB_API + '/mesh/v2/gh-issues')
+	const issues = await res.json()
+	if (res.ok) {
+		return {
+			props: {
+				issues
+			}
+		}
+	} else {
+		return {
+			status: res.status,
+			error: new Error('Could not fetch issues')
+		}
+	}
+}
 </script>
 
 <script lang="ts">
-	import Counter from '$lib/Counter.svelte';
+import type { IssueType } from "../../types/stxeco.type";
+import { Alarm, ArrowUpRightCircle, CloudMoon } from "svelte-bootstrap-icons";
+import { DateTime } from 'luxon'
+import Counter from '$lib/Counter.svelte';
+export let issues:Array<IssueType>;
+const labels = (labels: any[]) => {
+    if (!labels) return ''
+    let labelNames = ''
+    labels.forEach((label) => {
+        labelNames += label.name
+    })
+    return labelNames
+}
+let numbProposals = issues.filter((o) => o.pullRequest).length
+let numbIssues = issues.filter((o) => !o.pullRequest).length
+
+$: filteredIssues = filtered
+
+let filter1 = 'issues'
+let filtered = issues
+function filter(newfilter:string) {
+	if (newfilter === 'issues') {
+		filter1 = 'issues'
+		filtered = issues.filter((o) => !o.pullRequest)
+	} else {
+		filter1 = 'proposals'
+		filtered = issues.filter((o) => o.pullRequest)
+	}
+}
+
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>SIP Suggestions</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 <section>
-	<h1>
-		<img width="40%" src="/img/svelte-welcome.png" alt="Welcome" />
-		<span class="welcome">
-			<picture>
-				<source srcset="svelte-welcome.webp" type="image/webp" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/index.svelte</strong>
-	</h2>
-
-	<Counter />
+	<div class="container">
+		<div class="row">
+			<div class="col-12 text-small">
+				<span class={(filter1==='issues') ? 'text-info pointer mr-3' : 'pointer mr-3'} on:click={() => {filter('issues')}}>Suggestions ({numbIssues})</span>
+				<span class={(filter1==='proposals') ? 'text-info pointer mr-3' : 'pointer mr-3'} on:click={() => {filter('proposals')}}>Proposals ({numbProposals})</span>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<table class="table table-striped text-small">
+					<thead>
+					  <tr>
+						<th scope="col">Title</th>
+						<th scope="col">State</th>
+						<th scope="col">Comments</th>
+						<th scope="col">Date</th>
+						<th scope="col">Actions</th>
+					  </tr>
+					</thead>
+					<tbody>
+						{#each filteredIssues as issue}
+						<tr>
+						<th scope="row" class="py-3">{issue.title}</th>
+						<td class="py-3">{ labels(issue.labels) }</td>
+						<td class="py-3">{issue.comments.length}</td>
+						<td class="py-3">{(!issue.createdAt) ? '' : DateTime.fromMillis(issue.createdAt).toLocaleString({ month: 'short', day: '2-digit', year: '2-digit' })}</td>
+						<td class="py-3">
+							<a target="_blank" class="mr-2 text-info" href={issue.htmlUrl}>
+								<span data-bs-toggle="tooltip" data-bs-placement="top" title="View on GitHub">
+									<ArrowUpRightCircle fill="purple" width={20} height={20} />
+								</span>
+							</a>
+						</td>
+					</tr>
+					{/each}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </section>
 
 <style>
@@ -37,25 +107,5 @@
 		justify-content: center;
 		align-items: center;
 		flex: 1;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
 	}
 </style>
