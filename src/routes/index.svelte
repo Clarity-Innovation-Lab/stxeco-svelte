@@ -3,12 +3,11 @@
 </script>
 
 <script lang="ts">
-	import Counter from '$lib/Counter.svelte';
 </script>
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" content="Ecosystem DAO" />
 </svelte:head>
 
 <section>
@@ -19,15 +18,7 @@
 				<img src="svelte-welcome.png" alt="Welcome" />
 			</picture>
 		</span>
-
-		to your new<br />SvelteKit app
 	</h1>
-
-	<h2>
-		try editing <strong>src/routes/index.svelte</strong>
-	</h2>
-
-	<Counter />
 </section>
 
 <style>

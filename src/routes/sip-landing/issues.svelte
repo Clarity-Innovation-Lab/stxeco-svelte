@@ -19,9 +19,8 @@ export async function load({ fetch }) {
 
 <script lang="ts">
 import type { IssueType } from "../../types/stxeco.type";
-import { Alarm, ArrowUpRightCircle, CloudMoon } from "svelte-bootstrap-icons";
+import { ArrowUpRightCircle } from "svelte-bootstrap-icons";
 import { DateTime } from 'luxon'
-import Counter from '$lib/Counter.svelte';
 export let issues:Array<IssueType>;
 const labels = (labels: any[]) => {
     if (!labels) return ''
