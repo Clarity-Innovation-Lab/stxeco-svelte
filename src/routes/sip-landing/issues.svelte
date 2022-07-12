@@ -34,6 +34,9 @@ const labels = (labels: any[]) => {
 let numbProposals = issues.filter((o) => o.pullRequest).length
 let numbIssues = issues.filter((o) => !o.pullRequest).length
 
+let menuClasses = 'border-right pointer pl-5 '
+$: issueClassList = (filter1 === 'issues') ? menuClasses + ' text-danger' : menuClasses
+$: propClassList = (filter1 === 'issues') ? menuClasses : menuClasses + ' text-danger'
 $: filteredIssues = filtered
 
 let filter1 = 'issues'
@@ -59,8 +62,8 @@ function filter(newfilter:string) {
 	<div class="container">
 		<div class="row">
 			<div class="col-12 text-small">
-				<span class={(filter1==='issues') ? 'text-info pointer mr-3' : 'pointer mr-3'} on:click={() => {filter('issues')}}>Suggestions ({numbIssues})</span>
-				<span class={(filter1==='proposals') ? 'text-info pointer mr-3' : 'pointer mr-3'} on:click={() => {filter('proposals')}}>Proposals ({numbProposals})</span>
+				<span class={issueClassList} on:click={() => {filter('issues')}}>Suggestions ({numbIssues})</span>
+				<span class={propClassList} on:click={() => {filter('proposals')}}>Proposals ({numbProposals})</span>
 			</div>
 		</div>
 	</div>

@@ -21,7 +21,7 @@
 
 <Header />
 
-<main>
+<main class="my-5" style="min-height: 70vh; background-size: contain;">
   <slot />
 </main>
 
@@ -39,21 +39,4 @@
     box-sizing: border-box;
   }
 
-  footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-  }
-
-  footer a {
-    font-weight: bold;
-  }
-
-  @media (min-width: 480px) {
-    footer {
-      padding: 40px 0;
-    }
-  }
 </style>

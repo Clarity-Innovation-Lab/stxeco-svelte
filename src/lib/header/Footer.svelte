@@ -5,7 +5,7 @@
   
   </script>
   
-  <div class="border-top bg-light">
+  <div class="footer border-top bg-light">
   <div>
     <div class="container-fluid text-left pt-3">
       <div class="row">
@@ -65,14 +65,14 @@
   </div>
   
   <style>
+    .footer {
+      margin: auto 0px 0px 0px;
+    }
     .footer-end {
       background: #fff;
       text-align: center;
       padding: 0;
       margin: 0;
-    }
-    .footer-style {
-      background: #aeaeae;
     }
     .demo-div {
       height: 40px;

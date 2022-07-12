@@ -20,24 +20,16 @@
 </svelte:head>
 
 <div class="content">
-	<h1>About this app</h1>
+	<h1>About Ecosystem DAO</h1>
 
 	<p>
-		This is a <a href="https://kit.svelte.dev">SvelteKit</a> app. You can make your own by typing the
-		following into your command line and following the prompts:
-	</p>
-
-	<pre>npm init svelte</pre>
-
-	<p>
-		The page you're looking at is purely static HTML, with no client-side interactivity needed.
-		Because of that, we don't need to load any JavaScript. Try viewing the page's source, or opening
-		the devtools network panel and reloading.
+		Ecosystem DAO is a project that's all about bvuilding the foundations for a new
+		fairer and more secure Internet.
 	</p>
 
 	<p>
-		The <a href="/todos">TODOs</a> page illustrates SvelteKit's data loading and form handling. Try using
-		it with JavaScript disabled!
+		The DAO - Decentralised Autonomous Organisation - helps create consensus between
+		groups of people working often remotely.
 	</p>
 </div>
 
