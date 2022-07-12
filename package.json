@@ -20,6 +20,7 @@
     "buffer": "^6.0.3",
     "eslint": "^8.16.0",
     "eslint-plugin-svelte3": "^4.0.0",
+    "prettier": "^2.7.1",
     "rollup-plugin-polyfill-node": "^0.10.1",
     "sass": "^1.53.0",
     "svelte": "^3.46.0",

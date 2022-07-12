@@ -1,8 +1,8 @@
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 
 const StacksAuthStore = writable({
-    loggedIn: false,
-    stxAddress: null
-})
+  loggedIn: false,
+  stxAddress: null,
+});
 
-export default StacksAuthStore
+export default StacksAuthStore;
