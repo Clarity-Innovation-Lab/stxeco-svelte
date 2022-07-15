@@ -9,7 +9,13 @@ const logout = () => {
 }
 </script>
 
-<nav class="navbar navbar-expand-sm sticky-top navbar-light bg-warning py-4">
+<div class="container-fluid px-0">
+	<div class="bg-danger text-light py-0 text-center under-construction">
+		Under Constructions - <a class="text-light" href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank">contributions welcome via discord!</a>
+	</div>
+</div>
+
+<nav class="navbar navbar-expand-sm navbar-light bg-warning py-4">
 	<div class="container">
 	  	<a class="navbar-brand" href="/"><img src="/img/logo.png" alt="" width="30" height="24"  class="d-inline-block align-text-top pr-3"> <span class="mx-3">Eco-system-DAO</span></a>
 		  <span class="nav-item"><a class:text-danger={$page.url.pathname === '/about'} href="/about">About</a></span>
@@ -33,6 +39,14 @@ const logout = () => {
 		</div>
 	</div>
 </nav>
+
+{#if $page.url.pathname.indexOf('/dao') > -1}
+<div class="bg-light text-dark py-2 text-center text-small">
+	<span class="px-3 border-right nav-item"><a class:active={$page.url.pathname.indexOf('/dao/proposal') > -1} href="/dao/proposals">Proposals</a></span>
+	<span class="px-3 border-right nav-item"><a class:active={$page.url.pathname.indexOf('/dao/extension') > -1} href="/dao/extensions">Extension</a></span>
+	<span class="px-3 nav-item"><a class:active={$page.url.pathname.indexOf('/strategy') > -1} href="/dao/strategy">Launch Plans</a></span>
+</div>
+{/if}
 
 <style>
 	nav {

@@ -19,6 +19,10 @@ With options
 
 See also dev notes below for instructions on polyfilling Buffer into webpack 5.
 
+### File Structure
+
+The application is structured according to [this](https://kit.svelte.dev/docs/project-structure).
+
 ## Developing
 
 Clone the repo and install dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:

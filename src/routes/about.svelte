@@ -13,6 +13,12 @@
 	// it so that it gets served as a static asset in prod
 	export const prerender = true;
 </script>
+<script>
+// @ts-nocheck
+
+	  import settings from '$lib/settings'
+
+</script>
 
 <svelte:head>
 	<title>About</title>
@@ -31,6 +37,27 @@
 		The DAO - Decentralised Autonomous Organisation - helps create consensus between
 		groups of people working often remotely.
 	</p>
+	<h4>User Properties</h4>
+	{#if $settings.userProperties}
+	{#each $settings.userProperties as item}
+	<p>{item.functionName} = {item.value.value}</p>
+	{/each}
+	{/if}
+	<p>--------------------------------------------</p>
+	<h4>Dao Properties</h4>
+	{#each $settings.daoProperties as item}
+	<p>{item.id} = {item.value}</p>
+	{/each}
+	<p>--------------------------------------------</p>
+	<h4>Proposals</h4>
+	{#each $settings.proposals as item}
+	<p>{item.title}</p>
+	{/each}
+	<p>--------------------------------------------</p>
+	<h4>Extensions</h4>
+	{#each $settings.extensions as item}
+	<p>{item.contract.contract_id}</p>
+	{/each}
 </div>
 
 <style>

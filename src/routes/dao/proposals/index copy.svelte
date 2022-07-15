@@ -1,40 +1,40 @@
-<script lang="ts">
-  import settings from '$lib/settings'
-	import Modal from '$lib/shared/Modal.svelte';
+<script context="module" lang="ts">
+  export async function load({ fetch }) {
+    const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposals'
+    const res = await fetch(url)
+    const proposals = await res.json()
+    if (res.ok) {
+      return {
+        props: {
+          proposals
+        }
+      }
+    } else {
+      return {
+        status: res.status,
+        error: new Error('Could not fetch proposals')
+      }
+    }
+  }
+  </script>
+  
+  <script lang="ts">
   import type { ProposalType } from "../../../types/stxeco.type";
   import { ArrowUpRightCircle } from "svelte-bootstrap-icons";
+  import settings from '$lib/settings';
   import { DateTime } from 'luxon'
-
-  let item;
-  let showModal;
-	const toggleModal = () => {
-		showModal = !showModal
-	}
-
-  const openSesame = (currentItem) => {
-    item = currentItem;
-    toggleModal();
-  }
+  export let proposals:Array<ProposalType>;
+  console.log(proposals)
   const canPropose = () => {
       return true
   }    
   </script>
   
   <svelte:head>
-    <title>DAO Proposals</title>
-    <meta name="description" content="Ecosystem DAO proposals" />
+    <title>SIP Suggestions</title>
+    <meta name="description" content="Svelte demo app" />
   </svelte:head>
   
-  <Modal {showModal} on:click={toggleModal}>
-    <div class="source-modal"><pre style="width: 95%">{item.proposalContract.source_code}</pre></div>
-    <div slot="title">
-      <h3>Proposal: {item.proposalContract.contract_id.split('.')[1]}</h3>
-    </div>
-  </Modal>
-  
-  <section>
-  </section>
-
   <section>
     <div></div>
     <div class="container">
@@ -51,15 +51,15 @@
               </tr>
             </thead>
             <tbody>
-              {#each $settings.proposals as item}
+              {#each proposals as item}
               <tr>
-              <th scope="row" class="py-3"><span on:click={() => { openSesame(item) }} class="pointer mr-2 text-info">{item.proposalContract.contract_id.split('.')[1]}</span></th>
+              <th scope="row" class="py-3"><a class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>{item.title}</a></th>
               <td class="py-3">{item.status}</td>
               <td class="py-3">{item.proposer}</td>
               <td class="py-3">{(!item.created) ? '' : DateTime.fromMillis(item.created).toLocaleString({ month: 'short', day: '2-digit', year: '2-digit' })}</td>
               <td class="py-3">
-                <a class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>
-                  <span data-bs-toggle="tooltip" data-bs-placement="top" title="Open proposal">
+                <a target="_blank" class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>
+                  <span data-bs-toggle="tooltip" data-bs-placement="top" title="View on GitHub">
                     <ArrowUpRightCircle fill="purple" width={20} height={20} />
                   </span>
                 </a>
@@ -74,7 +74,6 @@
   </section>
   
   <style>
-    /**
     section {
       display: flex;
       flex-direction: column;
@@ -82,6 +81,5 @@
       align-items: center;
       flex: 1;
     }
-    **/
   </style>
   
