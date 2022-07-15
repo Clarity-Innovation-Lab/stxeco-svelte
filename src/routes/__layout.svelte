@@ -8,6 +8,8 @@
     import Footer from "$lib/header/Footer.svelte";
     import { page } from "$app/stores";
 
+    let bootstrap;
+
     if (typeof window !== "undefined") {
       // @ts-ignore
       window.Buffer = Buffer;
@@ -15,6 +17,7 @@
     let appInitialized:boolean
     onMount(async () => {
       try {
+        //bootstrap = (await import('bootstrap'));
           StacksAuthService.updateLoginStatus();
           await settings.init()           
           appInitialized = true

@@ -34,6 +34,13 @@ npm run dev
 npm run dev -- --open
 ```
 
+### Prettyfying
+
+```node
+> npx prettier --check .
+> npx prettier --write .
+```
+
 ## Building
 
 To create a production version of your app:
