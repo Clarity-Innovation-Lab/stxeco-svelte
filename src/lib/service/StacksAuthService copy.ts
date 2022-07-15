@@ -2,10 +2,15 @@
 // @ts-nocheck
 import StacksAuthStore from '../../stores/StacksAuthStore.js';
 // import { client } from './micro-stacks-client.ts';
-import settings from '$lib/settings'
-import { AppConfig, UserSession, showConnect, authenticate } from '@stacks/connect'
-const appConfig = new AppConfig(['store_write', 'publish_data'])
-const userSession = new UserSession({ appConfig })
+import settings from '$lib/settings';
+import {
+  AppConfig,
+  UserSession,
+  showConnect,
+  authenticate,
+} from '@stacks/connect';
+const appConfig = new AppConfig(['store_write', 'publish_data']);
+const userSession = new UserSession({ appConfig });
 
 interface Profile {
   username: string;
@@ -52,10 +57,10 @@ const StacksAuthService = {
           return getProfile();
         });
       },
-      appDetails: defDetails
-    }
+      appDetails: defDetails,
+    };
     showConnect(authOptions);
-    settings.init()
+    settings.init();
   },
   logout: async function () {
     if (userSession.isUserSignedIn()) {
@@ -63,14 +68,14 @@ const StacksAuthService = {
       StacksAuthStore.update(() => {
         return getProfile();
       });
-      settings.init()
+      settings.init();
     }
   },
   updateLoginStatus: function () {
     StacksAuthStore.update(() => {
       return getProfile();
     });
-  }
+  },
 };
 
 export default StacksAuthService;

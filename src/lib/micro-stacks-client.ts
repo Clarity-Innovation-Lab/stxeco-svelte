@@ -15,11 +15,11 @@ const config: ClientConfig = {
 const client = createClient({ config });
 
 if (network === 'testnet') {
-  client.setNetwork('testnet')
+  client.setNetwork('testnet');
 } else if (network === 'local') {
-  client.setNetwork(new StacksMocknet())
+  client.setNetwork(new StacksMocknet());
 } else {
-  client.setNetwork('mainnet')
+  client.setNetwork('mainnet');
 }
 
 export { client };

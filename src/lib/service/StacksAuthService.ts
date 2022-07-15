@@ -2,7 +2,7 @@
 // @ts-nocheck
 import StacksAuthStore from '../../stores/StacksAuthStore.js';
 import { client } from '$lib/micro-stacks-client.ts';
-import settings from '$lib/settings'
+import settings from '$lib/settings';
 
 interface Profile {
   username: string;
@@ -41,7 +41,7 @@ const StacksAuthService = {
     StacksAuthStore.update(() => {
       return getProfile();
     });
-    settings.init()
+    settings.init();
   },
   logout: async function () {
     if (client.hasSession) {
@@ -49,14 +49,14 @@ const StacksAuthService = {
       StacksAuthStore.update(() => {
         return getProfile();
       });
-      settings.init()
+      settings.init();
     }
   },
   updateLoginStatus: function () {
     StacksAuthStore.update(() => {
       return getProfile();
     });
-  }
+  },
 };
 
 export default StacksAuthService;
