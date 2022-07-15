@@ -15,7 +15,7 @@ const logout = () => {
 	</div>
 </div>
 
-<nav class="navbar navbar-expand-sm navbar-light bg-warning py-4">
+<nav class="navbar navbar-expand-sm sticky-top navbar-light bg-warning py-4">
 	<div class="container">
 	  	<a class="navbar-brand" href="/"><img src="/img/logo.png" alt="" width="30" height="24"  class="d-inline-block align-text-top pr-3"> <span class="mx-3">Eco-system-DAO</span></a>
 		  <span class="nav-item"><a class:text-danger={$page.url.pathname === '/about'} href="/about">About</a></span>
