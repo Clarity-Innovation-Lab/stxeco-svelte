@@ -90,6 +90,7 @@ $stylish:    #4B515D !default;
 $blue:    #283593 !default;
 $brown:   #795548 !default;
 $indigo:  #5154A1 !default;
+$stxeco-indigo:  #a98e9f !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
 $red:     #C92E11 !default; //#dc3545 !default;
@@ -135,7 +136,7 @@ $colors: map-merge(
 );
 
 $primary:       $stylish !default;
-$secondary:     $indigo !default;
+$secondary:     $stxeco-indigo !default;
 $success:       $stxeco-teal !default;
 $info:          $stxeco-cyan !default; //$cyan !default;
 $warning:       $stxeco-yellow !default;

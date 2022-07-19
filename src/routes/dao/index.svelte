@@ -1,7 +1,7 @@
 <script lang="ts">
   import settings from '$lib/settings'
 	import CardWithParams from '../../shared/CardWithParams.svelte'
-  import { client } from '$lib/micro-stacks-client.ts';
+  // import { client } from '$lib/micro-stacks-client.ts';
   import { contractPrincipalCV, tupleCV } from 'micro-stacks/clarity';
   import { PostConditionMode } from 'micro-stacks/transactions';
   import { TxType } from '@micro-stacks/client';

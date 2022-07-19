@@ -44,6 +44,9 @@
 	{/each}
 	{/if}
 	<p>--------------------------------------------</p>
+	<h4>Blockchain Info</h4>
+	Stacks Tip Height: {($settings.info.stacks_tip_height)}
+	<p>--------------------------------------------</p>
 	<h4>Dao Properties</h4>
 	{#each $settings.daoProperties as item}
 	<p>{item.id} = {item.value}</p>

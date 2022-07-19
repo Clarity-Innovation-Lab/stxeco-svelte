@@ -53,19 +53,19 @@
             <tbody>
               {#each proposals as item}
               <tr>
-              <th scope="row" class="py-3"><a class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>{item.title}</a></th>
-              <td class="py-3">{item.status}</td>
-              <td class="py-3">{item.proposer}</td>
-              <td class="py-3">{(!item.created) ? '' : DateTime.fromMillis(item.created).toLocaleString({ month: 'short', day: '2-digit', year: '2-digit' })}</td>
-              <td class="py-3">
-                <a target="_blank" class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>
-                  <span data-bs-toggle="tooltip" data-bs-placement="top" title="View on GitHub">
-                    <ArrowUpRightCircle fill="purple" width={20} height={20} />
-                  </span>
-                </a>
-              </td>
-            </tr>
-            {/each}
+                <th scope="row" class="py-3"><a class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>{item.title}</a></th>
+                <td class="py-3">{item.status}</td>
+                <td class="py-3">{item.proposer}</td>
+                <td class="py-3">{(!item.created) ? '' : DateTime.fromMillis(item.created).toLocaleString({ month: 'short', day: '2-digit', year: '2-digit' })}</td>
+                <td class="py-3">
+                  <a target="_blank" class="mr-2 text-info" href={'/dao/proposals/' + item.contractId}>
+                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="View on GitHub">
+                      <ArrowUpRightCircle fill="purple" width={20} height={20} />
+                    </span>
+                  </a>
+                </td>
+              </tr>
+              {/each}
             </tbody>
           </table>
         </div>

@@ -1,5 +1,6 @@
 import { writable, get } from 'svelte/store';
-import authService from '$lib/service/StacksAuthService';
+//import authService from '$lib/service/StacksAuthService';
+import type { SettingsType } from "../types/stxeco.type";
 
 function createStore() {
   const initialValue = {};
@@ -9,23 +10,23 @@ function createStore() {
   return {
     subscribe,
 
-    async init() {
+    async init(stxAddress:string|null) {
       let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/dao-data';
-      if (authService.getProfile().loggedIn) {
+      if (stxAddress) {
         url =
           import.meta.env.VITE_CLARITYLAB_API +
           '/daoapi/v2/dao-data/' +
-          authService.getProfile().stxAddress;
+          stxAddress;
       }
       const res = await fetch(url);
       const daoData = await res.json();
       if (res.ok) set(daoData);
     },
 
-    changeSetting(key: string, value: any) {
+    changeSetting(key: string, value: SettingsType) {
       if (!key) return;
-      const storeValue: any = get(this);
-      storeValue[key] = value;
+      let storeValue: SettingsType = get(this);
+      storeValue = value;
       update((_) => storeValue);
     },
   };
