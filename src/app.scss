@@ -83,4 +83,25 @@ button:focus:not(:focus-visible) {
   text-align: left;
   color: #000;
   background: white;
+  border: 1pt solid #aeaeae;
+  border-radius: 10px;
+}
+.source-code {
+  padding: 10px 10px;
+  overflow-y: auto;
+  min-height: 600px;
+  border-radius: 10px;
+  text-align: left;
+  color: #000;
+  background: #cecece;
+  border: 1pt solid #aeaeae;
+  border-radius: 10px;
+}
+.content {
+  width: 100%;
+  max-width: var(--column-width);
+  margin: var(--column-margin-top) auto 0 auto;
+}
+.outline-light {
+  border: 1pt solid #ccc!important;
 }

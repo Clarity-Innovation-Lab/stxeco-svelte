@@ -1,50 +1,37 @@
 <script lang="ts">
-  import settings from '$lib/settings'
+  import settings from '$lib/settings';
 	import Modal from '$lib/shared/Modal.svelte';
   //import { Tooltip, Toast, Popover } from 'bootstrap';
   import { Gear, ArrowUpRightCircle, CodeSlash } from "svelte-bootstrap-icons";
   import { goto } from '$app/navigation';
-  import type { ProposalType, DaoPropertyType } from "../../../types/stxeco.type";
+  import type { ProposalType } from "../../../types/stxeco.type";
   import {tick, onMount} from 'svelte'
-  import StacksAuthStore from '../../../stores/StacksAuthStore.js'
 
   let showModal:boolean;
 	const toggleModal = () => {
-		showModal = !showModal
+		showModal = !showModal;
 	}
 
-  const emergencia = import.meta.env.VITE_DAO_EMERGENCY_TEAM;
   const network = import.meta.env.VITE_NETWORK;
   const explorer = import.meta.env.VITE_STACKS_EXPLORER;
 
   const contractUrl = (txId:string) => {
-      return explorer + '/txid/' + txId + '?chain=' + network
+      return explorer + '/txid/' + txId + '?chain=' + network;
   }
 
-  const executiveTeam = emergencia.indexOf($StacksAuthStore.stxAddress) > -1
   let item:ProposalType;
-  const hasSufficientBalance = (currentItem:ProposalType) => {
-    const userProps = $settings.userProperties
-    const hasBalance = userProps.find((o) => o.functionName === 'edg-has-percentage-balance').value.value
-    return hasBalance
-    /**
-    const daoProps = $settings.daoProperties
-    const tokeBalance = userProps.find((o) => o.functionName === 'edg-get-balance').value.value
-    const tokenBalanceLocked = userProps.find((o) => o.functionName === 'edg-get-locked').value.value
-    const proposeFactor = daoProps.find((o) => o.id === 'propose-factor').value
-    return (tokeBalance + tokenBalanceLocked) * (proposeFactor.value) >= tokeBalance * 1000
-    **/
-  }
   const openSesame = (currentItem:ProposalType) => {
     item = currentItem;
     toggleModal();
   }
   const openProposal = (currentItem:ProposalType) => {
-    item = currentItem;
     goto(`/dao/proposals/${item.contractId}`, { replaceState: false }) 
   }
-  const submitProposal = () => {
-    goto('/dao/proposal-submission', { replaceState: false }) 
+  const submitProposal = (currentItem:ProposalType) => {
+    goto(`/dao/proposals/${currentItem.contractId}`, { replaceState: false }) 
+  }
+  const deployProposal = () => {
+    goto('/dao/proposals/deployment', { replaceState: false }) 
   }
   const getStatusMessage = (proposal:ProposalType) => {
     const stacksTipHeight = $settings.info.stacks_tip_height
@@ -106,11 +93,11 @@
 
   <section>
     <div class="container">
-      {#if hasSufficientBalance}
-        <a class="dropdown-item" href="/" on:click|preventDefault={() => { submitProposal() }}>Submit a Proposal</a>
-      {:else}
-        <span class="dropdown-item">Insufficient balance in this account to submit proposals</span>
-      {/if}
+      <div class="d-flex justify-content-end mb-4">
+        <button class="btn success" on:click|preventDefault={() => { deployProposal() }}>
+          Submit a Proposal
+        </button>
+      </div>
 
       <div class="row">
         <div class="col-12">
@@ -138,13 +125,10 @@
                       <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}><CodeSlash fill="purple" width={20} height={20} /> Show Clarity Source Code</a>
                       <a class="dropdown-item mb-2 border-bottom pointer text-info" href={contractUrl(item.contractId)} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Show on Explorer</a>
                       <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Open Proposal</a>
-                      {#if !item.proposalData && hasSufficientBalance}
-                      <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/dao/proposals/submissions" data-bs-toggle="tooltip" data-bs-placement="top" title={getStatusTip(item.status)}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Submit Proposal</a>
+                      {#if item.status !== 'deployed'}
+                      <span class="dropdown-item mb-2 border-bottom pointer text-info text-center" data-bs-toggle="tooltip" data-bs-placement="top" title={getStatusTip(item.status)}>**{getStatusMessage(item)}**</span>
                       {:else}
-                      <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }} target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title={getStatusTip(item.status)}>{getStatusMessage(item)}</a>
-                      {/if}
-                      {#if executiveTeam}
-                      <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }} data-bs-toggle="tooltip" data-bs-placement="top" title="Emergency proposals can only be sumbitted by executive team members"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Emergency Proposal</a>
+                      <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Submit Proposal</a>
                       {/if}
                     </div>
                   </div>

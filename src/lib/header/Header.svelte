@@ -3,6 +3,7 @@ import { page } from '$app/stores';
 import StacksAuthStore from '../../stores/StacksAuthStore.js'
 import StacksAuthService from '$lib/service/StacksAuthService'
 import WalletConnectButton from './WalletConnectButton.svelte'
+import { Tools } from "svelte-bootstrap-icons";
 
 const logout = () => {
 	StacksAuthService.logout()
@@ -10,8 +11,8 @@ const logout = () => {
 </script>
 
 <div class="container-fluid px-0">
-	<div class="bg-danger text-light py-0 text-center under-construction">
-		Under Constructions - <a class="text-light" href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank">contributions welcome via discord!</a>
+	<div class="bg-danger py-2 text-light py-0 text-center under-construction">
+		<Tools /> Under construction - <a class="text-light" href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank">contributions welcome via discord!</a>
 	</div>
 </div>
 

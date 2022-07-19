@@ -1,22 +1,20 @@
 import { writable, get } from 'svelte/store';
 //import authService from '$lib/service/StacksAuthService';
-import type { SettingsType } from "../types/stxeco.type";
+import type { SettingsType } from "src/types/stxeco.type";
+import authService from '$lib/service/StacksAuthService';
 
 function createStore() {
-  const initialValue = {};
+  const initialValue:SettingsType = {};
   // destructure the store on creation to have 'direct access' to methods
   const { subscribe, update, set } = writable(initialValue);
 
   return {
     subscribe,
 
-    async init(stxAddress:string|null) {
+    async init() {
       let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/dao-data';
-      if (stxAddress) {
-        url =
-          import.meta.env.VITE_CLARITYLAB_API +
-          '/daoapi/v2/dao-data/' +
-          stxAddress;
+      if (authService.getProfile().loggedIn) {
+        url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/dao-data/' + authService.getProfile().stxAddress
       }
       const res = await fetch(url);
       const daoData = await res.json();

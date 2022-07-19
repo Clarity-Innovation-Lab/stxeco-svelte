@@ -28,10 +28,10 @@ export type IssueType = {
   comments: Array<string>;
 };
 export type Contract = {
-  tx_id: string | null | undefined;
-  source_code: string;
-  block_height: number;
-  contract_id: string;
+  tx_id?: string | null | undefined;
+  source_code?: string;
+  block_height?: number;
+  contract_id?: string;
 };
 export type ProposalData = {
   votesFor: number;
@@ -43,11 +43,17 @@ export type ProposalData = {
   passed: boolean;
 };
 export type ProposalType = {
+  deployTxId?: string|null;
+  submitTxId?: string|null;
   title: string;
   contractId: string;
   created: number;
-  proposer: Array<string>;
+  updated: number;
+  proposer: string|null;
   status: string;
   contract:Contract;
-  proposalData:ProposalData;
+  proposalData?:ProposalData;
+  githubIssue?: string;
+  githubPullRequest?: string;
+  description?: string;
 };
