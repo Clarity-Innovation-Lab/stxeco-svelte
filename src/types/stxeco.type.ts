@@ -8,7 +8,9 @@ export type SettingsType = {
 export type UserPropertyType = {
   id: string | null | undefined;
   stxAddress: string;
-  value: any;
+  value: {
+    value: string|number;
+  };
   contractName: string;
   functionName: string;
 };
@@ -56,4 +58,5 @@ export type ProposalType = {
   githubIssue?: string;
   githubPullRequest?: string;
   description?: string;
+  startHeight?:number;
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import StacksAuthStore from '../../../stores/StacksAuthStore.js'
+  import StacksAuthStore from '../../../stores/StacksAuthStore'
   import settings from '$lib/settings';
   import { DateTime } from 'luxon'
   import { client } from '$lib/micro-stacks-client';
@@ -12,7 +12,7 @@
   const emergencia = import.meta.env.VITE_DAO_EMERGENCY_TEAM;
   const executiveTeam = emergencia.indexOf($StacksAuthStore.stxAddress) > -1;
   const percentageBal = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance');
-  const canSubmit = percentageBal?.value.vlaue || false;
+  const canSubmit = percentageBal?.value.value || false;
 
   let showNoop = false;
   let showFromFile = false;

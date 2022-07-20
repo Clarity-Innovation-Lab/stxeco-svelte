@@ -79,7 +79,7 @@
 		text-align: left;
 	}
 	.form-field {
-		margin: 18px auto;
+		margin: 10px auto;
 	}
 	textarea {
 		width: 100%;

@@ -9,37 +9,47 @@
   import { TxType } from '@micro-stacks/client';
 
 	let contractId = $page.params.contractId;
-	let stacksTipHeight = $settings.info.stacks_tip_height;
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
 
-  const totalSupply = $settings.daoProperties?.find((o) => o.id === 'get-total-supply').value;
-  const proposalDuration = $settings.daoProperties?.find((o) => o.id === 'proposal-duration').value;
-  const tokenBalance = $settings.userProperties?.find((o) => o.functionName === 'edg-get-balance').value.value
-  const tokenBalanceLocked = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked').value.value
-  const totalDelegatedToMe = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-total-delegated').value.value
+	const stacksTipHeight = $settings.info.stacks_tip_height;
+  let obj = $settings.daoProperties?.find((o) => o.id === 'get-total-supply');
+  const totalSupply = obj?.value || 0;
+  obj = $settings.daoProperties?.find((o) => o.id === 'proposal-duration');
+  const proposalDuration = obj?.value || 0;
+  let uobj = $settings.userProperties?.find((o) => o.functionName === 'edg-get-balance')
+  const tokenBalance = uobj?.value.value || 0
+  uobj = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked');
+  const tokenBalanceLocked = uobj?.value.value || 0
+  uobj = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-total-delegated');
+  const totalDelegatedToMe = uobj?.value.value || 0
+
+  const startBlockHeight = proposal.proposalData?.startBlockHeight || 0;
+  const endBlockHeight = proposal.proposalData?.endBlockHeight || 0;
 
   export let vfor = true
-  export let title = proposal.title
+  let title = proposal.title
   let showModal:boolean;
 	const toggleModal = () => {
 		showModal = !showModal;
 	}
   const proposalEnds = () => {
     if (!proposalDuration) return 0
-    return Number(proposal.proposalData.startBlockHeight) + Number(proposalDuration)
+    return Number(startBlockHeight) + Number(proposalDuration)
   }
   $: votingInProgress = () => {
-      return stacksTipHeight >= proposal.proposalData.startBlockHeight && stacksTipHeight < proposal.proposalData.endBlockHeight
+      return stacksTipHeight >= startBlockHeight && stacksTipHeight < endBlockHeight
   }
   const statusMessage = () => {
-    const propData = proposal.proposalData
-    if (propData.concluded) {
-      if (propData.passed) return 'Voting ended, proposal concluded, proposal passed'
-      else return 'Voting ended, proposal concluded, proposal failed to pass'
-    } else if (stacksTipHeight > propData.endBlockHeight) return 'Voting ended'
-    else if (stacksTipHeight < propData.startBlockHeight) return 'Voting starts in ' + (propData.startBlockHeight - stacksTipHeight) + ' blocks'
-    else return 'Voting started - cast or delegate your vote!'
+    if (proposal.proposalData) {
+      const propData = proposal.proposalData
+      if (propData.concluded) {
+        if (propData.passed) return 'Voting ended, proposal concluded, proposal passed'
+        else return 'Voting ended, proposal concluded, proposal failed to pass'
+      } else if (stacksTipHeight > endBlockHeight) return 'Voting ended'
+      else if (stacksTipHeight < startBlockHeight) return 'Voting starts in ' + (startBlockHeight - stacksTipHeight) + ' blocks'
+      else return 'Voting started - cast or delegate your vote!'
+    }
   }
   
   let amount = 0

@@ -15,8 +15,8 @@
 </script>
 <script>
 // @ts-nocheck
-
-	  import settings from '$lib/settings'
+	import StacksAuthStore from '../stores/StacksAuthStore'
+	import settings from '$lib/settings'
 
 </script>
 
@@ -38,6 +38,7 @@
 		groups of people working often remotely.
 	</p>
 	<h4>User Properties</h4>
+	<p class="text-small">{$StacksAuthStore.stxAddress}</p>
 	{#if $settings.userProperties}
 	{#each $settings.userProperties as item}
 	<p>{item.functionName} = {item.value.value}</p>

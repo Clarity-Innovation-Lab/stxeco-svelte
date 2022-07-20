@@ -19,16 +19,16 @@
       return explorer + '/txid/' + txId + '?chain=' + network;
   }
 
-  let item:ProposalType;
+  let prop:ProposalType;
   const openSesame = (currentItem:ProposalType) => {
-    item = currentItem;
+    prop = currentItem;
     toggleModal();
   }
   const openProposal = (currentItem:ProposalType) => {
-    goto(`/dao/proposals/${item.contractId}`, { replaceState: false }) 
+    goto(`/dao/proposals/${prop.contractId}`, { replaceState: false }) 
   }
   const submitProposal = (currentItem:ProposalType) => {
-    goto(`/dao/proposals/${currentItem.contractId}`, { replaceState: false }) 
+    goto(`/dao/proposals/submission/${currentItem.contractId}`, { replaceState: false }) 
   }
   const deployProposal = () => {
     goto('/dao/proposals/deployment', { replaceState: false }) 
@@ -82,9 +82,9 @@
   </svelte:head>
   
   <Modal {showModal} on:click={toggleModal}>
-    <div class="source-modal"><pre style="width: 95%">{item.contract.source_code}</pre></div>
+    <div class="source-modal"><pre style="width: 95%">{prop.contract.source_code}</pre></div>
     <div slot="title">
-      <h3>Proposal: {item.contract.contract_id.split('.')[1]}</h3>
+      <h3>Proposal: {prop?.contract?.contract_id?.split('.')[1]}</h3>
     </div>
   </Modal>
   
@@ -95,7 +95,7 @@
     <div class="container">
       <div class="d-flex justify-content-end mb-4">
         <button class="btn success" on:click|preventDefault={() => { deployProposal() }}>
-          Submit a Proposal
+          Deploy a Proposal Contract
         </button>
       </div>
 
