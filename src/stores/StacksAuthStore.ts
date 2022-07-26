@@ -5,6 +5,6 @@ const StacksAuthStore = writable({
   stxAddress: null,
 });
 
-export const alert = writable('Welcome to the to-do list app!');
+//export const alert = writable('Welcome to the to-do list app!');
 
 export default StacksAuthStore;

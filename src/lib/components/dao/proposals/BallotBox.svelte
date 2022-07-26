@@ -67,7 +67,6 @@
       forCV = falseCV()
     }
     const amountCV = uintCV(vote.amount)
-    const governanceCV = contractPrincipalCV(deployer, 'ede000-governance-token')
     const proposalCV = contractPrincipalCV(vote.proposalContractId.split('.')[0], vote.proposalContractId.split('.')[1])
     const txOptions = {
       postConditions: [],
@@ -75,7 +74,7 @@
       contractAddress: deployer,
       contractName: 'ede002-proposal-voting',
       functionName: 'vote',
-      functionArgs: [amountCV, forCV, proposalCV, governanceCV],
+      functionArgs: [amountCV, forCV, proposalCV],
       // network,
       appDetails: {
         name: 'Ecosystem DAO',
@@ -113,7 +112,8 @@
           <div class="progress-bar progress-bar-striped"
                 role="progressbar" 
                 style={'width:' + votingProgressPercentage + '%'}
-                aria-valuenow={votingProgressPercentage} aria-valuemin={0} aria-valuemax={100}></div>
+                aria-valuenow={votingProgressPercentage} aria-valuemin={0} aria-valuemax={100}>
+          </div>
         </div>
         <div class="d-flex justify-content-between text-small">
           <div>{ proposal.proposalData.startBlockHeight }</div>

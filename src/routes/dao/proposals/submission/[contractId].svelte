@@ -31,19 +31,19 @@
 		if (!emergency) console.log('normal')
 		proposal.startHeight = propStart
         const startHeight = uintCV(propStart)
-        const governanceCV = contractPrincipalCV(import.meta.env.VITE_DAO_DEPLOY_ADDRESS, 'ede000-governance-token')
+        // const governanceCV = contractPrincipalCV(import.meta.env.VITE_DAO_DEPLOY_ADDRESS, 'ede000-governance-token')
         const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 		let functionArgs = []
 		if (emergency) {
 			functionArgs = [proposalCV]
 		} else {
-			functionArgs = [proposalCV, startHeight, governanceCV]
+			functionArgs = [proposalCV, startHeight]
 		}
 		const txOptions = {
 			postConditions: [],
 			postConditionMode: PostConditionMode.Deny,
 			contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-			contractName: (emergency) ? 'ede003-emergency-proposals' : 'ede002-proposal-submission',
+			contractName: (emergency) ? 'ede003-emergency-proposals' : 'ede002-threshold-proposal-submission',
 			functionName: (emergency) ? 'emergency-propose' : 'propose',
 			functionArgs: functionArgs,
 			// network,

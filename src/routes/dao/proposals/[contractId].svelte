@@ -11,7 +11,7 @@
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId)
   const back = () => {
-    goto(`/dao/proposals`, { replaceState: false }) 
+    goto(`/dao/proposals`, { replaceState: false })
   }
 </script>
 
