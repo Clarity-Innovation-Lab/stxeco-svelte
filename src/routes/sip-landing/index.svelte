@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CardWithParams from '../../shared/CardWithParams.svelte'
+	import CardWithParams from '$lib/shared/CardWithParams.svelte'
 
 	let st1 = '<p>Getting the community involved via the DAO</p><ol><li>Activate SIP becomes a DAO Proposal</li><li>Rules of the DAO apply - e.g.</li><li>Voting starts in 1 day / ends in 1 week</li></ol>'
 	let st2 = '<p>About CABs - Advisory Boards!</p><ol><li>Goverance - join discussions</li><li>Tokenomics - join discussions</li><li>Technical - join discussions</li></ol>'

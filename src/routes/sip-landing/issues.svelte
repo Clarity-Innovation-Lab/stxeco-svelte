@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
 export async function load({ fetch }) {
-	const res = await fetch(import.meta.env.VITE_CLARITYLAB_API + '/mesh/v2/gh-issues')
+	const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/gh-issues'
+	const res = await fetch(url)
 	const issues = await res.json()
 	if (res.ok) {
 		return {

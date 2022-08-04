@@ -20,26 +20,33 @@
     "buffer": "^6.0.3",
     "eslint": "^8.16.0",
     "eslint-plugin-svelte3": "^4.0.0",
-    "prettier": "^2.7.1",
+    "prettier": "2.7.1",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-polyfill-node": "^0.10.1",
     "sass": "^1.53.0",
     "svelte": "^3.46.0",
     "svelte-bootstrap-icons": "^2.0.1",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.7",
+    "svelte-range-slider-pips": "^2.0.3",
     "tslib": "^2.3.1",
     "typescript": "^4.7.4",
-    "vite": "^2.9.13"
+    "vite": "^3.0.0"
   },
   "type": "module",
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
     "@micro-stacks/client": "^1.0.0-beta.8",
     "autoprefixer": "^10.4.7",
+    "bootstrap": "^5.2.0-beta1",
     "cookie": "^0.4.1",
-    "jquery": "^3.6.0",
+    "js-sha256": "^0.9.0",
     "luxon": "^3.0.1",
     "micro-stacks": "^0.6.1",
-    "regenerator-runtime": "^0.13.9"
+    "popper": "^1.0.1",
+    "postcss": "^8.4.14",
+    "postcss-cli": "^10.0.0",
+    "svelte-notifications": "^0.9.96",
+    "svelte-toasts": "^1.1.2"
   }
 }

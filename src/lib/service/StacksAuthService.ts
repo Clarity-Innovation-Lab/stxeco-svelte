@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import StacksAuthStore from '../../stores/StacksAuthStore.js';
-import { client } from './micro-stacks-client.ts';
+import { client } from '$lib/micro-stacks-client.ts';
+import settings from '$lib/settings';
 
 interface Profile {
   username: string;
@@ -40,6 +41,7 @@ const StacksAuthService = {
     StacksAuthStore.update(() => {
       return getProfile();
     });
+    settings.init();
   },
   logout: async function () {
     if (client.hasSession) {
@@ -47,6 +49,7 @@ const StacksAuthService = {
       StacksAuthStore.update(() => {
         return getProfile();
       });
+      settings.init();
     }
   },
   updateLoginStatus: function () {

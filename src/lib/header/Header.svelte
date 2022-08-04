@@ -3,11 +3,18 @@ import { page } from '$app/stores';
 import StacksAuthStore from '../../stores/StacksAuthStore.js'
 import StacksAuthService from '$lib/service/StacksAuthService'
 import WalletConnectButton from './WalletConnectButton.svelte'
+import { Tools } from "svelte-bootstrap-icons";
 
 const logout = () => {
 	StacksAuthService.logout()
 }
 </script>
+
+<div class="container-fluid px-0">
+	<div class="bg-danger py-2 text-light py-0 text-center under-construction">
+		<Tools /> Under construction - <a class="text-light" href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank">contributions welcome via discord!</a>
+	</div>
+</div>
 
 <nav class="navbar navbar-expand-sm sticky-top navbar-light bg-warning py-4">
 	<div class="container">
@@ -33,6 +40,14 @@ const logout = () => {
 		</div>
 	</div>
 </nav>
+
+{#if $page.url.pathname.indexOf('/dao') > -1}
+<div class="bg-light text-dark py-2 text-center text-small">
+	<span class="px-3 border-right nav-item"><a class:active={$page.url.pathname.indexOf('/dao/proposal') > -1} href="/dao/proposals">Proposals</a></span>
+	<span class="px-3 border-right nav-item"><a class:active={$page.url.pathname.indexOf('/dao/extension') > -1} href="/dao/extensions">Extension</a></span>
+	<span class="px-3 nav-item"><a class:active={$page.url.pathname.indexOf('/strategy') > -1} href="/dao/strategy">Launch Plans</a></span>
+</div>
+{/if}
 
 <style>
 	nav {

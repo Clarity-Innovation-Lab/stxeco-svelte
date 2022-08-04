@@ -1,8 +1,26 @@
 <script context="module" lang="ts">
 	export const prerender = true;
-</script>
-
+	export async function load({ fetch }) {
+		const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/gh-issues'
+		const res = await fetch(url)
+		const issues = await res.json()
+		if (res.ok) {
+			return {
+				props: {
+					issues
+				}
+			}
+		} else {
+			return {
+				status: res.status,
+				error: new Error('Could not fetch issues')
+			}
+		}
+	}
+	</script>
+	
 <script lang="ts">
+
 </script>
 
 <svelte:head>
