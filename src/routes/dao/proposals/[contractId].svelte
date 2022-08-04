@@ -14,16 +14,20 @@
         path: '/extended/v1/address/' + authService.getProfile().stxAddress + '/balances?until_block=' + proposal.proposalData.startBlockHeight,
         httpMethod: 'get'
       }
-      const response = await GeneralUtils.postToApi('/v2/accounts', callData);
-      balanceAtHeight = GeneralUtils.fromMicroAmount(response.stx.balance)
-      return {
-        status: response.status,
-        props: {
-          contractId,
-          proposal,
-          balanceAtHeight
-        }
-      };
+      try {
+        const response = await GeneralUtils.postToApi('/v2/accounts', callData);
+        balanceAtHeight = GeneralUtils.fromMicroAmount(response.stx.balance)
+        return {
+          status: response.status,
+          props: {
+            contractId,
+            proposal,
+            balanceAtHeight
+          }
+        };
+      } catch (e) {
+        // server side load won't work in development so catch and continue..
+      }
     } else {
       return {
         status: res.status,
