@@ -9,10 +9,8 @@
   import { CaretRight, CaretRightFill } from "svelte-bootstrap-icons";
   import type { ProposalType } from 'src/types/stxeco.type.js';
 
-  const emergencia = import.meta.env.VITE_DAO_EMERGENCY_TEAM;
-  const executiveTeam = emergencia.indexOf($StacksAuthStore.stxAddress) > -1;
-  const percentageBal = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance');
-  const canSubmit = percentageBal?.value.value || false;
+  const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
+  const canSubmit = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
 
   let showNoop = false;
   let showFromFile = false;
@@ -119,7 +117,7 @@
   
 <section>
   <div class="container">
-    {#if canSubmit || executiveTeam}
+    {#if canSubmit || executiveTeamMember}
     <h3><span>Options for Deploying a Proposal Contract</span></h3>
     <div class="my-4 pointer" on:click={() => { showNoop = true; showFromFile = false; showDeployButton = false }}>{#if showNoop}<CaretRightFill fill="purple"/>{:else}<CaretRight />{/if} Deploy simple voting only (noop) proposal</div>
     <div class="pointer" on:click={() => { showNoop = false; showFromFile = true; showDeployButton = false }}>{#if showFromFile}<CaretRightFill fill="purple"/>{:else}<CaretRight/>{/if} Upload a fully unit tested proposal</div>
@@ -127,6 +125,11 @@
     <div class="container">Unable to deploy proposal</div>
     {/if}
     <div class="row mt-5">
+      {#if showDeployButton}
+      <div class="mt-3 d-flex justify-content-start">
+        <button class="btn btn-sm outline-light" on:click|preventDefault={() => { deployContract() }}>Deploy</button>
+      </div>
+      {/if}
       {#if showNoop}
       <div class="col-md-6 col-sm-12">
         <ProposalDeploymentForm on:addNewPoll={addNewPoll} />

@@ -1,5 +1,7 @@
 <script>
     export let showModal = false;
+
+    scroll(0,0);
 </script>
 
 {#if showModal}

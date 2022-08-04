@@ -2,13 +2,14 @@
     import { Buffer } from "buffer";
     import "../app.scss";
     import settings from '$lib/settings'
-    import {onMount} from 'svelte'
+    import {tick, onMount} from 'svelte'
     import StacksAuthService from "$lib/service/StacksAuthService";
     import Header from "$lib/header/Header.svelte";
     import Footer from "$lib/header/Footer.svelte";
     import { page } from "$app/stores";
+    import Notifications from 'svelte-notifications';
 
-    let bootstrap;
+    let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 
     if (typeof window !== "undefined") {
       // @ts-ignore
@@ -17,25 +18,34 @@
     let appInitialized:boolean
     onMount(async () => {
       try {
-        //bootstrap = (await import('bootstrap'));
+          bootstrap = (await import('bootstrap'));
           StacksAuthService.updateLoginStatus();
           await settings.init()           
           appInitialized = true
           console.log("Page=", page);
+          await tick();
+          setTimeout(function () {
+            const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+            const popoverTriggerList = window.document.querySelectorAll('[data-bs-toggle="dropdown"]')
+            if (popoverTriggerList) [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Dropdown(popoverTriggerEl))
+          }, 1000)
+
       } catch(error) {
             console.error(error)
       }
   })
-
 </script>
 
-<Header />
+<Notifications>
+  <Header />
 {#if appInitialized}
 <main class="my-5" style="min-height: 70vh; background-size: contain;">
   <slot />
 </main>
 {/if}
 <Footer/>
+</Notifications>
 
 <style>
   main {

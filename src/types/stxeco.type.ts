@@ -1,9 +1,20 @@
 export type SettingsType = {
+  extensions: any;
   proposals?: Array<ProposalType>;
   issues?: Array<IssueType>;
   daoProperties?: Array<DaoPropertyType>;
   userProperties?: Array<UserPropertyType>;
+  accountInfo?: any;
   info?: any;
+};
+export type ProfileType = {
+  loggedIn: boolean;
+  stxAddress: string | undefined;
+};
+export type ExtensionType = {
+  contractId: string;
+  valid: boolean;
+  contract:Contract;
 };
 export type UserPropertyType = {
   id: string | null | undefined;
@@ -35,10 +46,10 @@ export type Contract = {
   block_height?: number;
   contract_id?: string;
 };
-export type ProposalData = {
+export type ProposalDataType = {
   votesFor: number;
   votesAgainst: number;
-  proposal: string;
+  proposer: string;
   startBlockHeight: number;
   endBlockHeight: number;
   concluded: boolean;
@@ -49,12 +60,16 @@ export type ProposalType = {
   submitTxId?: string|null;
   title: string;
   contractId: string;
+  votingContract: string;
   created: number;
   updated: number;
+  funding: number;
+  emergencySignals: number;
+  executedAt: number;
   proposer: string|null;
   status: string;
   contract:Contract;
-  proposalData?:ProposalData;
+  proposalData?:ProposalDataType;
   githubIssue?: string;
   githubPullRequest?: string;
   description?: string;

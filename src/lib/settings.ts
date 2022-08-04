@@ -1,10 +1,12 @@
 import { writable, get } from 'svelte/store';
-//import authService from '$lib/service/StacksAuthService';
+import GeneralUtils from '$lib/service/GeneralUtils';
 import type { SettingsType } from "src/types/stxeco.type";
 import authService from '$lib/service/StacksAuthService';
 
 function createStore() {
-  const initialValue:SettingsType = {};
+  const initialValue:SettingsType = {
+    extensions: undefined
+  };
   // destructure the store on creation to have 'direct access' to methods
   const { subscribe, update, set } = writable(initialValue);
 
@@ -18,6 +20,18 @@ function createStore() {
       }
       const res = await fetch(url);
       const daoData = await res.json();
+      if (authService.getProfile().loggedIn) {
+        const callData = {
+          path: '/v2/accounts/' + authService.getProfile().stxAddress,
+          httpMethod: 'get',
+          postData: null
+        }
+        const res = await GeneralUtils.postToApi('/v2/accounts', callData);
+        res.balance = GeneralUtils.fromMicroAmount(res.balance);
+        res.locked = GeneralUtils.fromMicroAmount(res.locked);
+        daoData.accountInfo = res;
+      }
+
       if (res.ok) set(daoData);
     },
 

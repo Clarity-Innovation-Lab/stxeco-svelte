@@ -5,8 +5,8 @@
 	let contractId = $page.params.contractId;
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
-  const tokenBalance = $settings.userProperties?.find((o) => o.functionName === 'edg-get-balance').value.value
-  const tokenBalanceLocked = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked').value.value
+  const tokenBalance = Number($settings.userProperties?.find((o) => o.functionName === 'edg-get-balance')?.value?.value) || 0;
+  const tokenBalanceLocked = Number($settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked')?.value?.value) || 0;
 
   let amount = 0;
   export const title = 'time to vote on proposal';

@@ -17,11 +17,8 @@
   const constructDao = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
     const bootstrap = contractPrincipalCV(deployer, 'edp000-bootstrap')
-    const networkStr = import.meta.env.VITE_NETWORK;
-    // let network = new StacksTestnet()
-    // if (networkStr === 'mainnet') network = new StacksMainnet()
-    // if (networkStr === 'local') network = new StacksMocknet()
-
+    // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
+    
     const txOptions = {
       postConditions: [],
       postConditionMode: PostConditionMode.Deny,
@@ -35,13 +32,13 @@
         icon: '/img/logo.png'
       },
       onCancel: (error: any) => {
-        console.error(error)
+        console.log(error)
       },
       onFinish: (result: { txId: { txid: any; }; txRaw: any; stacksTransaction: any; }) => {
         console.log(result)
       }
     }
-    const payload = await client.signTransaction(TxType.ContractCall, txOptions);
+    await client.signTransaction(TxType.ContractCall, txOptions);
 }
 
   $: constructed = $settings.extensions.filter((o) => o.valid).length > 0
