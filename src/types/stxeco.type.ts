@@ -31,11 +31,16 @@ export type DaoPropertyType = {
   contractName: string;
   functionName: string;
 };
+export type LabelType = {
+  name: string;
+  value: string;
+};
 export type IssueType = {
   htmlUrl: string | null | undefined;
   createdAt: number;
+  updatedAt: number;
   title: string;
-  labels: Array<string>;
+  labels: Array<LabelType>;
   state: string;
   pullRequest: boolean;
   comments: Array<string>;

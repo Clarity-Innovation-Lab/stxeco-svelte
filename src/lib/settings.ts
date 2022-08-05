@@ -1,5 +1,5 @@
 import { writable, get } from 'svelte/store';
-import GeneralUtils from '$lib/service/GeneralUtils';
+import ChainUtils from '$lib/service/ChainUtils';
 import type { SettingsType } from "src/types/stxeco.type";
 import authService from '$lib/service/StacksAuthService';
 
@@ -26,9 +26,9 @@ function createStore() {
           httpMethod: 'get',
           postData: null
         }
-        const res = await GeneralUtils.postToApi('/v2/accounts', callData);
-        res.balance = GeneralUtils.fromMicroAmount(res.balance);
-        res.locked = GeneralUtils.fromMicroAmount(res.locked);
+        const res = await ChainUtils.postToApi('/v2/accounts', callData);
+        res.balance = ChainUtils.fromMicroAmount(res.balance);
+        res.locked = ChainUtils.fromMicroAmount(res.locked);
         daoData.accountInfo = res;
       }
 

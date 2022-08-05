@@ -17,10 +17,10 @@
             <div class="col-3">
               <p>Code</p>
               <div class="demo-div">
-                <a href="'https://github.com/Clarity-Innovation-Lab'" target="_blank">Clarity Lab</a>
+                <a href="https://github.com/Clarity-Innovation-Lab" target="_blank">Clarity Lab</a>
               </div>
               <div class="demo-div">
-                <a href="'https://github.com/Clarity-Innovation-Lab/executor-dao/issues'" target="_blank">DAO Issues</a>
+                <a href="https://github.com/Clarity-Innovation-Lab/executor-dao/issues" target="_blank">DAO Issues</a>
               </div>
             </div>
             <div class="col-3">

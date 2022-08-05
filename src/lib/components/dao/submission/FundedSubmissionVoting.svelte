@@ -5,7 +5,7 @@
 	import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
 	import { FungibleConditionCode, PostConditionMode, makeStandardSTXPostCondition } from 'micro-stacks/transactions';
 	import { TxType } from '@micro-stacks/client';
-	import GeneralUtils from '$lib/service/GeneralUtils';
+	import ChainUtils from '$lib/service/ChainUtils';
 	import StacksAuthStore from '../../../../stores/StacksAuthStore'
 	import { getNotificationsContext } from 'svelte-notifications';
 
@@ -26,7 +26,7 @@
 	const getSTXMintPostConds = function (amt:number) {
 		const postConds = []
 		if (!$StacksAuthStore.stxAddress) return [];
-		const amount = amt; // GeneralUtils.toOnChainAmount(amt, 0)
+		const amount = amt; // ChainUtils.toOnChainAmount(amt, 0)
 		postConds.push(makeStandardSTXPostCondition(
 			$StacksAuthStore.stxAddress,
 			FungibleConditionCode.LessEqual,
@@ -46,7 +46,7 @@
 			});
 			return
 		}
-		const amountUSTX = GeneralUtils.toOnChainAmount(amount)
+		const amountUSTX = ChainUtils.toOnChainAmount(amount)
         const amountCV = uintCV(amountUSTX)
         const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 		let functionArgs = [proposalCV, amountCV];
@@ -67,7 +67,7 @@
 			onFinish: async (result: { txId: string; txRaw: any; stacksTransaction: any; }) => {
 				proposal.status = 'submitting'
 				proposal.submitTxId = result.txId
-				const resp = await GeneralUtils.postToApi('/v2/proposals', proposal)
+				const resp = await ChainUtils.postToApi('/v2/proposals', proposal)
 				console.log(resp)
 			}
 		}

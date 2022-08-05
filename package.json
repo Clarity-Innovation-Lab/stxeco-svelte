@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite dev --port=8080",
     "build": "vite build",
+    "build-stag": "vite build --mode staging",
     "package": "svelte-kit package",
     "preview": "vite preview",
     "prepare": "svelte-kit sync",
@@ -13,6 +14,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-node": "^1.0.0-next.85",
     "@sveltejs/kit": "next",
     "@types/cookie": "^0.5.1",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
@@ -37,6 +39,7 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
     "@micro-stacks/client": "^1.0.0-beta.8",
+    "@sveltejs/adapter-static": "^1.0.0-next.38",
     "autoprefixer": "^10.4.7",
     "bootstrap": "^5.2.0-beta1",
     "cookie": "^0.4.1",
@@ -47,6 +50,7 @@
     "postcss": "^8.4.14",
     "postcss-cli": "^10.0.0",
     "svelte-notifications": "^0.9.96",
-    "svelte-toasts": "^1.1.2"
+    "svelte-toasts": "^1.1.2",
+    "svelte2tsx": "^0.5.13"
   }
 }

@@ -1,20 +1,26 @@
 <script context="module" lang="ts">
 	export const prerender = true;
 	export async function load({ fetch }) {
-		const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/gh-issues'
-		const res = await fetch(url)
-		const issues = await res.json()
-		if (res.ok) {
-			return {
-				props: {
-					issues
+		try {
+			if (typeof window !== "undefined") {
+				const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/gh-issues'
+				const res = await fetch(url)
+				const issues = await res.json()
+				if (res.ok) {
+					return {
+						props: {
+							issues
+						}
+					}
+				} else {
+					return {
+						status: res.status,
+						error: new Error('Could not fetch issues')
+					}
 				}
-			}
-		} else {
-			return {
-				status: res.status,
-				error: new Error('Could not fetch issues')
-			}
+    		}
+		} catch (e) {
+			console.log('Error on server fetching from github.. ', e);
 		}
 	}
 	</script>

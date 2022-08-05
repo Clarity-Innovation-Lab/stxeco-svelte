@@ -1,7 +1,7 @@
 <script context="module">
 	import settings from '$lib/settings';
   import authService from '$lib/service/StacksAuthService';
-  import GeneralUtils from '$lib/service/GeneralUtils';
+  import ChainUtils from '$lib/service/ChainUtils';
   /** @type {import('./__types/[contractId]').Load} */
   export async function load({ params, fetch }) {
     let balanceAtHeight = 0;
@@ -15,8 +15,8 @@
         httpMethod: 'get'
       }
       try {
-        const response = await GeneralUtils.postToApi('/v2/accounts', callData);
-        balanceAtHeight = GeneralUtils.fromMicroAmount(response.stx.balance)
+        const response = await ChainUtils.postToApi('/v2/accounts', callData);
+        balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
         return {
           status: response.status,
           props: {

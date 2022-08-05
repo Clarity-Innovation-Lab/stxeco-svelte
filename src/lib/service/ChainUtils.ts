@@ -1,10 +1,9 @@
-import { sha256 } from 'js-sha256'
 import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
 
 const precision = 1000000
 const btcPrecision = 100000000
 
-const GeneralUtils = {
+const ChainUtils = {
   postToApi: async (path:string, data:unknown) => {
     const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi' + path;
     const response = await fetch(url, {
@@ -14,12 +13,6 @@ const GeneralUtils = {
     });
     return response.json();
   },  
-  buildHash: function (hashable:string) {
-    const hash = sha256.create()
-    hash.update(hashable)
-    return hash.hex()
-    // return crypto.createHash('sha256').update(hashable).digest('hex')
-  },
   isValidAddress: function (addr: string) {
     try {
       standardPrincipalCV(addr)
@@ -96,21 +89,6 @@ const GeneralUtils = {
       return 0
     }
   },
-  sortResults: function (resultSet: any[]) {
-    resultSet = resultSet.sort(function compare (a: { title: string }, b: { title: string }) {
-      const nameA = a.title.toUpperCase() // ignore upper and lowercase
-      const nameB = b.title.toUpperCase() // ignore upper and lowercase
-      if (nameA > nameB) {
-        return -1
-      }
-      if (nameA < nameB) {
-        return 1
-      }
-      // names must be equal
-      return 0
-    })
-    return resultSet
-  },
   stringToHex: function (str: { length: number; charCodeAt: (arg0: number) => { (): any; new(): any; toString: { (arg0: number): any; new(): any } } }) {
     const arr = []
     for (let i = 0; i < str.length; i++) {
@@ -119,4 +97,4 @@ const GeneralUtils = {
     return '0x' + arr.join('')
   }
 }
-export default GeneralUtils
+export default ChainUtils

@@ -5,13 +5,6 @@
 	let st2 = '<p>About CABs - Advisory Boards!</p><ol><li>Goverance - join discussions</li><li>Tokenomics - join discussions</li><li>Technical - join discussions</li></ol>'
 	let st3 = '<p>SIPs start out as suggestions or issues registered on GitHub</p><ol><li>GitHub is complicated - learn about why we use it.</li><li>Have a suggestion for improving Stacks?</li><li>Comment on someone else\'s suggestion?</li></ol>'
 	let st4 = '<p>A <strong>Proposal</strong> is a Pull Request in GitHub lingo</p><ol><li>SIP workflow.</li><li>Review open proposals</li><li>Comment on open proposals</li></ol>'
-	type Todo = {
-		uid: string;
-		created_at: Date;
-		text: string;
-		done: boolean;
-		pending_delete: boolean;
-	};
 </script>
 
 <svelte:head>
@@ -27,45 +20,21 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-6 my-2"
-        >
-          <CardWithParams
-		  	title="Activating SIP"
-			image="img/bg/ecosys.jpg"
-            subtitle={st1}
-            linkTarget="/sip-landing/sip-voting"
-            linkName="More About Voting"
-          />
+        <div class="col-6 my-2">
+          <CardWithParams title="Suggestions" subtitle="" image="/img/bg/ecosys.jpg"
+            linkTarget="/sip/issues" linkName="Browse Suggestions"/>
         </div>
-        <div class="col-6 my-2"
-        >
-          <CardWithParams
-			title="Advisory Boards"
-			subtitle={st2}
-			image="img/bg/ecosys.jpg"
-            linkTarget="/sip-landing/sip-cabs"
-            linkName="About the CABs"
-          />
+        <div class="col-6 my-2">
+          <CardWithParams title="Proposals" subtitle="" image="/img/bg/tree.jpg"
+            linkTarget="/sip/issues?filter=pulls" linkName="Browse Proposals"/>
         </div>
-        <div class="col-6 my-2"
-        >
-          <CardWithParams
-		  	title="SIP Suggestions"
-            subtitle={st3}
-			image="img/bg/ecosys.jpg"
-            linkTarget="/sip-landing/issues"
-            linkName="Make a Suggestion?"
-          />
+        <div class="col-6 my-2">
+          <CardWithParams title="Activating SIP" subtitle="" image="/img/bg/ecosys.jpg"
+            linkTarget="/sip/sip-voting" linkName="About Voting"/>
         </div>
-        <div class="col-6 my-2"
-        >
-          <CardWithParams
-			title="SIP Proposals"
-			subtitle={st4}
-			image="img/bg/ecosys.jpg"
-            linkTarget="/sip-landing/issues?filter=pulls"
-            linkName="SIP Proposals"
-          />
+        <div class="col-6 my-2">
+          <CardWithParams title="Advisory Boards" subtitle="" image="/img/bg/tree.jpg"
+            linkTarget="/sip/sip-cabs" linkName="About the CABs"/>
         </div>
       </div>
     </div>
