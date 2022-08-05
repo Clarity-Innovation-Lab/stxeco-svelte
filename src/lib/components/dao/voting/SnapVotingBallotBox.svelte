@@ -6,7 +6,7 @@
   import { TxType } from '@micro-stacks/client';
   import type { ContractCallParams } from '@micro-stacks/client';
   import type { ProposalType } from "../../../../types/stxeco.type";
-	import GeneralUtils from '$lib/service/GeneralUtils';
+	import ChainUtils from '$lib/service/ChainUtils';
 
 	export let proposal:ProposalType;
 	export let balanceAtHeight:number;
@@ -27,8 +27,8 @@
     if (!vfor) {
       forCV = falseCV()
     }
-		// const amountUSTX = GeneralUtils.toOnChainAmount(amount)
-		const amountUSTX = GeneralUtils.toOnChainAmount(amount)
+		// const amountUSTX = ChainUtils.toOnChainAmount(amount)
+		const amountUSTX = ChainUtils.toOnChainAmount(amount)
     const amountCV = uintCV(amountUSTX)
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
     const txOptions:ContractCallParams = {
@@ -75,11 +75,11 @@
     <div class="my-5">
       <div class="d-flex justify-content-around">
         <div>
-          <button class="btn btn-outline-info" on:click={() => castVote(true)}>FOR <br/> {GeneralUtils.fromMicroAmount(proposalData.votesFor)}</button>
+          <button class="btn btn-outline-info" on:click={() => castVote(true)}>FOR <br/> {ChainUtils.fromMicroAmount(proposalData.votesFor)}</button>
         </div>
         <h2>Cast your Vote</h2>
         <div>
-          <button class="btn btn-outline-success" on:click={() => castVote(false)}>AGAINST <br/> {GeneralUtils.fromMicroAmount(proposalData.votesAgainst)}</button>
+          <button class="btn btn-outline-success" on:click={() => castVote(false)}>AGAINST <br/> {ChainUtils.fromMicroAmount(proposalData.votesAgainst)}</button>
         </div>
       </div>
     </div>

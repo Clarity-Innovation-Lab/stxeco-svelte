@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Buffer } from "buffer";
+    // import { Buffer } from "buffer";
     import "../app.scss";
     import settings from '$lib/settings'
     import {tick, onMount} from 'svelte'
@@ -13,7 +13,7 @@
 
     if (typeof window !== "undefined") {
       // @ts-ignore
-      window.Buffer = Buffer;
+      // window.Buffer = Buffer;
     }
     let appInitialized:boolean
     onMount(async () => {

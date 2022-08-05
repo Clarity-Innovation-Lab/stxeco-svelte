@@ -28,7 +28,7 @@ const logout = () => {
 			</ul>
 			<ul class="navbar-nav ">
 				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/dao') > -1} href="/dao">DAO</a></li>
-				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/sip-landing') > -1} href="/sip-landing">SIPs</a></li>
+				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/sip') > -1} href="/sip">SIPs</a></li>
 				<li class="nav-item">
 					{#if $StacksAuthStore.loggedIn}
 						<a on:click|preventDefault={logout} href="/">Logout</a>
@@ -43,13 +43,24 @@ const logout = () => {
 
 {#if $page.url.pathname.indexOf('/dao') > -1}
 <div class="bg-light text-dark py-2 text-center text-small">
-	<span class="px-3 border-right nav-item"><a class:active={$page.url.pathname.indexOf('/dao/proposal') > -1} href="/dao/proposals">Proposals</a></span>
-	<span class="px-3 border-right nav-item"><a class:active={$page.url.pathname.indexOf('/dao/extension') > -1} href="/dao/extensions">Extension</a></span>
-	<span class="px-3 nav-item"><a class:active={$page.url.pathname.indexOf('/strategy') > -1} href="/dao/strategy">Launch Plans</a></span>
+	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/dao/proposals'}<span class="active">SIP Home</span>{:else}<a href="/dao/proposals">Proposals</a>{/if}</span>
+	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/dao/extensions'}<span class="active">SIP Issues</span>{:else}<a href="/dao/extensions">Extension</a>{/if}</span>
+	<span class="px-3 nav-item">{#if $page.url.pathname === '/dao/strategy'}<span class="active">SIP Voting</span>{:else}<a href="/dao/strategy">Launch Plans</a>{/if}</span>
+</div>
+{/if}
+
+{#if $page.url.pathname.indexOf('/sip') > -1}
+<div class="bg-light text-dark py-2 text-center text-small">
+	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/sip'}<span class="active">SIP Home</span>{:else}<a href="/sip">SIP Home</a>{/if}</span>
+	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/sip/issues'}<span class="active">SIP Issues</span>{:else}<a href="/sip/issues">SIP Issues</a>{/if}</span>
+	<span class="px-3 nav-item">{#if $page.url.pathname === '/sip/sip-voting'}<span class="active">SIP Voting</span>{:else}<a href="/sip/sip-voting">SIP Voting</a>{/if}</span>
 </div>
 {/if}
 
 <style>
+	.active {
+		color: purple;
+	}
 	nav {
 		height: 80px;
 		display: flex;

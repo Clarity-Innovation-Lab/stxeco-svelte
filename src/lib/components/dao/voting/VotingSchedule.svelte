@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
-  import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
+  import { contractPrincipalCV } from 'micro-stacks/clarity';
   import { TxType } from '@micro-stacks/client';
   import { PostConditionMode } from 'micro-stacks/transactions';
   import { client } from '$lib/micro-stacks-client';

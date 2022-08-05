@@ -1,17 +1,23 @@
 
-<script>
-  export let image = ''
-  export let title = ''
-  export let subtitle = ''
-  export let linkName = ''
-  export let linkTarget = ''
+<script type="ts">
+	import { goto } from '$app/navigation';
+  export let image:string;
+  export let title:string;
+  export let subtitle:string;
+  export let linkName:string;
+  export let linkTarget:string;
+	const jumpin = () => {
+		goto(`${linkTarget}`, { replaceState: false })
+	}
+  const imgUrl = new URL(image, import.meta.url).href
+
 </script>
 <div class="card">
-  <img src={image} class="card-img-top" alt={subtitle}>
+  {#if image}<img src={imgUrl} class="card-img-top" alt={subtitle}>{/if}
   <div class="card-body">
     <h5 class="card-title">{title}</h5>
     <p class="card-text">{@html subtitle}</p>
-    <p class="mt-5 card-text text-center"><a href={linkTarget} class="btn btn-primary">{linkName}</a></p>
+    <button class="btn btn-light" on:click|preventDefault={() => { jumpin() }}>{linkName}</button>
   </div>
 </div>
 

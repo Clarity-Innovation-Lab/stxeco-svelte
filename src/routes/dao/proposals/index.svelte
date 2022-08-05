@@ -56,7 +56,7 @@
     goto('/dao/proposals/deployment', { replaceState: false }) 
   }
 
-  const stacksTipHeight = $settings.info.stacks_tip_height;
+  const stacksTipHeight = $settings.info?.stacks_tip_height || 0;
 
   $settings.proposals?.forEach((item) => {
     item.status = DaoUtils.getStatus(stacksTipHeight, item);

@@ -2,7 +2,7 @@
   import settings from '$lib/settings'
 	import CardWithParams from '$lib/shared/CardWithParams.svelte'
   import { client } from '$lib/micro-stacks-client';
-  import { contractPrincipalCV, tupleCV } from 'micro-stacks/clarity';
+  import { contractPrincipalCV } from 'micro-stacks/clarity';
   import { PostConditionMode } from 'micro-stacks/transactions';
   import { TxType } from '@micro-stacks/client';
   // import { makeContractCallToken, openTransactionPopup } from 'micro-stacks/connect';
@@ -41,7 +41,7 @@
     await client.signTransaction(TxType.ContractCall, txOptions);
 }
 
-  $: constructed = $settings.extensions.filter((o) => o.valid).length > 0
+  $: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || false
 </script>
 
 <svelte:head>
@@ -64,28 +64,28 @@
       <div class="row">
         <div class="col-6 my-2"
         >
-          <CardWithParams title="Proposals" image="img/bg/thinker.jpg" subtitle={st1}
+          <CardWithParams title="Proposals" image="/img/bg/thinker.jpg" subtitle={st1}
             linkTarget="/dao/proposals"
             linkName="Proposals"
           />
         </div>
         <div class="col-6 my-2"
         >
-          <CardWithParams title="Voting" subtitle={st2} image="img/bg/vote.jpg"
+          <CardWithParams title="Voting" subtitle={st2} image="/img/bg/vote.jpg"
             linkTarget="/dao/voting"
             linkName="Voting"
           />
         </div>
         <div class="col-6 my-2"
         >
-          <CardWithParams title="Forum"  subtitle={st3} image="img/bg/seats.jpg"
-            linkTarget="/sip-landing/issues"
+          <CardWithParams title="Forum"  subtitle={st3} image="/img/bg/seats.jpg"
+            linkTarget="/sip/issues"
             linkName="Make a Suggestion?"
           />
         </div>
         <div class="col-6 my-2"
         >
-          <CardWithParams title="Membership" subtitle={st4} image="img/bg/membership.jpg"
+          <CardWithParams title="Membership" subtitle={st4} image="/img/bg/membership.jpg"
             linkTarget="/dao/membership?filter=pulls"
             linkName="Learn About Membership"
           />
