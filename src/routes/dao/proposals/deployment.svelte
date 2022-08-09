@@ -10,8 +10,10 @@
   import type { ProposalType } from 'src/types/stxeco.type.js';
 
   const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
-  const canSubmit = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
-
+  let canSubmit = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
+  if (!canSubmit) {
+    canSubmit = $StacksAuthStore.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
+  }
   let showNoop = false;
   let showFromFile = false;
   const contractSource = `
