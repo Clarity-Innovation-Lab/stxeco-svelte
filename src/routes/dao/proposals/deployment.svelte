@@ -1,21 +1,21 @@
 <script lang="ts">
   import settings from '$lib/settings';
   import { DateTime } from 'luxon'
-  import { client } from '$lib/micro-stacks-client';
-  import { getCurrentAccount, TxType } from '@micro-stacks/client';
   import ProposalDeploymentForm from '$lib/components/dao/proposals/ProposalDeploymentForm.svelte';
   import LoadFile from '$lib/components/dao/proposals/LoadFile.svelte';
   import { CaretRight, CaretRightFill } from "svelte-bootstrap-icons";
   import type { ProposalType } from 'src/types/stxeco.type.js';
-	//import { getAccount } from "@micro-stacks/client";
-  import { client } from "../../../stores/client";
+	import { getAccount } from "@micro-stacks/svelte";
+  import { getOpenContractDeploy } from "@micro-stacks/svelte";
+ 
+  const contractDeploy = getOpenContractDeploy();
 
- 	const account = client;
+  const account = getAccount();
 
   const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
   let canSubmit = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
   if (!canSubmit) {
-    canSubmit = account.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
+    canSubmit = $account.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
   }
   let showNoop = false;
   let showFromFile = false;
@@ -76,42 +76,30 @@
 
   $: newSource = replacedSource;
   const deployContract = async () => {
-    const txOptions = {
+    await $contractDeploy.openContractDeploy({
       codeBody: replacedSource,
       contractName: contractName,
-      appDetails: {
-        name: 'Ecosystem DAO',
-        icon: '/img/logo.png'
-      },
-      onCancel: (error: any) => {
-        console.log(error)
-      },
-      onFinish: (result: { txId: string; txRaw: any; stacksTransaction: any; }) => {
-        console.log(result)
+      onFinish: data => {
+        console.log(data)
         newProposal.status = 'deploying'
-        newProposal.deployTxId = result.txId
+        newProposal.deployTxId = data.txId
         let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposals';
         postData(url, newProposal)
-      }
-    }
-    client.signTransaction(TxType.ContractDeploy, txOptions);
+      },
+      onCancel: () => {
+        console.log('popup closed!');
+      },
+    });
   }
   const postData = async (url:string, data:any) => {
-    // Default options are marked with *
     const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      //mode: 'cors', // no-cors, *cors, same-origin
-      //cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      //credentials: 'same-origin', // include, *same-origin, omit
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      //redirect: 'follow', // manual, *follow, error
-      //referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+      body: JSON.stringify(data)
     });
-    return response.json(); // parses JSON response into native JavaScript objects
+    return response.json();
   }
   </script>
   

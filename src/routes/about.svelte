@@ -1,24 +1,9 @@
-<script context="module">
-	import { browser, dev } from '$app/env';
-
-	// we don't need any JS on this page, though we'll load
-	// it in dev so that we get hot module replacement...
-	export const hydrate = dev;
-
-	// ...but if the client-side router is already loaded
-	// (i.e. we came here from elsewhere in the app), use it
-	export const router = browser;
-
-	// since there's no dynamic data here, we can prerender
-	// it so that it gets served as a static asset in prod
-	export const prerender = true;
-</script>
 <script>
 // @ts-nocheck
 	import settings from '$lib/settings'
-	import { getAccount } from "@micro-stacks/client";
+    import { getAccount } from '@micro-stacks/svelte';
  
- 	const account = getAccount();
+    const account = getAccount();
 
 </script>
 
@@ -40,7 +25,7 @@
 		groups of people working often remotely.
 	</p>
 	<h4>User Properties</h4>
-	<p class="text-small">{$account?.stxAddress || 'anon'}</p>
+	<p class="text-small">{$account.stxAddress || 'anon'}</p>
 	{#if $settings}
 	{#if $settings.userProperties}
 	{#each $settings.userProperties as item}

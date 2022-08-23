@@ -7,19 +7,15 @@
     import Footer from "$lib/header/Footer.svelte";
     import { page } from "$app/stores";
     import Notifications from 'svelte-notifications';
-    //import { mountClient } from "@micro-stacks/client";
-    //import { getAccount } from '@micro-stacks/client';
-    import { client } from '$lib/micro-stacks-client';
-    import { get_client } from "../stores/client";
+    import { mountClient } from "@micro-stacks/svelte";
+    import { getAccount } from '@micro-stacks/svelte';
 
-    /**
     mountClient({
         appName: 'Ecosystem DAO',
         appIconUrl: 'img/logo.png'
     })
     const account = getAccount();
-    **/
-    const account = client.selectAccount(client.getState());
+
     let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 
     if (typeof window !== "undefined") {
@@ -30,7 +26,6 @@
     onMount(async () => {
       try {
           bootstrap = (await import('bootstrap'));
-          //StacksAuthService.updateLoginStatus();
           await settings.init($account.stxAddress)           
           appInitialized = true
           console.log("Page=", page);

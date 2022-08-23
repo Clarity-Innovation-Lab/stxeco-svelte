@@ -1,44 +1,39 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import settings from '$lib/settings';
-  import { contractPrincipalCV } from 'micro-stacks/clarity';
-  import { TxType } from '@micro-stacks/client';
-  import { PostConditionMode } from 'micro-stacks/transactions';
-  import { client } from '$lib/micro-stacks-client';
+import { page } from '$app/stores';
+import settings from '$lib/settings';
+import { contractPrincipalCV } from 'micro-stacks/clarity';
+import { PostConditionMode } from 'micro-stacks/transactions';
+import { getOpenContractCall } from '@micro-stacks/svelte';
 
-	let contractId = $page.params.contractId;
-	let stacksTipHeight = $settings.info.stacks_tip_height;
-	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
-  const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, concluded: false, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
-  const endBH = proposalData.endBlockHeight - proposalData.startBlockHeight
-  const currentBH = stacksTipHeight - proposalData.startBlockHeight
-  $: currentBHN = (currentBH / endBH) * 100 
+const contractCall = getOpenContractCall();
 
-  const concludeVote = async () => {
+let contractId = $page.params.contractId;
+let stacksTipHeight = $settings.info.stacks_tip_height;
+export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
+if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, concluded: false, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
+const endBH = proposalData.endBlockHeight - proposalData.startBlockHeight
+const currentBH = stacksTipHeight - proposalData.startBlockHeight
+$: currentBHN = (currentBH / endBH) * 100 
+
+const concludeVote = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
-    const txOptions = {
-      postConditions: [],
-      postConditionMode: PostConditionMode.Deny,
-      contractAddress: deployer,
-      contractName: proposal.votingContract,
-      functionName: 'conclude',
-      functionArgs: [proposalCV],
-      // network,
-      appDetails: {
-        name: 'Ecosystem DAO',
-        icon: '/img/logo.png'
-      },
-      onCancel: (error: any) => {
-        console.error(error)
-      },
-      onFinish: (result: { txId: { txid: any; }; txRaw: any; stacksTransaction: any; }) => {
-        console.log(result)
-      }
-    }
-    await client.signTransaction(TxType.ContractCall, txOptions);
-  }
+    await $contractCall.openContractCall({
+        postConditions: [],
+        postConditionMode: PostConditionMode.Deny,
+        contractAddress: deployer,
+        contractName: proposal.votingContract || 'unknown',
+        functionName: 'conclude',
+        functionArgs: [proposalCV],
+        onFinish: data => {
+          console.log('finished contract call!', data);
+        },
+        onCancel: () => {
+          console.log('popup closed!');
+        }
+    });
+}
 </script>
 
 <section class="jumbo mb-5">

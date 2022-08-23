@@ -1,80 +1,76 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import settings from '$lib/settings';
-	import { client } from '$lib/micro-stacks-client';
-	import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
-	import { FungibleConditionCode, PostConditionMode, makeStandardSTXPostCondition } from 'micro-stacks/transactions';
-	import { TxType } from '@micro-stacks/client';
-	import ChainUtils from '$lib/service/ChainUtils';
-	import { getNotificationsContext } from 'svelte-notifications';
-	import { getAccount } from "@micro-stacks/client";
- 
- 	const account = getAccount();
+import { page } from '$app/stores';
+import settings from '$lib/settings';
+import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
+import { FungibleConditionCode, PostConditionMode, makeStandardSTXPostCondition } from 'micro-stacks/transactions';
+import ChainUtils from '$lib/service/ChainUtils';
+import { getNotificationsContext } from 'svelte-notifications';
+import { getAccount } from '@micro-stacks/svelte';
+import { getOpenContractCall } from '@micro-stacks/svelte';
 
-	const { addNotification } = getNotificationsContext();
+const contractCall = getOpenContractCall();
 
-	let contractId = $page.params.contractId
-	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+const account = getAccount();
 
-	const balance = $settings.accountInfo.balance;
-	const stacksTipHeight = $settings.info.stacks_tip_height;
-	let fundingCost = Number($settings.daoProperties?.find((o) => o.id === 'funding-cost')?.value) / 1000000 || 0;
-	let proposalDuration = Number($settings.daoProperties?.find((o) => o.id === 'proposal-duration')?.value) || 100;
-	let proposalStartDelay = Number($settings.daoProperties?.find((o) => o.id === 'proposal-start-delay')?.value) || 100;
-	const startHeightMessage = 'Block height ' + stacksTipHeight + '. Earliest start for voting is block ' + (stacksTipHeight + proposalStartDelay)+ ' (about ' + ((proposalStartDelay) / 144).toFixed(2) + ' days) after proposal is funded.';
-	const durationMessage = 'Voting will continue for ' + (proposalDuration)+ ' blocks (about ' + ((proposalDuration) / 144).toFixed(2) + ' days) after voting starts.';
+const { addNotification } = getNotificationsContext();
 
-	const getSTXMintPostConds = function (amt:number) {
-		const postConds = []
-		if (!$account.stxAddress) return [];
-		const amount = amt; // ChainUtils.toOnChainAmount(amt, 0)
-		postConds.push(makeStandardSTXPostCondition(
-			$account.stxAddress,
-			FungibleConditionCode.LessEqual,
-			amount
-		))
-		return postConds
+let contractId = $page.params.contractId
+export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
+if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+
+const balance = $settings.accountInfo.balance;
+const stacksTipHeight = $settings.info.stacks_tip_height;
+let fundingCost = Number($settings.daoProperties?.find((o) => o.id === 'funding-cost')?.value) / 1000000 || 0;
+let proposalDuration = Number($settings.daoProperties?.find((o) => o.id === 'proposal-duration')?.value) || 100;
+let proposalStartDelay = Number($settings.daoProperties?.find((o) => o.id === 'proposal-start-delay')?.value) || 100;
+const startHeightMessage = 'Block height ' + stacksTipHeight + '. Earliest start for voting is block ' + (stacksTipHeight + proposalStartDelay)+ ' (about ' + ((proposalStartDelay) / 144).toFixed(2) + ' days) after proposal is funded.';
+const durationMessage = 'Voting will continue for ' + (proposalDuration)+ ' blocks (about ' + ((proposalDuration) / 144).toFixed(2) + ' days) after voting starts.';
+
+const getSTXMintPostConds = function (amt:number) {
+	const postConds = []
+	if (!$account.stxAddress) return [];
+	const amount = amt; // ChainUtils.toOnChainAmount(amt, 0)
+	postConds.push(makeStandardSTXPostCondition(
+		$account.stxAddress,
+		FungibleConditionCode.LessEqual,
+		amount
+	))
+	return postConds
+}
+
+let amount = 1;
+const submit = async () => {
+	if (amount < 1) {
+		addNotification({
+			position: 'bottom-right',
+			heading: 'Please fix',
+			type: 'error',
+			description: 'Minimum contribution is 1 STX',
+		});
+		return
 	}
-
-	let amount = 1;
-	const submit = async () => {
-		if (amount < 1) {
-			addNotification({
-				position: 'bottom-right',
-				heading: 'Please fix',
-				type: 'error',
-				description: 'Minimum contribution is 1 STX',
-			});
-			return
+	const amountUSTX = ChainUtils.toOnChainAmount(amount)
+	const amountCV = uintCV(amountUSTX)
+	const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
+	let functionArgs = [proposalCV, amountCV];
+	await $contractCall.openContractCall({
+		postConditions: getSTXMintPostConds(amountUSTX),
+		postConditionMode: PostConditionMode.Deny,
+		contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+		contractName: 'ede008-funded-proposal-submission',
+		functionName: 'fund',
+		functionArgs: functionArgs,
+		onFinish: async (data) => {
+			proposal.status = 'submitting'
+			proposal.submitTxId = data.txId
+			const resp = await ChainUtils.postToApi('/v2/proposals', proposal)
+			console.log(resp)
+		},
+		onCancel: () => {
+			console.log('popup closed!');
 		}
-		const amountUSTX = ChainUtils.toOnChainAmount(amount)
-        const amountCV = uintCV(amountUSTX)
-        const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
-		let functionArgs = [proposalCV, amountCV];
-		const txOptions = {
-			postConditions: getSTXMintPostConds(amountUSTX),
-			postConditionMode: PostConditionMode.Deny,
-			contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-			contractName: 'ede008-funded-proposal-submission',
-			functionName: 'fund',
-			functionArgs: functionArgs,
-			appDetails: {
-				name: 'Ecosystem DAO',
-				icon: '/img/logo.png'
-			},
-			onCancel: (error: any) => {
-				console.error(error)
-			},
-			onFinish: async (result: { txId: string; txRaw: any; stacksTransaction: any; }) => {
-				proposal.status = 'submitting'
-				proposal.submitTxId = result.txId
-				const resp = await ChainUtils.postToApi('/v2/proposals', proposal)
-				console.log(resp)
-			}
-		}
-		client.signTransaction(TxType.ContractCall, txOptions);
-	}
+    });
+}
 </script>
 
 <svelte:head>
@@ -84,7 +80,7 @@
 
 <section>
     <div class="container my-5">
-		{#if proposal.funding < fundingCost}
+		{#if proposal.funding && proposal.funding < fundingCost}
 		<p>Funding target is {fundingCost} STX</p>
 		<p>Currently funded {proposal.funding} STX</p>
 		<p>Your wallet balance is {balance} STX</p>

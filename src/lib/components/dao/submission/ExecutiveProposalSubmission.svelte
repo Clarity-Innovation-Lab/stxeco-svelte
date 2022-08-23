@@ -1,54 +1,49 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import settings from '$lib/settings';
-	import { client } from '$lib/micro-stacks-client';
-	import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
-	import { PostConditionMode } from 'micro-stacks/transactions';
-	import { TxType } from '@micro-stacks/client';
+import { page } from '$app/stores';
+import settings from '$lib/settings';
+import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
+import { PostConditionMode } from 'micro-stacks/transactions';
+import { getOpenContractCall } from '@micro-stacks/svelte';
 
-	let contractId = $page.params.contractId
-	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+const contractCall = getOpenContractCall();
 
-	const stacksTipHeight = $settings.info.stacks_tip_height;
+let contractId = $page.params.contractId
+export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
+if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
 
-	const submit = async () => {
-        const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
-		let functionArgs = [proposalCV]
-		const txOptions = {
-			postConditions: [],
-			postConditionMode: PostConditionMode.Deny,
-			contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-			contractName: 'ede004-emergency-proposals',
-			functionName: 'emergency-propose',
-			functionArgs: functionArgs,
-			// network,
-			appDetails: {
-				name: 'Ecosystem DAO',
-				icon: '/img/logo.png'
-			},
-			onCancel: (error: any) => {
-				console.log(error)
-			},
-			onFinish: (result: { txId: string; txRaw: any; stacksTransaction: any; }) => {
-				proposal.status = 'submitting'
-				proposal.submitTxId = result.txId
-				let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposals';
-				postData(url, proposal)
-			}
+const stacksTipHeight = $settings.info.stacks_tip_height;
+
+const submit = async () => {
+	const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
+	let functionArgs = [proposalCV]
+	await $contractCall.openContractCall({
+		postConditions: [],
+		postConditionMode: PostConditionMode.Deny,
+		contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+		contractName: 'ede004-emergency-proposals',
+		functionName: 'emergency-propose',
+		functionArgs: functionArgs,
+		onFinish: data => {
+			proposal.status = 'submitting'
+			proposal.submitTxId = data.txId
+			let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposals';
+			postData(url, proposal)
+		},
+		onCancel: () => {
+			console.log('popup closed!');
 		}
-		client.signTransaction(TxType.ContractCall, txOptions);
-	}
-	const postData = async (url:string, data:any) => {
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(data)
-		});
-		return response.json(); 
-	}
+	});
+}
+const postData = async (url:string, data:any) => {
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(data)
+	});
+	return response.json(); 
+}
 
-	const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
+const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 </script>
 
 <svelte:head>

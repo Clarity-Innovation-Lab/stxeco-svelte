@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
-  import { client } from '$lib/micro-stacks-client';
   import { contractPrincipalCV } from 'micro-stacks/clarity';
   import { PostConditionMode } from 'micro-stacks/transactions';
-  import { TxType } from '@micro-stacks/client';
+  import { getOpenContractCall } from '@micro-stacks/svelte';
+
+  const contractCall = getOpenContractCall();
 
 	let contractId = $page.params.contractId;
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
@@ -14,26 +15,20 @@
   const signalSupport = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
-    const txOptions = {
+    await $contractCall.openContractCall({
       postConditions: [],
       postConditionMode: PostConditionMode.Deny,
       contractAddress: deployer,
       contractName: 'ede004-emergency-execute',
       functionName: 'executive-action',
       functionArgs: [proposalCV],
-      // network,
-      appDetails: {
-        name: 'Ecosystem DAO',
-        icon: '/img/logo.png'
+      onFinish: data => {
+        console.log('finished contract call!', data);
       },
-      onCancel: (error: any) => {
-        console.log(error)
+      onCancel: () => {
+        console.log('popup closed!');
       },
-      onFinish: (data: any) => {
-        console.log(data)
-      }
-    }
-    await client.signTransaction(TxType.ContractCall, txOptions);
+    });
   }
 
 	let stacksTipHeight = $settings.info.stacks_tip_height;

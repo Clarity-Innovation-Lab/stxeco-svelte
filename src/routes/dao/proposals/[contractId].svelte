@@ -1,44 +1,48 @@
 <script context="module">
-	import settings from '$lib/settings';
-  import authService from '$lib/service/StacksAuthService';
-  import ChainUtils from '$lib/service/ChainUtils';
-  /** @type {import('./__types/[contractId]').Load} */
-  export async function load({ params, fetch }) {
-    let balanceAtHeight = 0;
-    const contractId = params.contractId;
-    let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
-    let res = await fetch(url);
-    const proposal = await res.json();
-    if (proposal.proposalData) {
-      const callData = {
-        path: '/extended/v1/address/' + authService.getProfile().stxAddress + '/balances?until_block=' + proposal.proposalData.startBlockHeight,
-        httpMethod: 'get'
-      }
-      try {
-        const response = await ChainUtils.postToApi('/v2/accounts', callData);
-        balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
-        return {
-          status: response.status,
-          props: {
-            contractId,
-            proposal,
-            balanceAtHeight
-          }
-        };
-      } catch (e) {
-        // server side load won't work in development so catch and continue..
-      }
-    } else {
+import settings from '$lib/settings';
+import ChainUtils from '$lib/service/ChainUtils';
+import { getAccount } from '@micro-stacks/svelte';
+
+const account = getAccount();
+const stxAddress = $account.stxAddress;
+
+/** @type {import('./__types/[contractId]').Load} */
+export async function load({ params, fetch }) {
+  let balanceAtHeight = 0;
+  const contractId = params.contractId;
+  let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
+  let res = await fetch(url);
+  const proposal = await res.json();
+  if (proposal.proposalData) {
+    const callData = {
+      path: '/extended/v1/address/' + stxAddress + '/balances?until_block=' + proposal.proposalData.startBlockHeight,
+      httpMethod: 'get'
+    }
+    try {
+      const response = await ChainUtils.postToApi('/v2/accounts', callData);
+      balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
       return {
-        status: res.status,
+        status: response.status,
         props: {
           contractId,
           proposal,
           balanceAtHeight
         }
       };
+    } catch (e) {
+      // server side load won't work in development so catch and continue..
     }
+  } else {
+    return {
+      status: res.status,
+      props: {
+        contractId,
+        proposal,
+        balanceAtHeight
+      }
+    };
   }
+}
 </script>
 
 <script lang="ts">
