@@ -20,11 +20,7 @@
 				{extension: .ede006-treasury, enabled: true}
 			)
 		))
-
-		(try! (contract-call? .ede004-emergency-execute set-signals-required u1)) ;; signal from 3 out of 4 team members requied.
-
-		;; Mint initial token supply.
-		(print "ExecutorDAO extensions reset.")
+		(try! (contract-call? .ede004-emergency-execute set-signals-required u2))
 		(ok true)
 	)
 )

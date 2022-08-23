@@ -12,6 +12,7 @@ let st2 = '<p>Ongoing votes - delegate your vote</p>'
 let st3 = '<p>Get involved - join the discussion</p>'
 let st4 = '<p>The DAO is a community</p>'
 let response;
+let txId: string;
 
 const constructDao = async () => {
   const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
@@ -26,6 +27,7 @@ const constructDao = async () => {
     functionArgs: [bootstrap],
     onFinish: data => {
       console.log('finished contract call!', data);
+      txId = data.txId;
     },
     onCancel: () => {
       console.log('popup closed!');
@@ -33,7 +35,8 @@ const constructDao = async () => {
   });
 }
 
-$: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || false
+$: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || false;
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
 <svelte:head>
@@ -45,6 +48,11 @@ $: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || fals
   {#if !constructed}
   <div class="container text-center">
     <button type="button" class="btn btn-primary" on:click={constructDao}>CONSTRUCT DAO</button>
+  </div>
+  {/if}
+  {#if txId}
+  <div>
+    <a href={explorerUrl} target="_blank">View on explorer</a>
   </div>
   {/if}
 

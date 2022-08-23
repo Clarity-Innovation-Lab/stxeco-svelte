@@ -11,6 +11,8 @@
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
   const proposalData = proposal.proposalData || { startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
+  $: buttonLabel = contractCall.isRequestPending ? "Tx Sent": "SUPPORT PROPOSAL";
+  let txId: string;
 
   const signalSupport = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
@@ -23,6 +25,7 @@
       functionName: 'executive-action',
       functionArgs: [proposalCV],
       onFinish: data => {
+        txId = data.txId;
         console.log('finished contract call!', data);
       },
       onCancel: () => {
@@ -34,16 +37,22 @@
 	let stacksTipHeight = $settings.info.stacks_tip_height;
   const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
   const canVote = executiveTeamMember // && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
+  $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
 <section>
   {#if canVote}
   <div class="row mt-5">
     <div class="my-5 text-center">
-		<h4>{proposal.contractId.split('.')[1]}</h4>
-		<h6>Signal support for this proposal via multisig voting by executive team</h6>
-      <button class="btn btn-outline-success" on:click={() => signalSupport()}>SUPPORT</button>
+      <h4>{proposal.contractId.split('.')[1]}</h4>
+      <h6>Signal support for this proposal via multisig voting by executive team</h6>
+      {#if !txId}<button class="btn btn-outline-success" on:click={() => signalSupport()}>{buttonLabel}</button>{/if}
     </div>
+    {#if txId}
+    <div>
+      <a href={explorerUrl} target="_blank">View on explorer</a>
+    </div>
+    {/if}
   </div>
   {/if}
 </section>

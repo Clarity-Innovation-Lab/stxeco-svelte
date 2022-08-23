@@ -16,13 +16,9 @@
 				{extension: .ede008-funded-proposal-submission, enabled: true}
 			)
 		))
-
 		(try! (contract-call? .ede008-funded-proposal-submission set-parameter "funding-cost" u10000000))
 		(try! (contract-call? .ede008-funded-proposal-submission set-parameter "proposal-start-delay" u2))
 		(try! (contract-call? .ede008-funded-proposal-submission set-parameter "proposal-duration" u200))
-
-		;; Mint initial token supply.
-		(print "ExecutorDAO extensions reset.")
 		(ok true)
 	)
 )

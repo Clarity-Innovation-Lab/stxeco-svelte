@@ -12,7 +12,8 @@
 
     mountClient({
         appName: 'Ecosystem DAO',
-        appIconUrl: 'img/logo.png'
+        appIconUrl: '/img/logo.png',
+        network: import.meta.env.VITE_NETWORK
     })
     const account = getAccount();
 
@@ -38,7 +39,7 @@
           }, 1000)
 
       } catch(error) {
-            console.error(error)
+            console.log(error)
       }
   })
 </script>
