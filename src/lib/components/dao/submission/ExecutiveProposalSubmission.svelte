@@ -28,7 +28,7 @@
 				icon: '/img/logo.png'
 			},
 			onCancel: (error: any) => {
-				console.error(error)
+				console.log(error)
 			},
 			onFinish: (result: { txId: string; txRaw: any; stacksTransaction: any; }) => {
 				proposal.status = 'submitting'

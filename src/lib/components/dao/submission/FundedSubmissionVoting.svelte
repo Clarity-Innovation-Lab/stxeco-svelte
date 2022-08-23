@@ -6,8 +6,10 @@
 	import { FungibleConditionCode, PostConditionMode, makeStandardSTXPostCondition } from 'micro-stacks/transactions';
 	import { TxType } from '@micro-stacks/client';
 	import ChainUtils from '$lib/service/ChainUtils';
-	import StacksAuthStore from '../../../../stores/StacksAuthStore'
 	import { getNotificationsContext } from 'svelte-notifications';
+	import { getAccount } from "@micro-stacks/client";
+ 
+ 	const account = getAccount();
 
 	const { addNotification } = getNotificationsContext();
 
@@ -25,10 +27,10 @@
 
 	const getSTXMintPostConds = function (amt:number) {
 		const postConds = []
-		if (!$StacksAuthStore.stxAddress) return [];
+		if (!$account.stxAddress) return [];
 		const amount = amt; // ChainUtils.toOnChainAmount(amt, 0)
 		postConds.push(makeStandardSTXPostCondition(
-			$StacksAuthStore.stxAddress,
+			$account.stxAddress,
 			FungibleConditionCode.LessEqual,
 			amount
 		))

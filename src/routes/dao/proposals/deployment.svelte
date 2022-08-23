@@ -1,18 +1,21 @@
 <script lang="ts">
-  import StacksAuthStore from '../../../stores/StacksAuthStore'
   import settings from '$lib/settings';
   import { DateTime } from 'luxon'
   import { client } from '$lib/micro-stacks-client';
-  import { TxType } from '@micro-stacks/client';
+  import { getCurrentAccount, TxType } from '@micro-stacks/client';
   import ProposalDeploymentForm from '$lib/components/dao/proposals/ProposalDeploymentForm.svelte';
   import LoadFile from '$lib/components/dao/proposals/LoadFile.svelte';
   import { CaretRight, CaretRightFill } from "svelte-bootstrap-icons";
   import type { ProposalType } from 'src/types/stxeco.type.js';
+	//import { getAccount } from "@micro-stacks/client";
+  import { client } from "../../../stores/client";
+
+ 	const account = client;
 
   const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
   let canSubmit = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
   if (!canSubmit) {
-    canSubmit = $StacksAuthStore.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
+    canSubmit = account.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
   }
   let showNoop = false;
   let showFromFile = false;
@@ -36,14 +39,14 @@
     contractName = e.detail.contractName;
     newProposal = {
       title: e.detail.title,
-      proposer: $StacksAuthStore.stxAddress,
+      proposer: $account.stxAddress,
       status: 'deployed',
       created: DateTime.now().ts,
       updated: DateTime.now().ts,
-      contractId: $StacksAuthStore.stxAddress + '.' + contractName,
+      contractId: $account.stxAddress + '.' + contractName,
       contract: {
         source_code: replacedSource,
-        contract_id: $StacksAuthStore.stxAddress + '.' + contractName
+        contract_id: $account.stxAddress + '.' + contractName
       }
     }
 		replacedSource = contractSource.replace('<title>', e.detail.title);
@@ -59,14 +62,14 @@
     showDeployButton = true;
     newProposal = {
       title: contractName,
-      proposer: $StacksAuthStore.stxAddress,
+      proposer: $account.stxAddress,
       status: 'deployed',
       created: DateTime.now().ts,
       updated: DateTime.now().ts,
-      contractId: $StacksAuthStore.stxAddress + '.' + contractName,
+      contractId: $account.stxAddress + '.' + contractName,
       contract: {
         source_code: replacedSource,
-        contract_id: $StacksAuthStore.stxAddress + '.' + contractName
+        contract_id: $account.stxAddress + '.' + contractName
       }
     }
 	}
@@ -81,7 +84,7 @@
         icon: '/img/logo.png'
       },
       onCancel: (error: any) => {
-        console.error(error)
+        console.log(error)
       },
       onFinish: (result: { txId: string; txRaw: any; stacksTransaction: any; }) => {
         console.log(result)
@@ -121,14 +124,14 @@
   <div class="container">
     {#if canSubmit || executiveTeamMember}
     <h3><span>Options for Deploying a Proposal Contract</span></h3>
-    <div class="my-4 pointer" on:click={() => { showNoop = true; showFromFile = false; showDeployButton = false }}>{#if showNoop}<CaretRightFill fill="purple"/>{:else}<CaretRight />{/if} Deploy simple voting only (noop) proposal</div>
+    <div class="mt-4 pointer" on:click={() => { showNoop = true; showFromFile = false; showDeployButton = false }}>{#if showNoop}<CaretRightFill fill="purple"/>{:else}<CaretRight />{/if} Deploy simple voting only (noop) proposal</div>
     <div class="pointer" on:click={() => { showNoop = false; showFromFile = true; showDeployButton = false }}>{#if showFromFile}<CaretRightFill fill="purple"/>{:else}<CaretRight/>{/if} Upload a fully unit tested proposal</div>
     {:else}
     <div class="container">Unable to deploy proposal</div>
     {/if}
-    <div class="row mt-5">
+    <div class="row mt-3">
       {#if showDeployButton}
-      <div class="mt-3 d-flex justify-content-start">
+      <div class="my-3 d-flex justify-content-start">
         <button class="btn btn-sm outline-light" on:click|preventDefault={() => { deployContract() }}>Deploy</button>
       </div>
       {/if}
@@ -148,11 +151,6 @@
         {:else}
         <div><pre class="source-code">{newSource}</pre></div>
         {/if}
-      </div>
-      {/if}
-      {#if showDeployButton}
-      <div class="mt-3 d-flex justify-content-start">
-        <button class="btn btn-sm outline-light" on:click|preventDefault={() => { deployContract() }}>Deploy</button>
       </div>
       {/if}
     </div>

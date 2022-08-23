@@ -16,7 +16,7 @@
 
   const constructDao = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
-    const bootstrap = contractPrincipalCV(deployer, 'edp000-bootstrap')
+    const bootstrap = contractPrincipalCV(deployer, 'edp000-bootstrap-minimal')
     // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
     
     const txOptions = {

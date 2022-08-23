@@ -1,13 +1,7 @@
 <script lang="ts">
 import { page } from '$app/stores';
-import StacksAuthStore from '../../stores/StacksAuthStore.js'
-import StacksAuthService from '$lib/service/StacksAuthService'
 import WalletConnectButton from './WalletConnectButton.svelte'
-import { Tools } from "svelte-bootstrap-icons";
-
-const logout = () => {
-	StacksAuthService.logout()
-}
+import { Tools } from "svelte-bootstrap-icons"; 
 </script>
 
 <div class="container-fluid px-0">
@@ -30,11 +24,7 @@ const logout = () => {
 				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/dao') > -1} href="/dao">DAO</a></li>
 				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/sip') > -1} href="/sip">SIPs</a></li>
 				<li class="nav-item">
-					{#if $StacksAuthStore.loggedIn}
-						<a on:click|preventDefault={logout} href="/">Logout</a>
-					{:else}
-						<WalletConnectButton />
-					{/if}
+					<WalletConnectButton />
 				</li>
 			</ul>
 		</div>

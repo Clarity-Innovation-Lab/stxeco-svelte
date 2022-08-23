@@ -27,10 +27,10 @@
         icon: '/img/logo.png'
       },
       onCancel: (error: any) => {
-        console.error(error)
+        console.log(error)
       },
-      onFinish: (result: { txId: { txid: any; }; txRaw: any; stacksTransaction: any; }) => {
-        console.log(result)
+      onFinish: (data: any) => {
+        console.log(data)
       }
     }
     await client.signTransaction(TxType.ContractCall, txOptions);

@@ -15,8 +15,10 @@
 </script>
 <script>
 // @ts-nocheck
-	import StacksAuthStore from '../stores/StacksAuthStore'
 	import settings from '$lib/settings'
+	import { getAccount } from "@micro-stacks/client";
+ 
+ 	const account = getAccount();
 
 </script>
 
@@ -38,7 +40,7 @@
 		groups of people working often remotely.
 	</p>
 	<h4>User Properties</h4>
-	<p class="text-small">{$StacksAuthStore?.stxAddress || 'anon'}</p>
+	<p class="text-small">{$account?.stxAddress || 'anon'}</p>
 	{#if $settings}
 	{#if $settings.userProperties}
 	{#each $settings.userProperties as item}
