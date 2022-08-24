@@ -10,11 +10,17 @@
     import { mountClient } from "@micro-stacks/svelte";
     import { getAccount } from '@micro-stacks/svelte';
 
-    mountClient({
-        appName: 'Ecosystem DAO',
-        appIconUrl: '/img/logo.png',
-        network: import.meta.env.VITE_NETWORK
-    })
+    const network = import.meta.env.VITE_NETWORK;
+    let origin = import.meta.env.VITE_ORIGIN;
+    if (typeof window !== 'undefined') {
+      origin = window.location.origin;
+    }
+    const config = {
+      appName: 'Ecosystem DAO',
+      appIconUrl: origin + '/img/logo.png',
+      network: network
+    };
+    mountClient(config)
     const account = getAccount();
 
     let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
