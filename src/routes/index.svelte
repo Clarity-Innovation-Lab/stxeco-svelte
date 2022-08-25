@@ -24,22 +24,33 @@ export async function load({ fetch }) {
 	}
 }
 </script>
+<script>
+	import createClient from '$lib/prismicio'; // Update this path if necessary
+	import  * as prismicH from '@prismicio/helpers';
 	
-
+	const client = createClient()
+	const document = client.getSingle('home')
+  </script>
+  
 <svelte:head>
 	<title>Home</title>
 	<meta name="description" content="Ecosystem DAO" />
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset="svelte-welcome.webp" type="image/webp" />
-				<img src="svelte-welcome.png" alt="Welcome" />
-			</picture>
-		</span>
-	</h1>
+	{#await document}
+	<p>Loading...</p>
+  {:then prismicResponse}
+  {@html prismicH.asHTML(prismicResponse.data.content)}
+  <!--
+	<h1>{prismicH.asText(prismicResponse.data.title)}</h1>
+	{@html prismicH.asHTML(prismicResponse.data.tagline)}
+	{@html prismicH.asImageSrc(prismicResponse.data['homepage-image'])}
+  -->
+  {:catch error}
+  <pre>{document}</pre>
+  <pre>{error.message}</pre>
+  {/await}
 </section>
 
 <style>
