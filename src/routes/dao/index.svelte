@@ -4,6 +4,7 @@ import CardWithParams from '$lib/shared/CardWithParams.svelte'
 import { contractPrincipalCV } from 'micro-stacks/clarity';
 import { PostConditionMode } from 'micro-stacks/transactions';
 import { getOpenContractCall } from '@micro-stacks/svelte';
+import ChainUtils from '$lib/service/ChainUtils';
 
 const contractCall = getOpenContractCall();
 

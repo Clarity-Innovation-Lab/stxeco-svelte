@@ -20,6 +20,7 @@ if (!canSubmit) {
 let showNoop = false;
 let showFromFile = false;
 const contractSource = `
+;; DAO: Ecosystem DAO
 ;; Title: <title>
 ;; Author: <author>
 ;; Synopsis: <synopsis>

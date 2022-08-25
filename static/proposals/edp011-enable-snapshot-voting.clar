@@ -1,3 +1,4 @@
+;; DAO: Ecosystem DAO
 ;; Title: EDP011 Enable Snapshot Voting
 ;; Author: Mike Cohen
 ;; Synopsis:

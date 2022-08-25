@@ -1,3 +1,4 @@
+;; DAO: Ecosystem DAO
 ;; Title: EDP000 Bootstrap Minimal
 ;; Author: Marvin Janssen, Mike Cohen
 ;; Synopsis:

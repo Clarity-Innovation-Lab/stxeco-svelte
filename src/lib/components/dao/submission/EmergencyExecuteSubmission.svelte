@@ -10,6 +10,7 @@
 	let contractId = $page.params.contractId;
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+  const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
   const proposalData = proposal.proposalData || { startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
   $: buttonLabel = contractCall.isRequestPending ? "Tx Sent": "SUPPORT PROPOSAL";
   let txId: string;
@@ -46,6 +47,7 @@
     <div class="my-5 text-center">
       <h4>{proposal.contractId.split('.')[1]}</h4>
       <h6>Signal support for this proposal via multisig voting by executive team</h6>
+      <p>{proposal.emergencySignals} of {sigsRequired} signal(s) received so far.</p>
       {#if !txId}<button class="btn btn-outline-success" on:click={() => signalSupport()}>{buttonLabel}</button>{/if}
     </div>
     {#if txId}

@@ -10,25 +10,13 @@ export async function load({ params, fetch }) {
   let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
   let res = await fetch(url);
   const proposal = await res.json();
-  if (proposal.proposalData) {
-		if (typeof window === 'undefined') {
-      return {
-        status: res.status,
-        props: {
-          contractId,
-          proposal
-        }
-      };
-    }
-  } else {
-    return {
+  return {
       status: res.status,
       props: {
-        contractId,
-        proposal
+          contractId,
+          proposal
       }
     };
-  }
 }
 </script>
 
@@ -68,14 +56,6 @@ onMount(async () => {
     }
     const response = await ChainUtils.postToApi('/v2/accounts', callData);
     balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
-    return {
-      status: response.status,
-      props: {
-        contractId,
-        proposal,
-        balanceAtHeight
-      }
-    };
   }
 })
 $: balanceAtHeight = 0
@@ -96,26 +76,31 @@ $: balanceAtHeight = 0
         </p>
       </div>
     </div>
-	  {#if status === 'deployed'}
-    <div class="jumbo">
-      <h6 class="my-3">Contract is deployed and ready to submit to the DAO</h6>
-      <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>submit</button>
-    </div>
+	  {#if proposal.deployTxId && !proposal.submitTxId}
+      {#if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
+        <div class="jumbo">
+          <h6 class="my-3">Proposal requires support before voting can start...</h6>
+          <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>fund proposal</button>
+        </div>
+      {:else}
+        <div class="jumbo">
+          <h6 class="my-3">Proposal is deployed and ready to submit to the DAO</h6>
+          <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>submit</button>
+        </div>
+      {/if}
 	  {/if}
 	  <ExecutedBanner {proposal} />
-	  {#if proposal.proposalData}
-    <div>
-      <VotingSchedule {proposal}/>
-    </div>
-	  {/if}
     {#if proposal.proposalData}
-    <div>
-      {#if proposal.votingContract === 'ede001-proposal-voting'}
-      <PropBallotBox {proposal} />
-      {:else if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
-      <SnapBallotBox {proposal} {balanceAtHeight}/>
-      {/if}
-    </div>
+      <div>
+        <VotingSchedule {proposal}/>
+      </div>
+      <div>
+        {#if proposal.votingContract === 'ede001-proposal-voting'}
+          <PropBallotBox {proposal} />
+        {:else if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
+          <SnapBallotBox {proposal} {balanceAtHeight}/>
+        {/if}
+      </div>
     {/if}
 
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">

@@ -68,7 +68,7 @@ export type ProposalType = {
   votingContract?: string|undefined;
   created: number;
   updated: number;
-  funding?: number;
+  funding?: number; // important - number implies funded proposal submission
   emergencySignals?: number;
   executedAt?: number;
   proposer: string|undefined;

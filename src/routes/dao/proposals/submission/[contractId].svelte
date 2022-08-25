@@ -89,7 +89,7 @@
 			{#if !executed}
 			<div class="text-center my-5">
 				{#if fundedProposal}
-					<button class:text-success={showFundedProposal} class="btn outline-light mr-2" on:click={showFundedForm}>Submit Funded Proposal</button>
+					<button class:text-success={showFundedProposal} class="btn outline-light mr-2" on:click={showFundedForm}>Fund Proposal</button>
 				{/if}
 				{#if thresholdProposal}
 					<button class:text-success={showThresholdProposal} class="btn outline-light mr-2" on:click={showThresholdForm}>Submit Threshold Proposal</button>

@@ -1,3 +1,4 @@
+;; DAO: Ecosystem DAO
 ;; Title: EDP002 Kill Emergency Execute
 ;; Author: Mike Cohen
 ;; Synopsis:
