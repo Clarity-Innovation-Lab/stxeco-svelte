@@ -1,32 +1,37 @@
 <script context="module">
-import settings from '$lib/settings';
-import ChainUtils from '$lib/service/ChainUtils';
-
-//const stxAddress = $account.stxAddress;
-
-/** @type {import('./__types/[contractId]').Load} */
 export async function load({ params, fetch }) {
-  const contractId = params.contractId;
-  let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
-  let res = await fetch(url);
-  const proposal = await res.json();
-  return {
-      status: res.status,
-      props: {
-          contractId,
-          proposal
-      }
-    };
+  try {
+    const contractId = params.contractId;
+    let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
+    let res = await fetch(url);
+    if (res.ok) {
+        const proposal = await res.json();
+				return {
+					props: {
+            contractId,
+            proposal
+					}
+				}
+			} else {
+				return {
+					status: res.status,
+					error: new Error('Could not fetch issues')
+				}
+			}
+  } catch (e) {
+    console.log(e);
+  }
 }
 </script>
 
 <script lang="ts">
+import settings from '$lib/settings';
+import ChainUtils from '$lib/service/ChainUtils';
 import {onMount} from 'svelte'
 import VotingSchedule from '$lib/components/dao/voting/VotingSchedule.svelte'
 import PropBallotBox from '$lib/components/dao/voting/PropVotingBallotBox.svelte'
 import SnapBallotBox from '$lib/components/dao/voting/SnapVotingBallotBox.svelte'
 import { goto } from '$app/navigation';
-import DaoUtils from '$lib/service/DaoUtils';
 import ExecutedBanner from '$lib/components/dao/proposals/ExecutedBanner.svelte'
 import type { ProposalType } from "../../../types/stxeco.type";
 import { getAccount } from '@micro-stacks/svelte';
@@ -46,8 +51,6 @@ const submit = () => {
   goto(`/dao/proposals/submission/${contractId}`, { replaceState: false })
 }
 let showEmergVoting = false;
-const stacksTipHeight = $settings.info.stacks_tip_height;
-const status = DaoUtils.getStatus(stacksTipHeight, proposal)
 onMount(async () => {
   if (proposal.proposalData) {
     const callData = {
@@ -76,7 +79,7 @@ $: balanceAtHeight = 0
         </p>
       </div>
     </div>
-	  {#if proposal.deployTxId && !proposal.submitTxId}
+	  {#if proposal.deployTxId}
       {#if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
         <div class="jumbo">
           <h6 class="my-3">Proposal requires support before voting can start...</h6>

@@ -39,6 +39,8 @@ const getSTXMintPostConds = function (amt:number) {
 }
 
 let amount = 1;
+let txId: string;
+
 const submit = async () => {
 	if (amount < 1) {
 		addNotification({
@@ -62,6 +64,7 @@ const submit = async () => {
 		functionArgs: functionArgs,
 		onFinish: async (data) => {
 			proposal.status = 'submitting'
+			txId = data.txId
 			proposal.submitTxId = data.txId
 			const resp = await ChainUtils.postToApi('/v2/proposals', proposal)
 			console.log(resp)
@@ -71,6 +74,7 @@ const submit = async () => {
 		}
     });
 }
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
 <svelte:head>
@@ -94,7 +98,13 @@ const submit = async () => {
 				<div class="d-flex justify-content-center"><input class="w-25 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"> </div>
 				<div id="emailHelp" class="form-text">The amount you wish to contribute towards funding this proposal - minimum contribution is 1 STX.</div>
 			  </div>
-			<button class="btn outline-light mr-2 text-info" on:click={() => submit()}>Fund Proposal</button>
+			{#if txId}
+				<div>
+				  <a href={explorerUrl} target="_blank">View on explorer</a>
+				</div>
+			{:else}
+				<button class="btn outline-light mr-2 text-info" on:click={() => submit()}>Fund Proposal</button>
+			{/if}
 		</form>
 	{:else}
 		<p>Funding target met {proposal.funding} of {fundingCost} STX raised</p>

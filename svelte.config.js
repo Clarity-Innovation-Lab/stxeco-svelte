@@ -15,7 +15,9 @@ const config = {
   kit: {
     prerender: {default: true},
     trailingSlash: 'always',
-    adapter: adapter()
+    adapter: adapter({
+      fallback: '200.html'
+    })
   }
 };
 
