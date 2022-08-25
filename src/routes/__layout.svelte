@@ -3,11 +3,29 @@
     import "../app.scss";
     import settings from '$lib/settings'
     import {tick, onMount} from 'svelte'
-    import StacksAuthService from "$lib/service/StacksAuthService";
     import Header from "$lib/header/Header.svelte";
     import Footer from "$lib/header/Footer.svelte";
     import { page } from "$app/stores";
     import Notifications from 'svelte-notifications';
+    import { mountClient } from "@micro-stacks/svelte";
+    import { getAccount } from '@micro-stacks/svelte';
+    import { getNetwork } from '@micro-stacks/svelte';
+
+
+    let origin = import.meta.env.VITE_ORIGIN;
+    if (typeof window !== 'undefined') {
+      origin = window.location.origin;
+    }
+
+    const config = {
+      appName: 'Ecosystem DAO',
+      appIconUrl: origin + '/img/logo.png',
+      network: import.meta.env.VITE_NETWORK
+    };
+    mountClient(config)
+    const network = getNetwork();
+    $network.setNetwork(import.meta.env.VITE_NETWORK);
+    const account = getAccount();
 
     let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 
@@ -19,8 +37,7 @@
     onMount(async () => {
       try {
           bootstrap = (await import('bootstrap'));
-          StacksAuthService.updateLoginStatus();
-          await settings.init()           
+          await settings.init($account.stxAddress)           
           appInitialized = true
           console.log("Page=", page);
           await tick();
@@ -32,7 +49,7 @@
           }, 1000)
 
       } catch(error) {
-            console.error(error)
+            console.log(error)
       }
   })
 </script>

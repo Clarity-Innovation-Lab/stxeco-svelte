@@ -14,6 +14,7 @@
     const proposalContractUrl = (proposal.contract.tx_id) ? import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + proposal.deployTxId + '?chain=' + import.meta.env.VITE_NETWORK : null
 
 	const executed = proposal.executedAt > 0
+	const execPropContractDeployed = false;
 	
 	const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 
@@ -88,16 +89,16 @@
 			{#if !executed}
 			<div class="text-center my-5">
 				{#if fundedProposal}
-					<button class:text-success={showFundedProposal} class="btn outline-light mr-2" on:click={showFundedForm}>Submit Funded Proposal</button>
+					<button class:text-success={showFundedProposal} class="btn outline-light mr-2" on:click={showFundedForm}>Fund Proposal</button>
 				{/if}
 				{#if thresholdProposal}
 					<button class:text-success={showThresholdProposal} class="btn outline-light mr-2" on:click={showThresholdForm}>Submit Threshold Proposal</button>
 				{/if}
-				{#if executiveTeamMember}
+				{#if executiveTeamMember && execPropContractDeployed}
 					<button class:text-success={showExecutiveProposal} class="btn outline-light mr-2" on:click={showExecutiveProposalSubmitForm}>Submit Executive Proposal</button>
 				{/if}
 				{#if executiveTeamMember}
-					<button class:text-success={showEmergencyExecute} class="btn outline-light mr-2" on:click={showEmergencySubmitForm}>Submit Emergency Execute</button>
+					<button class:text-success={showEmergencyExecute} class="btn outline-light mr-2" on:click={showEmergencySubmitForm}>Open Emergency Execute</button>
 				{/if}
 			</div>
 			{:else}

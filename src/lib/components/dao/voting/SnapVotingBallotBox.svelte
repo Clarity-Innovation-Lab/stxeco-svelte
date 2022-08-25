@@ -1,59 +1,51 @@
 <script lang="ts">
-	import settings from '$lib/settings';
-  import { client } from '$lib/micro-stacks-client';
-  import { contractPrincipalCV, trueCV, falseCV, uintCV } from 'micro-stacks/clarity';
-  import { PostConditionMode } from 'micro-stacks/transactions';
-  import { TxType } from '@micro-stacks/client';
-  import type { ContractCallParams } from '@micro-stacks/client';
-  import type { ProposalType } from "../../../../types/stxeco.type";
-	import ChainUtils from '$lib/service/ChainUtils';
+import settings from '$lib/settings';
+import { contractPrincipalCV, trueCV, falseCV, uintCV } from 'micro-stacks/clarity';
+import { PostConditionMode } from 'micro-stacks/transactions';
+import type { ProposalType } from "../../../../types/stxeco.type";
+import ChainUtils from '$lib/service/ChainUtils';
+import { getOpenContractCall } from '@micro-stacks/svelte';
 
-	export let proposal:ProposalType;
-	export let balanceAtHeight:number;
+const contractCall = getOpenContractCall();
 
-  const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
+export let proposal:ProposalType;
+export let balanceAtHeight:number;
 
-	let stacksTipHeight = $settings.info.stacks_tip_height;
-  let tokenBalance = $settings.userProperties?.find((o) => o.functionName === 'edg-get-balance')?.value?.value || 0
-  const tokenBalanceLocked = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked')?.value.value || 0;
+const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
 
+let stacksTipHeight = $settings.info.stacks_tip_height;
+let tokenBalance = $settings.userProperties?.find((o) => o.functionName === 'edg-get-balance')?.value?.value || 0
+const tokenBalanceLocked = $settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked')?.value.value || 0;
 
-	let amount = 0;
-
-  const castVote = async (vfor:boolean) => {
+let amount = 0;
+const castVote = async (vfor:boolean) => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
     if (amount === 0) return;
     let forCV = trueCV()
     if (!vfor) {
       forCV = falseCV()
     }
-		// const amountUSTX = ChainUtils.toOnChainAmount(amount)
-		const amountUSTX = ChainUtils.toOnChainAmount(amount)
+    // const amountUSTX = ChainUtils.toOnChainAmount(amount)
+    const amountUSTX = ChainUtils.toOnChainAmount(amount)
     const amountCV = uintCV(amountUSTX)
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
-    const txOptions:ContractCallParams = {
-      postConditions: [],
-      postConditionMode: PostConditionMode.Deny,
-      contractAddress: deployer,
-      contractName: 'ede007-snapshot-proposal-voting',
-      functionName: 'vote',
-      functionArgs: [amountCV, forCV, proposalCV],
-      // network,
-      appDetails: {
-        name: 'Ecosystem DAO',
-        icon: '/img/logo.png'
-      },
-      onCancel: (error: any) => {
-        console.error(error)
-      },
-      onFinish: (result: { txId: { txid: any; }; txRaw: any; stacksTransaction: any; }) => {
-        console.log(result);
-      }
-    }
-    await client.signTransaction(TxType.ContractCall, txOptions);
-  }
+    await $contractCall.openContractCall({
+        postConditions: [],
+        postConditionMode: PostConditionMode.Deny,
+        contractAddress: deployer,
+        contractName: 'ede007-snapshot-proposal-voting',
+        functionName: 'vote',
+        functionArgs: [amountCV, forCV, proposalCV],
+        onFinish: data => {
+          console.log('finished contract call!', data);
+        },
+        onCancel: () => {
+          console.log('popup closed!');
+        }
+    });
+}
 
-  const canVote = tokenBalance > tokenBalanceLocked && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
+const canVote = tokenBalance > tokenBalanceLocked && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
 </script>
 
 <section>

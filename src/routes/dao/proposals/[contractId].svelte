@@ -1,71 +1,64 @@
 <script context="module">
-	import settings from '$lib/settings';
-  import authService from '$lib/service/StacksAuthService';
-  import ChainUtils from '$lib/service/ChainUtils';
-  /** @type {import('./__types/[contractId]').Load} */
-  export async function load({ params, fetch }) {
-    let balanceAtHeight = 0;
-    const contractId = params.contractId;
-    let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
-    let res = await fetch(url);
-    const proposal = await res.json();
-    if (proposal.proposalData) {
-      const callData = {
-        path: '/extended/v1/address/' + authService.getProfile().stxAddress + '/balances?until_block=' + proposal.proposalData.startBlockHeight,
-        httpMethod: 'get'
-      }
-      try {
-        const response = await ChainUtils.postToApi('/v2/accounts', callData);
-        balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
-        return {
-          status: response.status,
-          props: {
-            contractId,
-            proposal,
-            balanceAtHeight
-          }
-        };
-      } catch (e) {
-        // server side load won't work in development so catch and continue..
-      }
-    } else {
-      return {
-        status: res.status,
-        props: {
+import settings from '$lib/settings';
+import ChainUtils from '$lib/service/ChainUtils';
+
+//const stxAddress = $account.stxAddress;
+
+/** @type {import('./__types/[contractId]').Load} */
+export async function load({ params, fetch }) {
+  const contractId = params.contractId;
+  let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposal/' + contractId;
+  let res = await fetch(url);
+  const proposal = await res.json();
+  return {
+      status: res.status,
+      props: {
           contractId,
-          proposal,
-          balanceAtHeight
-        }
-      };
-    }
-  }
+          proposal
+      }
+    };
+}
 </script>
 
 <script lang="ts">
-  import VotingSchedule from '$lib/components/dao/voting/VotingSchedule.svelte'
-  import PropBallotBox from '$lib/components/dao/voting/PropVotingBallotBox.svelte'
-  import SnapBallotBox from '$lib/components/dao/voting/SnapVotingBallotBox.svelte'
-  import { goto } from '$app/navigation';
-	import DaoUtils from '$lib/service/DaoUtils';
-  import ExecutedBanner from '$lib/components/dao/proposals/ExecutedBanner.svelte'
-  import type { ProposalType } from "../../../types/stxeco.type";
+import {onMount} from 'svelte'
+import VotingSchedule from '$lib/components/dao/voting/VotingSchedule.svelte'
+import PropBallotBox from '$lib/components/dao/voting/PropVotingBallotBox.svelte'
+import SnapBallotBox from '$lib/components/dao/voting/SnapVotingBallotBox.svelte'
+import { goto } from '$app/navigation';
+import DaoUtils from '$lib/service/DaoUtils';
+import ExecutedBanner from '$lib/components/dao/proposals/ExecutedBanner.svelte'
+import type { ProposalType } from "../../../types/stxeco.type";
+import { getAccount } from '@micro-stacks/svelte';
 
-  export let proposal:ProposalType;
-  export let contractId:string;
-  export let balanceAtHeight:number;
+const account = getAccount();
 
-  const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
-	// export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId)
-  const back = () => {
-    goto(`/dao/proposals`, { replaceState: false })
+export let proposal:ProposalType;
+export let contractId:string;
+
+const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
+// export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
+if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId)
+const back = () => {
+  goto(`/dao/proposals`, { replaceState: false })
+}
+const submit = () => {
+  goto(`/dao/proposals/submission/${contractId}`, { replaceState: false })
+}
+let showEmergVoting = false;
+const stacksTipHeight = $settings.info.stacks_tip_height;
+const status = DaoUtils.getStatus(stacksTipHeight, proposal)
+onMount(async () => {
+  if (proposal.proposalData) {
+    const callData = {
+      path: '/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal.proposalData?.startBlockHeight,
+      httpMethod: 'get'
+    }
+    const response = await ChainUtils.postToApi('/v2/accounts', callData);
+    balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
   }
-  const submit = () => {
-    goto(`/dao/proposals/submission/${contractId}`, { replaceState: false })
-  }
-  let showEmergVoting = false;
-  const stacksTipHeight = $settings.info.stacks_tip_height;
-  const status = DaoUtils.getStatus(stacksTipHeight, proposal)
+})
+$: balanceAtHeight = 0
 </script>
 
 <svelte:head>
@@ -83,26 +76,31 @@
         </p>
       </div>
     </div>
-	  {#if status === 'deployed'}
-    <div class="jumbo">
-      <h6 class="my-3">Contract is deployed and ready to submit to the DAO</h6>
-      <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>submit</button>
-    </div>
+	  {#if proposal.deployTxId && !proposal.submitTxId}
+      {#if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
+        <div class="jumbo">
+          <h6 class="my-3">Proposal requires support before voting can start...</h6>
+          <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>fund proposal</button>
+        </div>
+      {:else}
+        <div class="jumbo">
+          <h6 class="my-3">Proposal is deployed and ready to submit to the DAO</h6>
+          <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>submit</button>
+        </div>
+      {/if}
 	  {/if}
 	  <ExecutedBanner {proposal} />
-	  {#if proposal.proposalData}
-    <div>
-      <VotingSchedule {proposal}/>
-    </div>
-	  {/if}
     {#if proposal.proposalData}
-    <div>
-      {#if proposal.votingContract === 'ede001-proposal-voting'}
-      <PropBallotBox {proposal} />
-      {:else if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
-      <SnapBallotBox {proposal} {balanceAtHeight}/>
-      {/if}
-    </div>
+      <div>
+        <VotingSchedule {proposal}/>
+      </div>
+      <div>
+        {#if proposal.votingContract === 'ede001-proposal-voting'}
+          <PropBallotBox {proposal} />
+        {:else if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
+          <SnapBallotBox {proposal} {balanceAtHeight}/>
+        {/if}
+      </div>
     {/if}
 
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">

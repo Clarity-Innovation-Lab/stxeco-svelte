@@ -12,6 +12,7 @@
 		showModal = !showModal;
 	}
 
+  const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
   const network = import.meta.env.VITE_NETWORK;
   const explorer = import.meta.env.VITE_STACKS_EXPLORER;
   $: currentFilter = 'All Proposals';
@@ -68,13 +69,13 @@
   }
 
   const classList = (item:ProposalType) => {
-    let clazzes = 'py-3';
-    if (item.executedAt > 0) {
-      clazzes = 'py-3 bg-success text-white';
+    let clazzes = 'py-4';
+    if (item?.executedAt > 0) {
+      clazzes = 'py-4 bg-success text-white';
     } else if (item.funding > 0 && item.funding < fundingCost) {
-      clazzes = 'py-3 bg-warning text-white';
+      clazzes = 'py-4 bg-warning text-white';
     } else if (item.funding > 0 && item.funding >= fundingCost) {
-      clazzes = 'py-3 bg-danger text-white';
+      clazzes = 'py-4 bg-danger text-white';
     }
     return clazzes;
   }
@@ -138,26 +139,26 @@
                   <th class={classList(item)} scope="row"><a class="text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.contractId.split('.')[1]}</a></th>
                   <td class={classList(item)}>
                     {status(item)} 
-                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }}>{item.emergencySignals}</a>){/if}
+                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }}>{item.emergencySignals}/{sigsRequired}</a>){/if}
                     {#if item.funding > 0}(<a class="pointer text-info" href="/" on:click|preventDefault={() => {fundProposal(item) }}>{item.funding}/{fundingCost}</a>){/if}
                   </td>
                   <td class={classList(item)}>{item.proposer}</td>
                   <td class={classList(item)}>
                     <div class="dropdown">
-                      <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button style="height: 40px;" class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <Gear fill="purple" width={20} height={20} />
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}><CodeSlash fill="purple" width={20} height={20} /> Show Clarity Source Code</a>
-                        <a class="dropdown-item mb-2 border-bottom pointer text-info" href={contractUrl(item.contractId)} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Show on Explorer</a>
-                        <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Open Proposal</a>
+                        <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}><CodeSlash fill="purple" width={20} height={20} /> Show Clarity Source Code</a>
+                        <a class="dropdown-item pointer text-info" href={contractUrl(item.contractId)} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Show on Explorer</a>
+                        <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Open Proposal</a>
                         {#if item.status === 'deployed'}
-                          <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Submit Proposal</a>
+                          <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Submit Proposal</a>
                           {:else if item.status === 'submitted'}
-                          <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Vote on Proposal</a>
+                          <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Vote on Proposal</a>
                         {/if}
                         {#if item.funding > 0 && item.funding < fundingCost}
-                          <a class="dropdown-item mb-2 border-bottom pointer text-info" href="/" on:click|preventDefault={() => { fundProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Fund Proposal</a>
+                          <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { fundProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Fund Proposal</a>
                         {/if}
                       </div>
                     </div>

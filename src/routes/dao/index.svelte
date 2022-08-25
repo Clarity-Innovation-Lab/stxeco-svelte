@@ -1,47 +1,43 @@
 <script lang="ts">
-  import settings from '$lib/settings'
-	import CardWithParams from '$lib/shared/CardWithParams.svelte'
-  import { client } from '$lib/micro-stacks-client';
-  import { contractPrincipalCV } from 'micro-stacks/clarity';
-  import { PostConditionMode } from 'micro-stacks/transactions';
-  import { TxType } from '@micro-stacks/client';
-  // import { makeContractCallToken, openTransactionPopup } from 'micro-stacks/connect';
-  // import type {ContractCallTxOptions, FinishedTxData } from 'micro-stacks/connect';
+import settings from '$lib/settings'
+import CardWithParams from '$lib/shared/CardWithParams.svelte'
+import { contractPrincipalCV } from 'micro-stacks/clarity';
+import { PostConditionMode } from 'micro-stacks/transactions';
+import { getOpenContractCall } from '@micro-stacks/svelte';
+import ChainUtils from '$lib/service/ChainUtils';
 
-	let st1 = '<p>Submit proposals to the DAO</p>'
-	let st2 = '<p>Ongoing votes - delegate your vote</p>'
-	let st3 = '<p>Get involved - join the discussion</p>'
-	let st4 = '<p>The DAO is a community</p>'
-	let response;
+const contractCall = getOpenContractCall();
 
-  const constructDao = async () => {
-    const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
-    const bootstrap = contractPrincipalCV(deployer, 'edp000-bootstrap')
-    // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
-    
-    const txOptions = {
-      postConditions: [],
-      postConditionMode: PostConditionMode.Deny,
-      contractAddress: deployer,
-      contractName: 'executor-dao',
-      functionName: 'construct',
-      functionArgs: [bootstrap],
-      // network,
-      appDetails: {
-        name: 'Ecosystem DAO',
-        icon: '/img/logo.png'
-      },
-      onCancel: (error: any) => {
-        console.log(error)
-      },
-      onFinish: (result: { txId: { txid: any; }; txRaw: any; stacksTransaction: any; }) => {
-        console.log(result)
-      }
-    }
-    await client.signTransaction(TxType.ContractCall, txOptions);
+let st1 = '<p>Submit proposals to the DAO</p>'
+let st2 = '<p>Ongoing votes - delegate your vote</p>'
+let st3 = '<p>Get involved - join the discussion</p>'
+let st4 = '<p>The DAO is a community</p>'
+let response;
+let txId: string;
+
+const constructDao = async () => {
+  const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
+  const bootstrap = contractPrincipalCV(deployer, 'edp000-bootstrap-minimal')
+  // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
+  await $contractCall.openContractCall({
+    postConditions: [],
+    postConditionMode: PostConditionMode.Deny,
+    contractAddress: deployer,
+    contractName: 'executor-dao',
+    functionName: 'construct',
+    functionArgs: [bootstrap],
+    onFinish: data => {
+      console.log('finished contract call!', data);
+      txId = data.txId;
+    },
+    onCancel: () => {
+      console.log('popup closed!');
+    },
+  });
 }
 
-  $: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || false
+$: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || false;
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
 <svelte:head>
@@ -53,6 +49,11 @@
   {#if !constructed}
   <div class="container text-center">
     <button type="button" class="btn btn-primary" on:click={constructDao}>CONSTRUCT DAO</button>
+  </div>
+  {/if}
+  {#if txId}
+  <div>
+    <a href={explorerUrl} target="_blank">View on explorer</a>
   </div>
   {/if}
 

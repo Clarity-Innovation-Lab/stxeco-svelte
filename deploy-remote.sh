@@ -4,7 +4,7 @@ set -e;
 export DEPLOYMENT=$1
 PATH_DEPLOY=build
 mkdir -p $PATH_DEPLOY
-export SERVER=locke.brightblock.org
+export SERVER=popper.brightblock.org
 export BUILDER=build-stag
 if [ "$DEPLOYMENT" == "prod" ]; then
   SERVER=chomsky.brightblock.org;
@@ -24,7 +24,7 @@ function __build() {
 
 function __pushcode() {
   echo "\n- deploying from pipeline build \n";
-  rsync -aP -e "ssh  -p 7019" $PATH_DEPLOY/* static/* bob@$SERVER:/var/www/stxeco
+  rsync -aP $PATH_DEPLOY/* static/* bob@$SERVER:/var/www/stxeco
 }
 
 BUILD_PATH=./

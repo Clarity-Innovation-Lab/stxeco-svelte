@@ -1,54 +1,60 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
-  import { client } from '$lib/micro-stacks-client';
   import { contractPrincipalCV } from 'micro-stacks/clarity';
   import { PostConditionMode } from 'micro-stacks/transactions';
-  import { TxType } from '@micro-stacks/client';
+  import { getOpenContractCall } from '@micro-stacks/svelte';
+
+  const contractCall = getOpenContractCall();
 
 	let contractId = $page.params.contractId;
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+  const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
   const proposalData = proposal.proposalData || { startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
+  $: buttonLabel = contractCall.isRequestPending ? "Tx Sent": "SUPPORT PROPOSAL";
+  let txId: string;
 
   const signalSupport = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
     const proposalCV = contractPrincipalCV(proposal.contractId.split('.')[0], proposal.contractId.split('.')[1])
-    const txOptions = {
+    await $contractCall.openContractCall({
       postConditions: [],
       postConditionMode: PostConditionMode.Deny,
       contractAddress: deployer,
       contractName: 'ede004-emergency-execute',
       functionName: 'executive-action',
       functionArgs: [proposalCV],
-      // network,
-      appDetails: {
-        name: 'Ecosystem DAO',
-        icon: '/img/logo.png'
+      onFinish: data => {
+        txId = data.txId;
+        console.log('finished contract call!', data);
       },
-      onCancel: (error: any) => {
-        console.error(error)
+      onCancel: () => {
+        console.log('popup closed!');
       },
-      onFinish: (result: { txId: { txid: any; }; txRaw: any; stacksTransaction: any; }) => {
-        console.log(result)
-      }
-    }
-    await client.signTransaction(TxType.ContractCall, txOptions);
+    });
   }
 
 	let stacksTipHeight = $settings.info.stacks_tip_height;
   const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
   const canVote = executiveTeamMember // && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
+  $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
 <section>
   {#if canVote}
   <div class="row mt-5">
     <div class="my-5 text-center">
-		<h4>{proposal.contractId.split('.')[1]}</h4>
-		<h6>Signal support for this proposal via multisig voting by executive team</h6>
-      <button class="btn btn-outline-success" on:click={() => signalSupport()}>SUPPORT</button>
+      <h4>{proposal.contractId.split('.')[1]}</h4>
+      <h6>Signal support for this proposal via multisig voting by executive team</h6>
+      <p>{proposal.emergencySignals} of {sigsRequired} signal(s) received so far.</p>
+      {#if !txId}<button class="btn btn-outline-success" on:click={() => signalSupport()}>{buttonLabel}</button>{/if}
     </div>
+    {#if txId}
+    <div>
+      <a href={explorerUrl} target="_blank">View on explorer</a>
+    </div>
+    {/if}
   </div>
   {/if}
 </section>

@@ -65,13 +65,13 @@ export type ProposalType = {
   submitTxId?: string|null;
   title: string;
   contractId: string;
-  votingContract: string;
+  votingContract?: string|undefined;
   created: number;
   updated: number;
-  funding: number;
-  emergencySignals: number;
-  executedAt: number;
-  proposer: string|null;
+  funding?: number; // important - number implies funded proposal submission
+  emergencySignals?: number;
+  executedAt?: number;
+  proposer: string|undefined;
   status: string;
   contract:Contract;
   proposalData?:ProposalDataType;

@@ -1,9 +1,16 @@
 import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
+//import { StacksMocknet } from 'micro-stacks/network';
 
 const precision = 1000000
 const btcPrecision = 100000000
 
 const ChainUtils = {
+  network: () => {
+    const network = import.meta.env.VITE_NETWORK;
+    if (network === 'mainnet') 'mainnet'; //return new StacksMainnet();
+    else if (network === 'testnet') 'testnet'; //return new StacksTestnet();
+    else return 'mocknet' // new StacksMocknet();
+  },  
   postToApi: async (path:string, data:unknown) => {
     const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi' + path;
     const response = await fetch(url, {
