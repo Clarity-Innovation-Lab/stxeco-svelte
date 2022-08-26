@@ -6,6 +6,7 @@
   import { goto } from '$app/navigation';
   import type { ProposalType } from "../../../types/stxeco.type";
 	import DaoUtils from '$lib/service/DaoUtils';
+	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
 
   let showModal:boolean;
 	const toggleModal = () => {
@@ -40,8 +41,10 @@
   }
 
   let prop:ProposalType;
+  let sourceCode: string|undefined = '';
   const openSesame = (currentItem:ProposalType) => {
     prop = currentItem;
+    sourceCode = currentItem.contract.source_code;
     toggleModal();
   }
   const openProposal = (currentItem:ProposalType) => {
@@ -88,7 +91,7 @@
     sortDir = !sortDir;
   }
 
-  $: sortedProps = DaoUtils.sortProposals($settings.proposals, sortDir, sortField);
+  $: sortedProps = DaoUtils.sortProposals($settings?.proposals, sortDir, sortField);
 
   </script>
   
@@ -98,7 +101,7 @@
   </svelte:head>
   
   <Modal {showModal} on:click={toggleModal}>
-    <div class="source-modal"><pre style="width: 95%">{prop.contract.source_code}</pre></div>
+    <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
     <div slot="title">
       <h3>Proposal: {prop?.contract?.contract_id?.split('.')[1]}</h3>
     </div>

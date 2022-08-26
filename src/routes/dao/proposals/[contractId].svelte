@@ -35,6 +35,7 @@ import { goto } from '$app/navigation';
 import ExecutedBanner from '$lib/components/dao/proposals/ExecutedBanner.svelte'
 import type { ProposalType } from "../../../types/stxeco.type";
 import { getAccount } from '@micro-stacks/svelte';
+import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
 
 const account = getAccount();
 
@@ -44,6 +45,7 @@ export let contractId:string;
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 // export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId)
+const sourceCode: string|undefined = proposal.contract.source_code;
 const back = () => {
   goto(`/dao/proposals`, { replaceState: false })
 }
@@ -107,26 +109,8 @@ $: balanceAtHeight = 0
     {/if}
 
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-      <div class="source-modal"><pre style="width: 95%">{proposal.contract.source_code}</pre></div>
+      <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
     </div>
-    <!--
-    <ul class="mt-5 nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Contract</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Description</button>
-      </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-        <div class="source-modal"><pre style="width: 95%">{proposal.contract.source_code}</pre></div>
-      </div>
-      <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-        <ProposalMetaDisplay {proposal} />
-      </div>
-    </div>
-    -->  
   </section>
 
 <style>

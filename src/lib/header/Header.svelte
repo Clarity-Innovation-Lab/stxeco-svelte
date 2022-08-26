@@ -33,9 +33,9 @@ import { Tools } from "svelte-bootstrap-icons";
 
 {#if $page.url.pathname.indexOf('/dao') > -1}
 <div class="bg-light text-dark py-2 text-center text-small">
-	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/dao/proposals'}<span class="active">SIP Home</span>{:else}<a href="/dao/proposals">Proposals</a>{/if}</span>
-	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/dao/extensions'}<span class="active">SIP Issues</span>{:else}<a href="/dao/extensions">Extension</a>{/if}</span>
-	<span class="px-3 nav-item">{#if $page.url.pathname === '/dao/strategy'}<span class="active">SIP Voting</span>{:else}<a href="/dao/strategy">Launch Plans</a>{/if}</span>
+	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/dao/proposals'}<span class="active">Proposals</span>{:else}<a href="/dao/proposals">Proposals</a>{/if}</span>
+	<span class="px-3 border-right nav-item">{#if $page.url.pathname === '/dao/extensions'}<span class="active">Extensions</span>{:else}<a href="/dao/extensions">Extensions</a>{/if}</span>
+	<span class="px-3 nav-item">{#if $page.url.pathname === '/dao/strategy'}<span class="active">Launch Plans</span>{:else}<a href="/dao/strategy">Launch Plans</a>{/if}</span>
 </div>
 {/if}
 

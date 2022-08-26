@@ -1,11 +1,13 @@
 <script lang="ts">
   import settings from '$lib/settings'
 	import Modal from '$lib/shared/Modal.svelte';
+	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
   import type { ExtensionType } from "../../../types/stxeco.type";
 	import DaoUtils from '$lib/service/DaoUtils';
   import { SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
 
   let item:ExtensionType;
+  let sourceCode: string|undefined = '';
   let showModal:boolean;
 	const toggleModal = () => {
 		showModal = !showModal
@@ -13,6 +15,7 @@
 
   const openSesame = (currentItem:ExtensionType) => {
     item = currentItem;
+    sourceCode = item.contract.source_code;
     toggleModal();
   }
 
@@ -34,7 +37,7 @@
 </svelte:head>
   
 <Modal {showModal} on:click={toggleModal}>
-	<div class="source-modal"><pre style="width: 95%">{item.contract.source_code}</pre></div>
+	<div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
 	<div slot="title">
 		<h3>Extension: {item.contractId.split('.')[1]}</h3>
 	</div>
