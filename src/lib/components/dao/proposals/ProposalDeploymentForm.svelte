@@ -4,6 +4,18 @@
 	let fields = { contractName: '', title: '', author: '', synopsis: '', description: '' }
 	let errors = { contractName: '', title: '', author: '', synopsis: '', description: '' }
 	let valid = false
+	const stored = localStorage.getItem('PROPOSAL_FORM');
+	if (stored && typeof stored === 'string') {
+		fields = JSON.parse(stored)
+    }
+	const saveContractName = () => {
+		fields.contractName = fields.contractName.toLowerCase();
+		fields.contractName = fields.contractName.replace(/\s/g, '-');
+		localStorage.setItem('PROPOSAL_FORM', JSON.stringify(fields));
+	}
+	const saveForm = () => {
+		localStorage.setItem('PROPOSAL_FORM', JSON.stringify(fields));
+	}
 	const submitHandler = () => {
 		valid = true
 		if (fields.contractName.trim().length < 2) {
@@ -46,27 +58,27 @@
 <form on:submit|preventDefault={submitHandler}>
     <div class="form-field">
 	    <label for="contractName">Contract Name</label>
-		<input type="text" id="title" bind:value={fields.contractName}/>
+		<input type="text" id="title" bind:value={fields.contractName} on:input={saveContractName}/>
 		<div class="error">{errors.contractName}</div>
     </div>
     <div class="form-field">
 	    <label for="title">Title</label>
-		<input type="text" id="title" bind:value={fields.title}/>
+		<input type="text" id="title" bind:value={fields.title} on:input={saveForm}/>
 		<div class="error">{errors.title}</div>
     </div>
     <div class="form-field">
 	    <label for="author">Author</label>
-		<input type="text" id="author" bind:value={fields.author}/>
+		<input type="text" id="author" bind:value={fields.author} on:input={saveForm}/>
 		<div class="error">{errors.author}</div>
     </div>
     <div class="form-field">
 	    <label for="synopsis">Synopsis</label>
-		<input type="text" id="synopsis" bind:value={fields.synopsis}/>
+		<input type="text" id="synopsis" bind:value={fields.synopsis} on:input={saveForm}/>
 		<div class="error">{errors.synopsis}</div>
     </div>
     <div class="form-field">
 	    <label for="description">Description</label>
-		<textarea rows="3" type="text" id="description" bind:value={fields.description}/>
+		<textarea rows="3" type="text" id="description" bind:value={fields.description} on:input={saveForm}/>
 		<div class="error">{errors.description}</div>
     </div>
 	<button class="btn btn-sm outline-light">Update</button>
