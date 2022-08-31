@@ -1,12 +1,12 @@
 <script lang="ts">
   import settings from '$lib/settings';
 	import Modal from '$lib/shared/Modal.svelte';
+	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
   import ProposalFilter from '$lib/components/dao/proposals/ProposalFilter.svelte'
-  import { Gear, ArrowUpRightCircle, CodeSlash, SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
+  import { SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
   import { goto } from '$app/navigation';
   import type { ProposalType } from "../../../types/stxeco.type";
 	import DaoUtils from '$lib/service/DaoUtils';
-	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
 
   let showModal:boolean;
 	const toggleModal = () => {
@@ -47,15 +47,6 @@
     sourceCode = currentItem.contract.source_code;
     toggleModal();
   }
-  const openProposal = (currentItem:ProposalType) => {
-    goto(`/dao/proposals/${currentItem.contract.contract_id}`, { replaceState: false }) 
-  }
-  const submitProposal = (currentItem:ProposalType) => {
-    goto(`/dao/proposals/submission/${currentItem.contractId}`, { replaceState: false }) 
-  }
-  const fundProposal = (currentItem:ProposalType) => {
-    goto(`/dao/proposals/submission/fund-${currentItem.contractId}`, { replaceState: false }) 
-  }
   const deployProposal = () => {
     goto('/dao/proposals/deployment', { replaceState: false }) 
   }
@@ -72,13 +63,13 @@
   }
 
   const classList = (item:ProposalType) => {
-    let clazzes = 'py-4';
-    if (item?.executedAt > 0) {
-      clazzes = 'py-4 bg-success text-white';
-    } else if (item.funding > 0 && item.funding < fundingCost) {
-      clazzes = 'py-4 bg-warning text-white';
-    } else if (item.funding > 0 && item.funding >= fundingCost) {
-      clazzes = 'py-4 bg-danger text-white';
+    let clazzes = 'py-3';
+    if (typeof item.executedAt === 'number' && item.executedAt > 0) {
+      clazzes = 'py-3 bg-success text-white';
+    } else if (item.funding > -1 && item.funding < fundingCost) {
+      clazzes = 'py-3 bg-warning text-white';
+    } else if (item.funding > -1 && item.funding >= fundingCost) {
+      clazzes = 'py-3 bg-danger text-white';
     }
     return clazzes;
   }
@@ -90,9 +81,7 @@
     sortField = sf;
     sortDir = !sortDir;
   }
-
   $: sortedProps = DaoUtils.sortProposals($settings?.proposals, sortDir, sortField);
-
   </script>
   
   <svelte:head>
@@ -126,43 +115,32 @@
 
       <div class="row">
         <div class="col-12">
-          <table class="table table-striped text-small">
+          <table class="table table-striped">
             <thead>
               <tr>
-                <th scope="col" class="pointer" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</th>
-                <th scope="col" class="pointer" on:click={() => reorder('status')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} State</th>
-                <th scope="col">Proposed By</th>
-                <th scope="col">Actions</th>
+                <th scope="col" class="pointer my-2" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</th>
+                <th scope="col" class="pointer my-2" on:click={() => reorder('status')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} State</th>
+                <th scope="col" class="pointer my-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {#each sortedProps as item}
                 {#if item && matchesFilter(item)}
                 <tr>
-                  <th class={classList(item)} scope="row"><a class="text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.contractId.split('.')[1]}</a></th>
+                  <td class={classList(item)}><a class="text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.contractId.split('.')[1]}</a></td>
                   <td class={classList(item)}>
-                    {status(item)} 
-                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }}>{item.emergencySignals}/{sigsRequired}</a>){/if}
-                    {#if item.funding > 0}(<a class="pointer text-info" href="/" on:click|preventDefault={() => {fundProposal(item) }}>{item.funding}/{fundingCost}</a>){/if}
+                    {status(item)}
+                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.emergencySignals}/{sigsRequired}</a>){/if}
+                    {#if typeof item.funding === 'number' && item.funding > 0}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.funding}/{fundingCost}</a>){/if}
                   </td>
-                  <td class={classList(item)}>{item.proposer}</td>
                   <td class={classList(item)}>
                     <div class="dropdown">
-                      <button style="height: 40px;" class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <Gear fill="purple" width={20} height={20} />
-                      </button>
+                      <span class="dropdown px-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ...
+                      </span>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}><CodeSlash fill="purple" width={20} height={20} /> Show Clarity Source Code</a>
-                        <a class="dropdown-item pointer text-info" href={contractUrl(item.contractId)} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Show on Explorer</a>
-                        <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }} target="_blank"><ArrowUpRightCircle fill="purple" width={20} height={20} /> Open Proposal</a>
-                        {#if item.status === 'deployed'}
-                          <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { submitProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Submit Proposal</a>
-                          {:else if item.status === 'submitted'}
-                          <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Vote on Proposal</a>
-                        {/if}
-                        {#if item.funding > 0 && item.funding < fundingCost}
-                          <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { fundProposal(item) }}><ArrowUpRightCircle fill="purple" width={20} height={20} /> Fund Proposal</a>
-                        {/if}
+                        <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}>Show Clarity Source Code</a>
+                        <a class="dropdown-item pointer text-info" href={contractUrl(item.contractId)} target="_blank">Show on Explorer</a>
                       </div>
                     </div>
                   </td>
@@ -177,14 +155,5 @@
   </section>
   
   <style>
-    /**
-    section {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-    }
-    **/
   </style>
   

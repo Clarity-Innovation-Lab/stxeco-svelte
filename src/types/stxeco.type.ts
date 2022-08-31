@@ -50,6 +50,7 @@ export type Contract = {
   source_code?: string;
   block_height?: number;
   contract_id?: string;
+  tx_status?: string;
 };
 export type ProposalDataType = {
   votesFor: number;
@@ -68,7 +69,7 @@ export type ProposalType = {
   votingContract?: string|undefined;
   created: number;
   updated: number;
-  funding?: number; // important - number implies funded proposal submission
+  funding: number;
   emergencySignals?: number;
   executedAt?: number;
   proposer: string|undefined;

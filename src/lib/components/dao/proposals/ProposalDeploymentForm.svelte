@@ -1,19 +1,36 @@
-<script>
+<script lang="ts">
     import { createEventDispatcher } from 'svelte';
+
 	let dispatch = createEventDispatcher();
 	let fields = { contractName: '', title: '', author: '', synopsis: '', description: '' }
 	let errors = { contractName: '', title: '', author: '', synopsis: '', description: '' }
-	let valid = false
-	const stored = localStorage.getItem('PROPOSAL_FORM');
-	if (stored && typeof stored === 'string') {
-		fields = JSON.parse(stored)
-    }
+	if (localStorage.getItem('PROPOSAL_FORM')) {
+		fields = JSON.parse(localStorage.getItem('PROPOSAL_FORM'))
+	}
+	let valid = false;
 	const saveContractName = () => {
 		fields.contractName = fields.contractName.toLowerCase();
 		fields.contractName = fields.contractName.replace(/\s/g, '-');
 		localStorage.setItem('PROPOSAL_FORM', JSON.stringify(fields));
 	}
+	const saveDescription = () => {
+		let desc = fields.description.replace(/\n/g, '');
+		desc = desc.replace(/;; /g, '');
+		const words = desc.split(' ');
+		for (let i = 0; i < words.length; i++) {
+			if (i === 0) {
+				words[0] = '\n;; ' + words[0];
+			} else if (i % 8 === 0) {
+				words[i] = '\n;; ' + words[i];
+			}
+		}
+		fields.description = words.join(' ');
+		localStorage.setItem('PROPOSAL_FORM', JSON.stringify(fields));
+	}
 	const saveForm = () => {
+		fields.title = fields.title.replace(/\\/g, '');
+		fields.author = fields.author.replace(/\\/g, '');
+		fields.synopsis = fields.synopsis.replace(/\\/g, '');
 		localStorage.setItem('PROPOSAL_FORM', JSON.stringify(fields));
 	}
 	const submitHandler = () => {
@@ -50,35 +67,39 @@
 		}
 		// add ew poll if valid
 		if (valid) {
-			dispatch('addNewPoll', fields)
+			saveDescription();
+			saveForm();
+			dispatch('addNewPoll', fields);
 		}
 	}
+console.log('title=' + fields.title)
+console.log('PROPOSAL_FORM=' + localStorage.getItem('PROPOSAL_FORM'))
 </script>
 
 <form on:submit|preventDefault={submitHandler}>
     <div class="form-field">
-	    <label for="contractName">Contract Name</label>
-		<input type="text" id="title" bind:value={fields.contractName} on:input={saveContractName}/>
+	    <label for="contractName">Contract Name (max 60 chars)</label>
+		<input maxlength="60" type="text" id="title" bind:value={fields.contractName} on:input={saveContractName}/>
 		<div class="error">{errors.contractName}</div>
     </div>
     <div class="form-field">
-	    <label for="title">Title</label>
-		<input type="text" id="title" bind:value={fields.title} on:input={saveForm}/>
+	    <label for="title">Title (max 60 chars)</label>
+		<input maxlength="60" type="text" id="title" bind:value={fields.title} on:input={saveForm}/>
 		<div class="error">{errors.title}</div>
     </div>
     <div class="form-field">
 	    <label for="author">Author</label>
-		<input type="text" id="author" bind:value={fields.author} on:input={saveForm}/>
+		<input maxlength="60" type="text" id="author" bind:value={fields.author} on:input={saveForm}/>
 		<div class="error">{errors.author}</div>
     </div>
     <div class="form-field">
-	    <label for="synopsis">Synopsis</label>
-		<input type="text" id="synopsis" bind:value={fields.synopsis} on:input={saveForm}/>
+	    <label for="synopsis">Synopsis (max 100 chars)</label>
+		<input maxlength="100" type="text" id="synopsis" bind:value={fields.synopsis} on:input={saveForm}/>
 		<div class="error">{errors.synopsis}</div>
     </div>
     <div class="form-field">
-	    <label for="description">Description</label>
-		<textarea rows="3" type="text" id="description" bind:value={fields.description} on:input={saveForm}/>
+	    <label for="description">Description (max 500 chars)</label>
+		<textarea maxlength="500" rows="3" type="text" id="description" bind:value={fields.description} on:input={saveForm}/>
 		<div class="error">{errors.description}</div>
     </div>
 	<button class="btn btn-sm outline-light">Update</button>

@@ -16,15 +16,15 @@ const { addNotification } = getNotificationsContext();
 
 let contractId = $page.params.contractId
 export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
+if (!proposal) throw new Error('Proposal not found? ' + contractId);
 const fundingCost = Number($settings.daoProperties?.find((o) => o.id === 'funding-cost')?.value) / 1000000 || 0;
-const fundingMet = proposal.funding < fundingCost;
-const balance = $settings.accountInfo.balance;
+const fundingMet = proposal.funding >= fundingCost;
+const balance = $settings?.accountInfo?.balance;
 const stacksTipHeight = $settings.info.stacks_tip_height;
 let proposalDuration = Number($settings.daoProperties?.find((o) => o.id === 'proposal-duration')?.value) || 100;
 let proposalStartDelay = Number($settings.daoProperties?.find((o) => o.id === 'proposal-start-delay')?.value) || 100;
-const startHeightMessage = 'Block height ' + stacksTipHeight + '. Earliest start for voting is block ' + (stacksTipHeight + proposalStartDelay)+ ' (about ' + ((proposalStartDelay) / 144).toFixed(2) + ' days) after proposal is funded.';
-const durationMessage = 'Voting will continue for ' + (proposalDuration)+ ' blocks (about ' + ((proposalDuration) / 144).toFixed(2) + ' days) after voting starts.';
+const startHeightMessage = 'The earliest start for voting is ' + ((proposalStartDelay) / 144).toFixed(2) + ' days after proposal is funded at block ~ ' + (stacksTipHeight + proposalStartDelay);
+const durationMessage = 'The voting window is ' + (proposalDuration)+ ' blocks, roughly ' + ((proposalDuration) / 144).toFixed(2) + ' days, after voting starts.';
 
 const getSTXMintPostConds = function (amt:number) {
 	const postConds = []
@@ -77,42 +77,37 @@ const submit = async () => {
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
-<svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
-</svelte:head>
-
 <section>
-    <div class="container my-5">
-	{#if fundingMet}
-		<p>Funding target is {fundingCost} STX</p>
-		<p>Currently funded {proposal.funding} STX</p>
-		<p>Your wallet balance is {balance} STX</p>
-		<div class="my-4 card bg-light p-4 text-center">
-			<p>{startHeightMessage}</p>
-			<p>{durationMessage}</p>
-		</div>
-		<form on:submit|preventDefault>
-			<div class="mb-3 text-center">
-				<label for="Contribution" class="form-label">Contribution STX</label>
-				<div class="d-flex justify-content-center"><input class="w-25 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"> </div>
-				<div id="emailHelp" class="form-text">The amount you wish to contribute towards funding this proposal - minimum contribution is 1 STX.</div>
-			  </div>
+    <div class="">
+		{#if !fundingMet}
+			<p>{fundingCost - proposal.funding} STX is needed to fund this proposal - minimum contribution is 1 STX!</p>
 			{#if txId}
 				<div>
-				  <a href={explorerUrl} target="_blank">View on explorer</a>
+					<a href={explorerUrl} target="_blank">View on explorer</a>
 				</div>
-			{:else}
-				<button class="btn outline-light mr-2 text-info" on:click={() => submit()}>Fund Proposal</button>
 			{/if}
-		</form>
-	{:else}
-		<p>Funding target met {proposal.funding} of {fundingCost} STX raised</p>
-		<div class="my-4 card bg-light p-4 text-center">
-			<p>{startHeightMessage}</p>
-			<p>{durationMessage}</p>
-		</div>
-	{/if}
+			<form on:submit|preventDefault class="form-inline">
+				<div class="row">
+					<div class="col-md-6">
+						<input class="form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution">
+					</div>
+					<div class="col-md-4">
+						<button class="btn outline-light" on:click={() => submit()}>Fund</button>
+					</div>
+				</div>
+			</form>
+			<p>Your current balance is {balance} STX</p>
+			<div class="my-4 card bg-light p-4">
+				<p>{startHeightMessage}</p>
+				<p>{durationMessage}</p>
+			</div>
+		{:else}
+			<p>Funding target met {proposal.funding} of {fundingCost} STX raised</p>
+			<div class="my-4 card bg-light p-4 text-center">
+				<p>{startHeightMessage}</p>
+				<p>{durationMessage}</p>
+			</div>
+		{/if}
 	</div>
 </section>
 

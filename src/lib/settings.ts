@@ -19,6 +19,7 @@ function createStore() {
       }
       const res = await fetch(url);
       const daoData = await res.json();
+      daoData.proposals = daoData.proposals.filter((p) => p.contract.tx_status !== 'failed')
       if (stxAddress) {
         const callData = {
           path: '/v2/accounts/' + stxAddress,

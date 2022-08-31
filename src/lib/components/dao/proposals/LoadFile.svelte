@@ -20,12 +20,6 @@
 	
 <main>
 	<div>
-		<h4>Upload Contract</h4>
-		<p>Upload a contract. Contract must</p>
-		<ol>
-			<li>Be fully clarinet unit tested</li>
-			<li>Implement <strong>proposal-trait</strong></li>
-		</ol>
 		<label for="fileinput">Choose Clarity File: </label>
 		<input class="btn btn-info" type="file" id="fileinput" bind:files />
 	</div>

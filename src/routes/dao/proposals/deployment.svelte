@@ -13,7 +13,7 @@ const contractDeploy = getOpenContractDeploy();
 const account = getAccount();
 
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
-let canSubmit = $settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
+let canSubmit = true; //$settings.userProperties?.find((o) => o.functionName === 'edg-has-percentage-balance')?.value?.value || false;
 if (!canSubmit) {
   canSubmit = $account.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
 }
@@ -26,10 +26,10 @@ const contractSource = `
 ;; Synopsis: <synopsis>
 ;; Description: <description>
 
-(impl-trait .proposal-trait.proposal-trait)
+(impl-trait '${import.meta.env.VITE_DAO_DEPLOY_ADDRESS}.proposal-trait.proposal-trait)
 
 (define-public (execute (sender principal))
-(ok true)
+        (ok true)
 )
 `
 let newProposal:ProposalType;
@@ -103,6 +103,7 @@ const postData = async (url:string, data:any) => {
   return response.json();
 }
 $: newSource = replacedSource;
+$: newSourceValid = replacedSource.indexOf(import.meta.env.VITE_DAO_DEPLOY_ADDRESS + '.proposal-trait.proposal-trait') > -1;
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
@@ -122,16 +123,20 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
     {/if}
     <div class="row mt-3">
       {#if !txId && showDeployButton}
-      <div class="my-3 d-flex justify-content-start">
-        <button class="btn btn-sm outline-light" on:click|preventDefault={() => { deployContract() }}>Deploy</button>
-      </div>
+        <div class="my-3 d-flex justify-content-start">
+          {#if newSourceValid}
+          <button class="btn btn-sm outline-light" on:click|preventDefault={() => { deployContract() }}>Deploy Proposal Contract</button>
+          {:else}
+          <button disabled class="btn btn-sm text-danger">Proposal Trait Invalid</button>
+          {/if}
+        </div>
       {/if}
       {#if txId}
       <div>
         <a href={explorerUrl} target="_blank">View on explorer</a>
       </div>
       {/if}
-          {#if showNoop}
+      {#if showNoop}
       <div class="col-md-6 col-sm-12">
         <ProposalDeploymentForm on:addNewPoll={addNewPoll} />
       </div>
@@ -142,11 +147,22 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
       {/if}
       {#if showFromFile}
       <div class="col-12">
-        {#if !showDeployButton}
+        <h4>Upload Contract</h4>
+        <p>Upload a contract. Contract must</p>
+        <ol>
+          <li>Be fully clarinet unit tested</li>
+          <li>Implements <strong>'{import.meta.env.VITE_DAO_DEPLOY_ADDRESS}.proposal-trait</strong></li>
+        </ol>
+            {#if !showDeployButton}
         <LoadFile on:fileLoaded={fileLoaded}/>
         {:else}
         <div><pre class="source-code">{newSource}</pre></div>
         {/if}
+      </div>
+      {/if}
+      {#if txId}
+      <div>
+        <a href={explorerUrl} target="_blank">View on explorer</a>
       </div>
       {/if}
     </div>

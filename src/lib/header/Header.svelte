@@ -23,7 +23,7 @@ import { Tools } from "svelte-bootstrap-icons";
 			<ul class="navbar-nav ">
 				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/dao') > -1} href="/dao">DAO</a></li>
 				<li class="nav-item"><a class:text-danger={$page.url.pathname.indexOf('/sip') > -1} href="/sip">SIPs</a></li>
-				<li class="nav-item">
+				<li class="nav-item mb-1">
 					<WalletConnectButton />
 				</li>
 			</ul>
@@ -64,6 +64,7 @@ import { Tools } from "svelte-bootstrap-icons";
 		align-items: center;
 		padding: 0 1em;
 		color: var(--heading-color);
+		color: #fff;
 		font-weight: 700;
 		font-size: 0.8rem;
 		text-transform: uppercase;

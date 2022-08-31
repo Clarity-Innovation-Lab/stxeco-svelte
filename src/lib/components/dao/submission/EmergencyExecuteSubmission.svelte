@@ -43,8 +43,8 @@
 
 <section>
   {#if canVote}
-  <div class="row mt-5">
-    <div class="my-5 text-center">
+  <div class="row">
+    <div class="my-3">
       <h4>{proposal.contractId.split('.')[1]}</h4>
       <h6>Signal support for this proposal via multisig voting by executive team</h6>
       <p>{proposal.emergencySignals} of {sigsRequired} signal(s) received so far.</p>

@@ -37,6 +37,21 @@ const DaoUtils = {
     }
     return message;
   },
+  getMetaData: function (proposal: ProposalType) {
+    const preamble:Array<string> = [];
+    let lines = proposal.contract.source_code?.split('\n');
+    lines = lines?.filter((l) => l.indexOf(';;') > -1) || []
+    lines.forEach((l) => {
+      l = l.replace(/;;/, "");
+      l = l.replace(/DAO:/, "<div class=\"text-warning\">DAO:</div>");
+      l = l.replace(/Title:/, "<div class=\"text-warning\">Title:</div>");
+      l = l.replace(/Author:/, "<div class=\"text-warning\">Author:</div>");
+      l = l.replace(/Synopsis:/, "<div class=\"text-warning\">Synopsis:</div>");
+      l = l.replace(/Description:/, "<div class=\"text-warning\">Description:</div>");
+      preamble.push(l)
+    })
+    return preamble.join('');
+  },
   sortProposals: function (proposals: ProposalType[], asc:boolean, sortField:string) {
     if (!proposals) return []
     proposals = proposals.sort(function compare (a:ProposalType, b:ProposalType) {

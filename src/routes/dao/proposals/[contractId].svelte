@@ -19,7 +19,7 @@ export async function load({ params, fetch }) {
 				}
 			}
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 }
 </script>
@@ -33,38 +33,101 @@ import PropBallotBox from '$lib/components/dao/voting/PropVotingBallotBox.svelte
 import SnapBallotBox from '$lib/components/dao/voting/SnapVotingBallotBox.svelte'
 import { goto } from '$app/navigation';
 import ExecutedBanner from '$lib/components/dao/proposals/ExecutedBanner.svelte'
-import type { ProposalType } from "../../../types/stxeco.type";
 import { getAccount } from '@micro-stacks/svelte';
+import Modal from '$lib/shared/Modal.svelte';
 import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
+import DaoRules from '$lib/components/dao/proposals/DaoRules.svelte';
+import type { ProposalType } from "../../../types/stxeco.type";
+import FundedSubmissionVoting from '$lib/components/dao/submission/FundedSubmissionVoting.svelte'
+import ThresholdSubmissionVoting from '$lib/components/dao/submission/ThresholdSubmissionVoting.svelte'
+import EmergencyExecuteSubmission from '$lib/components/dao/submission/EmergencyExecuteSubmission.svelte'
+import ExecutiveProposalSubmission from '$lib/components/dao/submission/ExecutiveProposalSubmission.svelte'
+import Preamble from '$lib/components/dao/proposals/Preamble.svelte'
 
 const account = getAccount();
 
 export let proposal:ProposalType;
 export let contractId:string;
 
-const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 // export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId)
+if (!proposal || proposal.contract.tx_status === 'failed') {
+  goto(`/dao/proposals/404?contractId=${contractId}`, { replaceState: false })
+}
 const sourceCode: string|undefined = proposal.contract.source_code;
-const back = () => {
-  goto(`/dao/proposals`, { replaceState: false })
+let showSourceModal:boolean;
+let showRulesModal:boolean;
+const openSourceModal = () => {
+  showSourceModal = true;
+  showRulesModal = false;
 }
-const submit = () => {
-  goto(`/dao/proposals/submission/${contractId}`, { replaceState: false })
+const openRulesModal = () => {
+  showSourceModal = false;
+  showRulesModal = true;
 }
-let showEmergVoting = false;
+const closeModal = () => {
+  showSourceModal = false;
+  showRulesModal = false;
+}
+
+let propStatus = 'unknown';
+if (typeof (proposal.executedAt) === 'number' && proposal.executedAt > 0) {
+  propStatus = 'executed';
+} else if (proposal.deployTxId && !proposal.proposalData && proposal.contract.tx_status === 'pending') {
+  propStatus = 'deploying';
+} else if (proposal.deployTxId && !proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting') {
+  propStatus = 'readyToFund';
+} else if (proposal.deployTxId && !proposal.proposalData && proposal.votingContract !== 'ede007-snapshot-proposal-voting') {
+  propStatus = 'readyToSubmit';
+} else if (proposal.proposalData && proposal.votingContract === 'ede001-proposal-voting') {
+  propStatus = 'readyToVoteViaGovernanceToken';
+} else if (proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting') {
+  propStatus = 'readyToVoteViaSnapshot';
+} else if (!proposal.proposalData && !proposal.submitTxId && proposal.deployTxId) {
+  propStatus = 'readyToSubmit';
+}
+
+const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
+const thresholdProposalExt = $settings.extensions.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede002-threshold-proposal-submission') > 0);
+const thresholdProposalsValid = thresholdProposalExt && thresholdProposalExt.valid;
+const fundedProposalExt = $settings.extensions.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission') > 0);
+const fundedProposalsValid = fundedProposalExt && fundedProposalExt.valid;
+const executiveProposalsValid = false;
+const emergencyProposalsValid = true;
+
+$: balanceAtHeight = 0
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + proposal.deployTxId + '?chain=' + import.meta.env.VITE_NETWORK;
+
 onMount(async () => {
   if (proposal.proposalData) {
-    const callData = {
-      path: '/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal.proposalData?.startBlockHeight,
-      httpMethod: 'get'
+    try {
+      const callData = {
+        path: '/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal.proposalData?.startBlockHeight,
+        httpMethod: 'get'
+      }
+      const response = await ChainUtils.postToApi('/v2/accounts', callData);
+      balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
+    } catch (e) {
+      balanceAtHeight = 0;
+      console.log(e)
     }
-    const response = await ChainUtils.postToApi('/v2/accounts', callData);
-    balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
   }
 })
-$: balanceAtHeight = 0
 </script>
+
+<Modal showModal={showSourceModal || showRulesModal} on:click={closeModal}>
+  {#if showSourceModal}
+    <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
+  {:else}
+    <div class="source-modal"><DaoRules /></div>
+  {/if}
+    <div slot="title">
+      {#if showSourceModal}
+      <h3>Proposal: {proposal.contract.contract_id?.split('.')[1]}</h3>
+      {:else}
+        <h3>DAO Rules</h3>
+      {/if}
+    </div>
+</Modal>
 
 <svelte:head>
 	<title>About</title>
@@ -75,42 +138,68 @@ $: balanceAtHeight = 0
     <div class="my-2">
       <div class="border-bottom pb-2 mb-5 w-100 d-flex justify-content-between text-small">
         <h4>Proposal: <span class="">{ proposal.title }</span></h4>
-        <p>
-          <button class="btn btn-sm outline-light" on:click|preventDefault={() => { back() }}>BACK</button>
-          {#if executiveTeamMember}<button class="btn btn-sm outline-light" on:click={() => showEmergVoting = !showEmergVoting}>...</button>{/if}
-        </p>
+        <div>
+          <a class="mx-3" href="/" on:click|preventDefault={() => { openSourceModal() }} data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Show source code">Show Clarity</a>
+          <a class="mx-3" href="/" on:click|preventDefault={() => { openRulesModal() }} data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Show rules">Show Rules</a>
+          <a class="mx-3" href={explorerUrl} target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Show on blockchain explorer">Explorer</a>
+          <a class="mx-3" href="/dao/proposals">Back</a>
+        </div>
       </div>
     </div>
-	  {#if proposal.deployTxId}
-      {#if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
-        <div class="jumbo">
-          <h6 class="my-3">Proposal requires support before voting can start...</h6>
-          <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>fund proposal</button>
-        </div>
-      {:else}
-        <div class="jumbo">
-          <h6 class="my-3">Proposal is deployed and ready to submit to the DAO</h6>
-          <button class="btn btn-outline-primary" on:click|preventDefault={() => { submit() }}>submit</button>
-        </div>
-      {/if}
-	  {/if}
-	  <ExecutedBanner {proposal} />
-    {#if proposal.proposalData}
-      <div>
-        <VotingSchedule {proposal}/>
-      </div>
-      <div>
-        {#if proposal.votingContract === 'ede001-proposal-voting'}
-          <PropBallotBox {proposal} />
-        {:else if proposal.votingContract === 'ede007-snapshot-proposal-voting'}
-          <SnapBallotBox {proposal} {balanceAtHeight}/>
+    
+    {#if propStatus === 'executed'}
+      <h1>Proposal Passed</h1>
+      <ExecutedBanner {proposal} />
+      <Preamble {proposal}/>
+    {:else if propStatus === 'deploying'}
+      <h1>Proposal Deploying</h1>
+      <Preamble {proposal}/>
+      <p>Contract deployment is pending - check explorer for updates...</p>
+    {:else if propStatus === 'readyToFund'}
+        <h1>Crowd Fund Proposal</h1>
+        <p>Help take this proposal to a vote?</p>
+        <Preamble {proposal}/>
+				<FundedSubmissionVoting/>
+    {:else if propStatus === 'readyToSubmit'}
+      <div class="">
+        <h1 class="my-3">Ready to Start Crowd Funding</h1>
+        <Preamble {proposal}/>
+        {#if fundedProposalsValid}
+          <div class="">
+            <FundedSubmissionVoting/>
+          </div>
+        {/if}
+        {#if thresholdProposalsValid}
+          <div class="">
+            <ThresholdSubmissionVoting/>
+          </div>
+        {/if}
+        {#if executiveProposalsValid && executiveTeamMember}
+          <div class="">
+            <ExecutiveProposalSubmission/>
+          </div>
+        {/if}
+        {#if emergencyProposalsValid && executiveTeamMember}
+          <h1 class="mt-5">Emergency Execute</h1>
+          <p>Its possible to pass this proposal via a vote from the executive team</p>
+          <div class="">
+            <EmergencyExecuteSubmission/>
+          </div>
         {/if}
       </div>
+    {:else if propStatus === 'readyToVoteViaGovernanceToken'}
+      <h1>Vote For/Against Proposal</h1>
+      <p>Have your say on changes in the Stacks Eco-System</p>
+      <Preamble {proposal}/>
+      <VotingSchedule {proposal}/>
+      <PropBallotBox {proposal} />
+    {:else if propStatus === 'readyToVoteViaSnapshot' && balanceAtHeight > 0}
+      <h1>Vote For/Against Proposal</h1>
+      <p>Have your say on changes in the Stacks Eco-System</p>
+      <Preamble {proposal}/>
+      <VotingSchedule {proposal}/>
+      <SnapBallotBox {proposal} {balanceAtHeight}/>
     {/if}
-
-    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-      <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
-    </div>
   </section>
 
 <style>

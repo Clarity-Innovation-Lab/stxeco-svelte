@@ -14,9 +14,10 @@ const config = {
     }),
   ],
   kit: {
-    adapter: adapter({
-      fallback: '200.html'
-    }),
+    adapter: adapter(),
+    //adapter: adapter({
+    //  fallback: '200.html'
+    //})
     prerender: { default: true }
   }
 };
