@@ -73,7 +73,7 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
         <div class="col-6 my-2"
         >
           <CardWithParams title="Voting" subtitle={st2} image="/img/bg/vote.jpg"
-            linkTarget="/dao/voting"
+            linkTarget="/dao/proposals?filter=voting"
             linkName="Voting"
           />
         </div>

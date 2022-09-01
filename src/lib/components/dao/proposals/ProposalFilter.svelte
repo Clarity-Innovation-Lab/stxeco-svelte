@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
 
 	export let currentFilter:string;
-  const filterValues = ['all', 'emergexec', 'submitted', 'funding', 'concluded', 'deployed', 'draft']
+  const filterValues = ['all', 'emergexec', 'voting', 'funding', 'concluded', 'deployed', 'draft']
   let dispatch = createEventDispatcher();
 </script>
 

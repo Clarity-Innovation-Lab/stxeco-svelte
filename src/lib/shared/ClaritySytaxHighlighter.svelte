@@ -111,5 +111,6 @@ buff|hash160|sha256|sha512|sha512/256|keccak256|true|false|none)' +
 <style>
 .code {
     white-space: pre-wrap;
+	font-family: monospace;
   }
   </style>

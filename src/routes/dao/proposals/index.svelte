@@ -7,6 +7,8 @@
   import { goto } from '$app/navigation';
   import type { ProposalType } from "../../../types/stxeco.type";
 	import DaoUtils from '$lib/service/DaoUtils';
+	import { page } from '$app/stores';
+
 
   let showModal:boolean;
 	const toggleModal = () => {
@@ -16,7 +18,9 @@
   const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
   const network = import.meta.env.VITE_NETWORK;
   const explorer = import.meta.env.VITE_STACKS_EXPLORER;
-  $: currentFilter = 'All Proposals';
+  const isFiltered = $page.url.searchParams.has('filter');
+  const filter = (isFiltered) ? $page.url.searchParams.get('filter') : 'All Proposals';
+  $: currentFilter = filter;
 	const propFilterChange = (e: { detail: string; }) => {
 		currentFilter = e.detail
 	}
@@ -50,7 +54,6 @@
   const deployProposal = () => {
     goto('/dao/proposals/deployment', { replaceState: false }) 
   }
-
   const stacksTipHeight = $settings.info?.stacks_tip_height || 0;
 
   $settings.proposals?.forEach((item) => {
@@ -127,11 +130,12 @@
               {#each sortedProps as item}
                 {#if item && matchesFilter(item)}
                 <tr>
-                  <td class={classList(item)}><a class="text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.contractId.split('.')[1]}</a></td>
+                  <td class={classList(item)}><a class="text-white" href={'/dao/proposals/' + item.contract.contract_id}>{item.contractId.split('.')[1]}</a></td>
                   <td class={classList(item)}>
                     {status(item)}
-                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.emergencySignals}/{sigsRequired}</a>){/if}
-                    {#if typeof item.funding === 'number' && item.funding > 0}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}>{item.funding}/{fundingCost}</a>){/if}
+                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}><span class="text-white">{item.emergencySignals}/{sigsRequired}</span></a>){/if}
+                    {#if status(item) === 'voting'} - <a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}><span class="text-white">{DaoUtils.getVotingMessage(item.proposalData, stacksTipHeight)}</span></a>{/if}
+                    {#if status(item) === 'funding'}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}><span class="text-white">{item.funding}/{fundingCost}</span></a>){/if}
                   </td>
                   <td class={classList(item)}>
                     <div class="dropdown">

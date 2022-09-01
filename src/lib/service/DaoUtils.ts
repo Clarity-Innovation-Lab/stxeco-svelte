@@ -1,4 +1,4 @@
-import type { ProposalType, ExtensionType } from "../../types/stxeco.type";
+import type { ProposalType, ProposalDataType, ExtensionType } from "../../types/stxeco.type";
 
 const DaoUtils = {
   getStatus: (stacksTipHeight:number, proposal:ProposalType) => {
@@ -26,7 +26,7 @@ const DaoUtils = {
           message = 'voting';
         }
       } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting') {
-        message = 'funded';
+        message = 'voting';
       }
       if (proposal.proposalData.concluded) {
         if (proposal.proposalData.passed) message = 'passed';
@@ -36,6 +36,17 @@ const DaoUtils = {
       }
     }
     return message;
+  },
+  getVotingMessage: function (pd:ProposalDataType|undefined, stacksTipHeight:number) {
+      if (!pd) return 'unknown';
+      if (stacksTipHeight > pd.endBlockHeight) {
+        if (pd.concluded) return 'vote concluded';
+        else return 'voting ended';
+      } else if (stacksTipHeight < pd.startBlockHeight) {
+        return 'Voting starts in ' + (pd.startBlockHeight - stacksTipHeight) + ' blocks';
+      } else {
+        return (pd.endBlockHeight - stacksTipHeight) + ' blocks to go!'
+      }
   },
   getMetaData: function (proposal: ProposalType) {
     const preamble:Array<string> = [];

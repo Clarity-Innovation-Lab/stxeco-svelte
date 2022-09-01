@@ -88,7 +88,7 @@ console.log('PROPOSAL_FORM=' + localStorage.getItem('PROPOSAL_FORM'))
 		<div class="error">{errors.title}</div>
     </div>
     <div class="form-field">
-	    <label for="author">Author</label>
+	    <label for="author">Author (max 60 chars)</label>
 		<input maxlength="60" type="text" id="author" bind:value={fields.author} on:input={saveForm}/>
 		<div class="error">{errors.author}</div>
     </div>
