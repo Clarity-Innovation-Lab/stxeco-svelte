@@ -1,5 +1,4 @@
 <script lang="ts">
-	import CardWithParams from '$lib/shared/CardWithParams.svelte'
 	import Tab1 from "$lib/components/sips/tabs/Tab1.svelte";
 	import Tab2 from "$lib/components/sips/tabs/Tab2.svelte";
 	import Tab3 from "$lib/components/sips/tabs/Tab3.svelte";
@@ -14,9 +13,7 @@ let st4 = '<p>A <strong>Proposal</strong> is a Pull Request in GitHub lingo</p><
   let items = [
     { label: "SIP Process",
 		 value: 1,
-		 component: Tab1,
-     uid: 'sip_tab1',
-     docType: 'sip_tab'
+		 component: Tab1
 		},
     { label: "Making Suggestions",
 		 value: 2,

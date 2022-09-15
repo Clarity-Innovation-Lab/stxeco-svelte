@@ -41,6 +41,7 @@ const addNewPoll = (e: { detail:  { contractName: string; title: string; author:
   newProposal = {
     title: e.detail.title,
     proposer: $account.stxAddress,
+    funding: 0,
     status: 'deployed',
     created: DateTime.now().ts,
     updated: DateTime.now().ts,
@@ -64,6 +65,7 @@ const fileLoaded = (e: { detail: { contractName: string; source: string; }; }) =
   newProposal = {
     title: contractName,
     proposer: $account.stxAddress,
+    funding: 0,
     status: 'deployed',
     created: DateTime.now().ts,
     updated: DateTime.now().ts,

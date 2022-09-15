@@ -4,7 +4,7 @@ const DaoUtils = {
   getStatus: (stacksTipHeight:number, proposal:ProposalType) => {
     let message = 'unkown';
     // if (proposal.executedAt) return 'executed'
-    if (proposal.emergencySignals > 0) {
+    if (proposal && typeof proposal.emergencySignals === 'number' && proposal.emergencySignals > 0) {
       return 'emergexec'
     }
     if (!proposal.proposalData) {
@@ -63,7 +63,7 @@ const DaoUtils = {
     })
     return preamble.join('');
   },
-  sortProposals: function (proposals: ProposalType[], asc:boolean, sortField:string) {
+  sortProposals: function (proposals: ProposalType[]|undefined, asc:boolean, sortField:string) {
     if (!proposals) return []
     proposals = proposals.sort(function compare (a:ProposalType, b:ProposalType) {
       let nameA = a.contractId.split('.')[1].toUpperCase() // ignore upper and lowercase

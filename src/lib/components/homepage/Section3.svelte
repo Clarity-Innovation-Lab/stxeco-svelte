@@ -1,5 +1,5 @@
 <script>
-  import { ArrowDownRight, CaretRightFill } from "svelte-bootstrap-icons";
+  import { CaretRightFill } from "svelte-bootstrap-icons";
   import Sidebar from './Sidebar.svelte'
 
   const img1 = "https://images.prismic.io/edao/86ff5a4f-62f6-4961-b872-b22ab3dc2a67_stx_eco_hands_%23image.png?auto=compress,format";

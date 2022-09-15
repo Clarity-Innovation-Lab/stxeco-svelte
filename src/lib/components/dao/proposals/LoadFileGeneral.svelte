@@ -19,13 +19,14 @@
 		if (uploader) uploader.click();
 	}
 
-	const loadMediaObjects = (e) => {
+	const loadMediaObjects = (e:any) => {
 		let userFiles
 		if (e.dataTransfer) {
 			userFiles = e.dataTransfer.files
 		} else if (e.target) {
 			userFiles = e.target.files
 		}
+		/**
         const thisFile = {
 			lastModified: userFiles[0].lastModified,
 			lastModifiedDate: userFiles[0].lastModifiedDate,
@@ -34,6 +35,7 @@
 			size: userFiles[0].size,
 			dataUrl: ''
         }
+		**/
         const reader = new FileReader()
         reader.onload = function (e) {
 			console.log(e?.target?.result)
@@ -48,9 +50,6 @@
 	<div class="mt-4 mb-5">{@html contentModel.title}</div>
 	<div class="mx-5 px-5 " style="border: 1pt dashed #000;" >
 		<div class="mt-5">{@html contentModel.message}</div>
-		<div v-if="contentModel.iconName" class="mt-5" >
-			<b-icon class="text-warning" scale="3" :icon="contentModel.iconName" />
-		</div>
 		<div>
 			<input class="light input-file" id="my-uploader" style="width: 80%;" type="file" on:change={(e) => loadMediaObjects(e)}>
 		</div>

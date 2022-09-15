@@ -5,7 +5,9 @@
 	let fields = { contractName: '', title: '', author: '', synopsis: '', description: '' }
 	let errors = { contractName: '', title: '', author: '', synopsis: '', description: '' }
 	if (localStorage.getItem('PROPOSAL_FORM')) {
-		fields = JSON.parse(localStorage.getItem('PROPOSAL_FORM'))
+		const stringy = localStorage.getItem('PROPOSAL_FORM') || JSON.stringify(fields);
+		fields = JSON.parse(stringy);
+
 	}
 	let valid = false;
 	const saveContractName = () => {

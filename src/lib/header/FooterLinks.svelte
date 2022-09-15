@@ -1,6 +1,4 @@
 <script lang="ts">
-import { Discord, Twitter, Github } from "svelte-bootstrap-icons";
-
 let webWalletLink = 'https://www.hiro.so/wallet/install-web'
 let stacksOrg = 'https://stacks.org'
 </script>

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	export async function load({ fetch }) {
+	export async function load({ fetch }: { fetch: any }) {
 		try {
 			const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/gh-issues'
 			const res = await fetch(url)

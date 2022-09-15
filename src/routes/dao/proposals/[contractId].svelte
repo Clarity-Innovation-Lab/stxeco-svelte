@@ -1,4 +1,5 @@
 <script context="module">
+/** @type {import('./$types').RequestHandler} */
 export async function load({ params, fetch }) {
   try {
     const contractId = params.contractId;

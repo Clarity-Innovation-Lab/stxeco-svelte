@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
   import type { ProposalType } from "../../../../types/stxeco.type";
 
 	export let proposal:ProposalType;

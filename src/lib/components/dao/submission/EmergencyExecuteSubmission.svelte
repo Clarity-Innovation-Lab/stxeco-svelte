@@ -11,8 +11,7 @@
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
   const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
-  const proposalData = proposal.proposalData || { startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
-  $: buttonLabel = contractCall.isRequestPending ? "Tx Sent": "SUPPORT PROPOSAL";
+  $: buttonLabel = $contractCall.isRequestPending ? "Tx Sent": "SUPPORT PROPOSAL";
   let txId: string;
 
   const signalSupport = async () => {
@@ -35,7 +34,6 @@
     });
   }
 
-	let stacksTipHeight = $settings.info.stacks_tip_height;
   const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
   const canVote = executiveTeamMember // && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight
   $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;

@@ -1,22 +1,21 @@
 <script>
-  import Tab1 from '$lib/components/sips/tabs/Tab1.svelte';
-	import createClient from '$lib/prismicio'; // Update this path if necessary
-	import  * as prismicH from '@prismicio/helpers';
-	
-	export let docType;
-	export let uid;
-	const client = createClient()
-	const document = client.getByUID(docType, uid);
-	const isText = (tabContent) => {
-		let ans = false;
-		for (let o of tabContent) {
-			if (o.text.indexOf('</div>') > -1) {
-				ans = true;
-				break;
-			}
+import createClient from '$lib/prismicio'; // Update this path if necessary
+import  * as prismicH from '@prismicio/helpers';
+
+export let docType;
+export let uid;
+const client = createClient()
+const document = client.getByUID(docType, uid);
+const isText = (/** @type {any} */ tabContent) => {
+	let ans = false;
+	for (let o of tabContent) {
+		if (o.text.indexOf('</div>') > -1) {
+			ans = true;
+			break;
 		}
-		return ans;
 	}
+	return ans;
+}
 </script>
   
 <svelte:head>

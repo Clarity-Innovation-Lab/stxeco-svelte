@@ -2,7 +2,7 @@
 import { page } from '$app/stores';
 import settings from '$lib/settings';
 import Modal from '$lib/shared/Modal.svelte';
-import AmountSelection from '$lib/components/dao/voting/PropVotingSelectAmount.svelte'
+import PropVotingSelectAmount from '$lib/components/dao/voting/PropVotingSelectAmount.svelte'
 import { contractPrincipalCV, trueCV, falseCV, uintCV } from 'micro-stacks/clarity';
 import { PostConditionMode } from 'micro-stacks/transactions';
 import { getOpenContractCall } from '@micro-stacks/svelte';
@@ -64,7 +64,7 @@ const canVote = tokenBalance > tokenBalanceLocked && stacksTipHeight >= proposal
 </script>
 
 <Modal {showModal} on:click={closeModal}>
-  <AmountSelection {vfor} {proposal} on:castVote={castVote}/>
+  <PropVotingSelectAmount {vfor} {proposal} on:castVote={castVote}/>
   <div slot="title">
     <h3>{proposal.title}</h3>
   </div>

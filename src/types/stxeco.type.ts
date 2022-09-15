@@ -7,6 +7,16 @@ export type SettingsType = {
   accountInfo?: any;
   info?: any;
 };
+export type FileType = {
+  name: string;
+  timestamp: number;
+  data: any;
+};
+export type TabType = {
+  label: string;
+  value: number;
+  component: any;
+};
 export type ProfileType = {
   loggedIn: boolean;
   stxAddress: string | undefined;

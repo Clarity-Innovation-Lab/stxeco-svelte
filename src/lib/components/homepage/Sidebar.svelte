@@ -1,7 +1,5 @@
 <script>
-  import { Discord, Twitter, Github } from "svelte-bootstrap-icons";
-
-  export let context = 2;
+export let context = 2;
 </script>
   
 <div class="box" style="">

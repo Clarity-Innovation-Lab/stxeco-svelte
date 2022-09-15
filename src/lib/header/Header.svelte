@@ -1,7 +1,6 @@
 <script lang="ts">
 import { page } from '$app/stores';
 import WalletConnectButton from './WalletConnectButton.svelte'
-import { Tools } from "svelte-bootstrap-icons";
 
 let transparent = 'bg-warning';
 if ($page.url.pathname === '/') {
@@ -28,9 +27,9 @@ if ($page.url.pathname === '/') {
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class:text-danger={$page.url.pathname === '/about'} href="/about">About</a></li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<span class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					  votes
-					</a>
+					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 					  <li><a class="dropdown-item text-white" href="/dao/proposals">Proposals</a></li>
 					  <li><a class="dropdown-item" href="/dao/extensions">DAO Extensions</a></li>
@@ -39,9 +38,9 @@ if ($page.url.pathname === '/') {
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						Stacks
-					</a>
+					<span class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						stacks
+					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 					  <li><a class="dropdown-item text-white" href="/sip">Processes</a></li>
 					  <li><a class="dropdown-item" href="/sip/issues">Ongoing</a></li>

@@ -23,10 +23,8 @@
   }
 
   let sortDir = true;
-  let sortField = 'title';
 
-  const reorder = (sf:string) => {
-    sortField = sf;
+  const reorder = () => {
     sortDir = !sortDir;
   }
 
@@ -54,7 +52,7 @@
           <table class="table table-striped text-small">
             <thead>
               <tr>
-              <th scope="col" class="pointer" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Name</th>
+              <th scope="col" class="pointer" on:click={() => reorder()}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Name</th>
               <th scope="col">Connected</th>
               <th scope="col">Actions</th>
               </tr>
@@ -62,7 +60,7 @@
             <tbody>
               {#each sortedProps as item}
               <tr>
-              <th class:text-white={item.valid} class:bg-success={item.valid} scope="row" class="py-3"><span class="pointer mr-2">{item.contract.contract_id.split('.')[1]}</span></th>
+              <th class:text-white={item.valid} class:bg-success={item.valid} scope="row" class="py-3"><span class="pointer mr-2">{item?.contract?.contract_id?.split('.')[1]}</span></th>
               <td class:text-white={item.valid} class:bg-success={item.valid} class="pointer py-3" data-bs-toggle="tooltip" data-bs-placement="top" title="State of extension. Connected means this is an active extension in the DAO. Extensions can be activated by proposals">
                 <span>
                   {item.valid}

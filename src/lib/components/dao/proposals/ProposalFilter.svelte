@@ -1,7 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
-	export let currentFilter:string;
+	export let currentFilter:string|null;
+  if (!currentFilter) currentFilter = 'all';
   const filterValues = ['all', 'emergexec', 'voting', 'funding', 'concluded', 'deployed', 'draft']
   let dispatch = createEventDispatcher();
 </script>

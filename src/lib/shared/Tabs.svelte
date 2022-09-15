@@ -1,11 +1,11 @@
-<script>
-    export let items = [];
-    export let activeTabValue = 1;
-    export /** @type {any} */ let uid;
-    export /** @type {any} */ let docType;
+<script lang="ts">
+import type { TabType } from "../../types/stxeco.type";
+
+export let items:TabType[] = [];
+export let activeTabValue = 1;
   
-    const handleClick = tabValue => () => (activeTabValue = tabValue);
-  </script>
+const handleClick = (tabValue: number) => () => (activeTabValue = tabValue);
+</script>
   
   <ul>
   {#each items as item}
@@ -17,7 +17,7 @@
   {#each items as item}
       {#if activeTabValue == item.value}
       <div class="box">
-          <svelte:component this={item.component} docType={docType} uid={uid}/>
+          <svelte:component this={item.component}/>
       </div>
       {/if}
   {/each}

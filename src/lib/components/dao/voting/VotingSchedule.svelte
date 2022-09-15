@@ -55,7 +55,7 @@ const concludeVote = async () => {
         <h6>Currently at block { stacksTipHeight }: </h6>
         <div class="progress">
           <div class="progress-bar progress-bar-striped" role="progressbar" style={'width:' + (currentBHN) + '%'}
-                aria-valuenow={stacksTipHeight - proposalData.startBlockHeight} aria-valuemin="0" aria-valuemax={(proposalData.endBlockHeight - proposalData.startBlockHeight)}>
+                aria-valuenow={stacksTipHeight - proposalData.startBlockHeight} aria-valuemin={0} aria-valuemax={(proposalData.endBlockHeight - proposalData.startBlockHeight)}>
                 &nbsp;
           </div>
         </div>

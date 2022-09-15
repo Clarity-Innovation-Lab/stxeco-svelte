@@ -1,6 +1,7 @@
 import { writable, get } from 'svelte/store';
 import ChainUtils from '$lib/service/ChainUtils';
 import type { SettingsType } from "src/types/stxeco.type";
+import type { ProposalType } from "src/types/stxeco.type";
 
 function createStore() {
   const initialValue:SettingsType = {
@@ -19,7 +20,7 @@ function createStore() {
       }
       const res = await fetch(url);
       const daoData = await res.json();
-      daoData.proposals = daoData.proposals.filter((p) => p.contract.tx_status !== 'failed')
+      daoData.proposals = daoData.proposals.filter((p:ProposalType) => p.contract.tx_status !== 'failed')
       if (stxAddress) {
         const callData = {
           path: '/v2/accounts/' + stxAddress,

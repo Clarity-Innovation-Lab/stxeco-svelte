@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
 
+  export const title = 'time to vote on proposal';
+  export let vfor:boolean;
 	let contractId = $page.params.contractId;
 	export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 	if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
@@ -9,8 +11,6 @@
   const tokenBalanceLocked = Number($settings.userProperties?.find((dp) => dp.functionName === 'edg-get-locked')?.value?.value) || 0;
 
   let amount = 0;
-  export const title = 'time to vote on proposal';
-  export const vfor = true;
   const getVote = () => {
       return (vfor) ? 'for' : 'against'
   }
@@ -18,7 +18,7 @@
     return 'Lock up to available balance of ECO tokens.'
   }
   const castVote = () => {
-
+    console.log('empty function ?')
   }
 </script>
 

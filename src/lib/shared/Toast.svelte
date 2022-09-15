@@ -1,5 +1,5 @@
 <script>
-import { toasts, ToastContainer, FlatToast, BootstrapToast }  from "svelte-toasts";
+import { toasts, ToastContainer, FlatToast }  from "svelte-toasts";
 import {beforeUpdate} from 'svelte'
 
 export let showToast = false;
@@ -8,7 +8,7 @@ export /**
 */ let toastData;
 
 const configureToast = () => {
-    const toast = toasts.add({
+    toasts.add({
         title: toastData.title,
         description: toastData.description,
         duration: 10000, // 0 or negative to avoid auto-remove

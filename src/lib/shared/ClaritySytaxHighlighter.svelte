@@ -4,7 +4,6 @@ import prism from 'prismjs';
 export let sourceCode = '';
 let language = 'clarity';
 const par = '(\\()';
-const endpar = '(?=\\))';
 // End the pattern with look-ahead space
 const space = '(?=\\s)';
 const primitive = (pattern:string) => {

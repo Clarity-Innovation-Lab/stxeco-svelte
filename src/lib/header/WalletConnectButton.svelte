@@ -1,5 +1,4 @@
 <script>
-import { Power } from "svelte-bootstrap-icons";
 import { getAuth } from "@micro-stacks/svelte";
 import settings from '$lib/settings'
 import { getAccount } from '@micro-stacks/svelte';

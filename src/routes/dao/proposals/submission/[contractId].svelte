@@ -13,7 +13,7 @@ let contractId = $page.params.contractId
 export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
 
-const executed = proposal.executedAt > 0
+const executed = (proposal && proposal.executedAt) ? proposal?.executedAt > 0 : false;
 const execPropContractDeployed = false;
 
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
@@ -67,7 +67,7 @@ const showEmergencySubmitForm = () => {
 				<a href="/dao/proposals"><ChevronDoubleLeft/> back</a>
 			</div>
 		</div>
-		<DaoRules proposal={proposal} />
+		<DaoRules />
 		<div class="text-center my-5">
 			{#if !executed}
 			<div class="text-center my-5">

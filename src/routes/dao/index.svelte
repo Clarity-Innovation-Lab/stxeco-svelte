@@ -4,7 +4,7 @@ import CardWithParams from '$lib/shared/CardWithParams.svelte'
 import { contractPrincipalCV } from 'micro-stacks/clarity';
 import { PostConditionMode } from 'micro-stacks/transactions';
 import { getOpenContractCall } from '@micro-stacks/svelte';
-import ChainUtils from '$lib/service/ChainUtils';
+import type { ExtensionType } from "../../types/stxeco.type";
 
 const contractCall = getOpenContractCall();
 
@@ -12,7 +12,6 @@ let st1 = '<p>Submit proposals to the DAO</p>'
 let st2 = '<p>Ongoing votes - delegate your vote</p>'
 let st3 = '<p>Get involved - join the discussion</p>'
 let st4 = '<p>The DAO is a community</p>'
-let response;
 let txId: string;
 
 const constructDao = async () => {
@@ -36,7 +35,7 @@ const constructDao = async () => {
   });
 }
 
-$: constructed = $settings.extensions?.filter((o) => o.valid).length > 0 || false;
+$: constructed = $settings.extensions?.filter((o:ExtensionType) => o.valid).length > 0 || false;
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 </script>
 
