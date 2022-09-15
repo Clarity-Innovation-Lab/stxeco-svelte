@@ -1,7 +1,7 @@
 <script>
 import Sidebar from './Sidebar.svelte'
 
-const rowers = "https://images.prismic.io/edao/3e317ebd-abe0-4fd8-9d4d-409348f72b7d_stx_eco_rowing_image.png?auto=compress,format";
+const rowers = "https://images.prismic.io/edao/c5c4c13b-34a0-4c05-a3c1-01aaada52aef_stx_eco_rowing_%23image.png?auto=compress,format";
 function scrollTo() {
   const getMeTo = document.getElementById("section3");
   if (getMeTo) getMeTo.scrollIntoView({behavior: 'smooth'});
@@ -16,7 +16,7 @@ function scrollTo() {
     <div class="col-md-11 col-sm-12 mx-0" style="height: 100%; padding-top: 30px;">
       <div class="m-5">
         <div class="row">
-          <div class="col-lg-6 col-md-12 col-sm-12 ">
+          <div class="col-lg-6 col-md-6 col-sm-12 ">
             <div>
               <p><span class="text1">Join our Stacks Community</span>
                 <span class="text2">of forward thinking humans
@@ -34,7 +34,7 @@ function scrollTo() {
               <p class="mt-4"><button class="btn btn-outline">LAUNCH A DAO</button></p>
               </div>
           </div>
-          <div class="col-lg-6 col-md-12 col-sm-12 "  style="height: 100%;">
+          <div class="col-lg-6 col-md-6 col-sm-12 hideme"  style="height: 100%;">
             <div class="">
               <img src={rowers} alt="Rowing together" width="80%" height="auto" />
               <div class="square-thing">
@@ -75,15 +75,15 @@ section {
 }
 .text1 {
   font-family: Gilroy-ExtraBold;
-  font-size: 4rem;
-  line-height: 60pt;
+  font-size: 3.0rem;
+  line-height: 3.5rem;
   color: #e71d73;
   text-transform: uppercase;
 }
 .text2 {
   font-family: Gilroy-Light;
-  font-size: 4rem;
-  line-height: 60pt;
+  font-size: 3.0rem;
+  line-height: 3.5rem;
   color: #ededed;
 }
 .text3 {

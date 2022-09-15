@@ -2,10 +2,10 @@
   import { ArrowDownRight, CaretRightFill } from "svelte-bootstrap-icons";
   import Sidebar from './Sidebar.svelte'
 
-  const img1 = "https://images.prismic.io/edao/71ce7c5a-81b2-4b95-847f-cf0d31bed391_stx_eco_hands_image.png?auto=compress,format";
-  const img2 = "https://images.prismic.io/edao/b45532a6-681a-4dc3-a03d-619bf221c17e_stx_eco_snapshot_image.png?auto=compress,format";
-  const img3 = "https://images.prismic.io/edao/3e3a1729-9085-4013-b13b-5eb11287d222_stx_eco_coin_image.png?auto=compress,format";
-  const img4 = "https://images.prismic.io/edao/a213d63a-50dc-4f85-aa3c-6f4e4061ebdb_stx_eco_laptop_image.png?auto=compress,format";
+  const img1 = "https://images.prismic.io/edao/86ff5a4f-62f6-4961-b872-b22ab3dc2a67_stx_eco_hands_%23image.png?auto=compress,format";
+  const img2 = "https://images.prismic.io/edao/5e216471-9b0e-4376-ba06-d36aa651ec11_stx_eco_snapshot_%23image.png?auto=compress,format";
+  const img3 = "https://images.prismic.io/edao/fe0199be-cc3f-47cd-8875-81aab1632801_stx_eco_coin_%23image.png?auto=compress,format";
+  const img4 = "https://images.prismic.io/edao/5fcfd473-fb50-4b14-a788-701626c8c8a8_stx_eco_laptop_%23image.png?auto=compress,format";
 </script>
 
 <section id="section3">

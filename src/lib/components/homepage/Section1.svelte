@@ -115,18 +115,18 @@ section {
 
 .content h1 {
   color: #fff;
-  font-size: 6.5rem;
+  font-size: 6.0rem;
   letter-spacing: 0.1rem;
-  line-height: 5.5rem;
+  line-height: 5.0rem;
 }
 .content p {
-  font-size: 2.2rem;
+  font-size: 2.0rem;
   letter-spacing: 0.1rem;
   font-weight: 700;
   line-height: auto;
   color: #ededed;
 }
-@media screen and (min-width: 0px) and (max-width: 776px) {
+@media screen and (min-width: 0px) and (max-width: 940px) {
   .content { 
     top: 20%;
   }
