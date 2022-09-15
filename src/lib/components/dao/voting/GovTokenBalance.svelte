@@ -16,20 +16,20 @@
     <div class="row mt-5">
       <div class="col-12">
         <div class="row">
-          <div class="col-md-4 cols-sm-12">Unlocked</div>  
-          <div class="col-md-6 cols-sm-12">{ tokenBalance }</div>  
+          <div class="col-md-4 col-sm-12">Unlocked</div>  
+          <div class="col-md-6 col-sm-12">{ tokenBalance }</div>  
         </div>
         <div class="row">
-          <div class="col-md-4 cols-sm-12">locked</div>  
-          <div class="col-md-6 cols-sm-12">{ tokenBalanceLocked }</div>  
+          <div class="col-md-4 col-sm-12">locked</div>  
+          <div class="col-md-6 col-sm-12">{ tokenBalanceLocked }</div>  
         </div>
         <div class="row">
-          <div class="col-md-4 cols-sm-12">delegated</div>  
-          <div class="col-md-6 cols-sm-12">{ totalDelegatedToMe }</div>  
+          <div class="col-md-4 col-sm-12">delegated</div>  
+          <div class="col-md-6 col-sm-12">{ totalDelegatedToMe }</div>  
         </div>
         <div class="row">
-          <div class="col-md-4 cols-sm-12">Total Supply:</div>  
-          <div class="col-md-6 cols-sm-12">{ totalSupply }</div>  
+          <div class="col-md-4 col-sm-12">Total Supply:</div>  
+          <div class="col-md-6 col-sm-12">{ totalSupply }</div>  
         </div>
       </div>  
     </div>

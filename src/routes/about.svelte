@@ -33,7 +33,7 @@ const explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/?chain=' + import.m
 			{#if $settings.userProperties}
 			<h4>Your Settings</h4>
 			{#each $settings.userProperties as item}
-					<p>{item.functionName} = {item.value.value}</p>
+					<p>{item.functionName} = {item?.value?.value}</p>
 				{/each}
 			{/if}
 		{/if}

@@ -21,8 +21,6 @@
   <script lang="ts">
   import settings from '$lib/settings'
   import type { ProposalType } from "../../../types/stxeco.type";
-  import { ArrowUpRightCircle } from "svelte-bootstrap-icons";
-  import { DateTime } from 'luxon'
   export let proposals:Array<ProposalType> = settings;
   console.log(proposals)
   const canPropose = () => {

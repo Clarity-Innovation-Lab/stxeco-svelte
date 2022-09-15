@@ -16,8 +16,6 @@
 	}
 
   const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
-  const network = import.meta.env.VITE_NETWORK;
-  const explorer = import.meta.env.VITE_STACKS_EXPLORER;
   const isFiltered = $page.url.searchParams.has('filter');
   const filter = (isFiltered) ? $page.url.searchParams.get('filter') : 'All Proposals';
   $: currentFilter = filter;
@@ -40,8 +38,8 @@
   
 	const fundingCost = Number($settings.daoProperties?.find((o) => o.id === 'funding-cost')?.value) / 1000000 || 0;
 
-  const contractUrl = (txId:string) => {
-      return explorer + '/txid/' + txId + '?chain=' + network;
+  const explorerUrl = (txId:string) => {
+      return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
   }
 
   let prop:ProposalType;
@@ -144,7 +142,7 @@
                       </span>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}>Show Clarity Source Code</a>
-                        <a class="dropdown-item pointer text-info" href={contractUrl(item.contractId)} target="_blank">Show on Explorer</a>
+                        <a class="dropdown-item pointer text-info" href={explorerUrl(item.contractId)} target="_blank">Show on Explorer</a>
                       </div>
                     </div>
                   </td>

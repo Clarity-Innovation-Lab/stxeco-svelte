@@ -1,46 +1,62 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-	let dispatch = createEventDispatcher();
-	export let activeItem
-	export let items
-    const handleClick = () => {
-        const person = {
-            name,
-            beltColor,
-            age,
-            id: Math.random
-        }
-        dispatch('addPerson', person)
+    export let items = [];
+    export let activeTabValue = 1;
+    export /** @type {any} */ let uid;
+    export /** @type {any} */ let docType;
+  
+    const handleClick = tabValue => () => (activeTabValue = tabValue);
+  </script>
+  
+  <ul>
+  {#each items as item}
+      <li class={activeTabValue === item.value ? 'active' : ''}>
+          <span on:click={handleClick(item.value)}>{item.label}</span>
+      </li>
+  {/each}
+  </ul>
+  {#each items as item}
+      {#if activeTabValue == item.value}
+      <div class="box">
+          <svelte:component this={item.component} docType={docType} uid={uid}/>
+      </div>
+      {/if}
+  {/each}
+  <style>
+      .box {
+          margin-bottom: 10px;
+          padding: 40px;
+          border: 1px solid #dee2e6;
+      border-radius: 0 0 .5rem .5rem;
+      border-top: 0;
+      }
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+      border-bottom: 1px solid #dee2e6;
     }
-</script>
-
-<div class="tabs">
-    <ul>
-		{#each items as item}
-			<li on:click={() => dispatch('tabChange', item)}><div class:active={item === activeItem}>{item}</div></li>
-		{/each}
-	</ul>
-</div>
-
-<style>
-	.tabs {
-		margin-bottom: 40px;
-	}
-	ul {
-		display: flex;
-		justify-content: center;
-		padding: 0;
-		list-style-type: none;
-	}
-	li {
-		margin: 0 16px;
-		font-size: 18px;
-		color: #555;
-		cursor: pointer;
-	}
-	.active {
-		color: #d91b42;
-		border-bottom: 1px solid #ddd;
-		padding-bottom: 8px;
-	}
-</style>
+      li {
+          margin-bottom: -1px;
+      }
+  
+    span {
+      border: 1px solid transparent;
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      display: block;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+  
+    span:hover {
+      border-color: #e9ecef #e9ecef #dee2e6;
+    }
+  
+    li.active > span {
+      color: #495057;
+      background-color: #fff;
+      border-color: #dee2e6 #dee2e6 #fff;
+    }
+  </style>

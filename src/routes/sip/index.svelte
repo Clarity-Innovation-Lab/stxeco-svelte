@@ -1,10 +1,32 @@
 <script lang="ts">
 	import CardWithParams from '$lib/shared/CardWithParams.svelte'
+	import Tab1 from "$lib/components/sips/tabs/Tab1.svelte";
+	import Tab2 from "$lib/components/sips/tabs/Tab2.svelte";
+	import Tab3 from "$lib/components/sips/tabs/Tab3.svelte";
+  import Tabs from "$lib/shared/Tabs.svelte";
 
-	let st1 = '<p>Getting the community involved via the DAO</p><ol><li>Activate SIP becomes a DAO Proposal</li><li>Rules of the DAO apply - e.g.</li><li>Voting starts in 1 day / ends in 1 week</li></ol>'
-	let st2 = '<p>About CABs - Advisory Boards!</p><ol><li>Goverance - join discussions</li><li>Tokenomics - join discussions</li><li>Technical - join discussions</li></ol>'
-	let st3 = '<p>SIPs start out as suggestions or issues registered on GitHub</p><ol><li>GitHub is complicated - learn about why we use it.</li><li>Have a suggestion for improving Stacks?</li><li>Comment on someone else\'s suggestion?</li></ol>'
-	let st4 = '<p>A <strong>Proposal</strong> is a Pull Request in GitHub lingo</p><ol><li>SIP workflow.</li><li>Review open proposals</li><li>Comment on open proposals</li></ol>'
+/**
+let st1 = '<p>Getting the community involved via the DAO</p><ol><li>Activate SIP becomes a DAO Proposal</li><li>Rules of the DAO apply - e.g.</li><li>Voting starts in 1 day / ends in 1 week</li></ol>'
+let st2 = '<p>About CABs - Advisory Boards!</p><ol><li>Goverance - join discussions</li><li>Tokenomics - join discussions</li><li>Technical - join discussions</li></ol>'
+let st3 = '<p>SIPs start out as suggestions or issues registered on GitHub</p><ol><li>GitHub is complicated - learn about why we use it.</li><li>Have a suggestion for improving Stacks?</li><li>Comment on someone else\'s suggestion?</li></ol>'
+let st4 = '<p>A <strong>Proposal</strong> is a Pull Request in GitHub lingo</p><ol><li>SIP workflow.</li><li>Review open proposals</li><li>Comment on open proposals</li></ol>'
+**/
+  let items = [
+    { label: "SIP Process",
+		 value: 1,
+		 component: Tab1,
+     uid: 'sip_tab1',
+     docType: 'sip_tab'
+		},
+    { label: "Making Suggestions",
+		 value: 2,
+		 component: Tab2
+		},
+    { label: "Advisory Boards",
+		 value: 3,
+		 component: Tab3
+		}
+  ];
 </script>
 
 <svelte:head>
@@ -13,12 +35,15 @@
 </svelte:head>
 
 <section>
-    <div class="container my-5">
-      <div class="row">
+    <div class="container my-0">
+      <div class="row mb-5">
         <div class="col">
-          <h1>Stacks Improvement Proposals</h1>
+          <h1 class="mb-2">Stacks Improvement Proposals (SIPs)</h1>
+          <h6 class="mb-5">Everything you wanted to know but were afraid to ask!</h6>
+          <Tabs {items} />
         </div>
       </div>
+      <!--
       <div class="row">
         <div class="col-6 my-2">
           <CardWithParams title="Suggestions" subtitle="" image="/img/bg/ecosys.jpg"
@@ -37,6 +62,7 @@
             linkTarget="/sip/sip-cabs" linkName="About the CABs"/>
         </div>
       </div>
+      -->
     </div>
   </section>
 

@@ -4,13 +4,37 @@
 
 @import '@fontsource/fira-mono';
 
+@font-face {
+  font-family: "Akrobat-Black";
+  src: url("/fonts/Akrobat-Black.otf") format("truetype");
+}
+@font-face {
+  font-family: "Akrobat-Regular";
+  src: url("/fonts/Akrobat-Regular.otf") format("truetype");
+}
+@font-face {
+  font-family: "Akrobat-Thin";
+  src: url("/fonts/Akrobat-Thin.otf") format("truetype");
+}
+@font-face {
+  font-family: "Gilroy-ExtraBold";
+  src: url("/fonts/Gilroy-ExtraBold.otf") format("truetype");
+}
+@font-face {
+  font-family: "Gilroy-Light";
+  src: url("/fonts/Gilroy-Light.otf") format("truetype");
+}
 
+body, html {
+  height: 100%;
+}
+/*
 #svelte {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
+*/
 h1,
 h2,
 p {
@@ -24,18 +48,19 @@ p {
 
 a {
   text-decoration: none;
+  color: #428bca;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: #ca42b8;
 }
 
 h1 {
   font-size: 2rem;
 }
-
 h2 {
-  font-size: 1rem;
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
 pre {
@@ -115,6 +140,105 @@ button:focus:not(:focus-visible) {
   text-align: left;
   border-radius: 10px;
 }
+@media screen and (min-width: 0px) and (max-width: 776px) {
+  .hideme { display: none; }  /* show it on small screens */
+}
+.text-akrobat-thin {
+  font-family: Akrobat-Thin;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  line-height: 2em;
+  color: #ededed;
+}
+/* nav styles */
+/* burger menu styles */
+.navbar-toggler {
+  background-color: #fff;
+  opacity: 0.6;
+}
+@media screen and (min-width: 0px) and (max-width: 756px) {
+  .navbar-collapse {
+    float: right;
+  }
+  .navbar-collapse .navbar-nav {
+    background-color: #333;
+    opacity: 0.9;
+    border-radius: 10px;
+    text-align: left;
+    margin: 5px 5px;
+    padding: 15px 5px;
+    width: 100%;
+  }
+  .navbar-collapse .dropdown {
+    padding: 0px 15px;
+    margin: 0;
+  }
+}
+.navbar-nav {
+  margin-left: auto;
+}
+.navbar-collapse>ul>li>dropdown:hover {
+  color: #fff;
+}
+/* end burger menu styles */
+
+.nav-item a {
+	text-transform: lowercase;
+	font-weight: 700;
+	font-size: 1.0rem;
+  color: #fff;
+}
+nav {
+	display: flex;
+	z-index: 20;
+	height: 80px;
+	justify-content: center;
+	--background: rgba(0, 255, 255, 0.7);
+}
+nav a {
+	display: flex;
+	height: 100%;
+	align-items: center;
+	padding: 0 1em;
+	color: var(--heading-color);
+	color: #fff;
+	font-weight: 700;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	text-decoration: none;
+	transition: color 0.2s linear;
+}
+
+.nav-item>a:hover {
+	color: #eee;
+}
+
+.dropdown-menu {
+	background-color: transparent;
+	border: none;
+	padding-bottom: 0;
+	font-family: Gilroy-Light;
+}
+.nav-item > a:hover {
+  color: rgb(13, 12, 12);
+}
+.dropdown-item {
+  font-size: 5.5rem;
+  color: #ededed;
+}
+.dropdown-item:hover, .dropdown-item:focus {
+  opacity: 40%;
+  background-color: #ededed;
+}
+a.dropdown-item {
+	padding: 5px 5px;
+}
+.nav {
+	font-family: Gilroy-ExtraBold;
+}
+/* end nav styles */
+
 
 /* Prismjs styles for pretty Clarity */
 .token.comment,

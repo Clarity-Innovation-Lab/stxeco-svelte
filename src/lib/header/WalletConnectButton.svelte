@@ -9,7 +9,7 @@ const account = getAccount();
 
 const logout = () => {
 	$auth.signOut();
-	window.location.reload();
+	// window.location.reload();
 }
 const login = () => {
 	$auth.openAuthRequest({
@@ -22,12 +22,21 @@ const login = () => {
 </script>
 
 {#if $auth.isSignedIn}
-	<a href="/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}><Power fill="dark" width={20} height={40} /></a>
+	<span class="nav-item">
+		<a href="/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}>
+			<img src="/img/png-assets/stx_eco_wallet_on.png" alt="Wallet Connected" width="40" height="auto" />
+		</a>
+	</span>
 {:else if $auth.isRequestPending}
-	Authenticating..
+	<span class="nav-item"><a href="/" on:click|preventDefault={login}><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></a></span>
 {:else}
-<a href="/" class="text-white pointer" on:click|preventDefault={login} >Connect Wallet</a>
+	<span class="nav-item"><a href="/" class="pointer" on:click|preventDefault={login} ><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></a></span>
 {/if}
 
 <style>
+.nav-item {
+	text-transform: lowercase;
+	font-weight: 700;
+	font-size: 1.0rem;
+}
 </style>

@@ -1,6 +1,7 @@
 <script>
 import Section1 from '$lib/components/homepage/Section1.svelte'
 import Section2 from '$lib/components/homepage/Section2.svelte'
+import Section3 from '$lib/components/homepage/Section3.svelte'
 </script>
   
 <svelte:head>
@@ -8,7 +9,8 @@ import Section2 from '$lib/components/homepage/Section2.svelte'
 	<meta name="description" content="Ecosystem DAO" />
 </svelte:head>
 
-<Section1/>
-<div class="container">
-  <Section2/>
+<div>
+	<Section1/>
+	<Section2/>
+	<Section3/>
 </div>

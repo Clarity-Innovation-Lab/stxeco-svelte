@@ -63,8 +63,8 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
       <p>Vote with at least 1 STX or any amount up to your balance at the block height where voting started. 
       Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
   </div>
-  {#if canVote}
   <div class="row">
+    {#if canVote}
 		<form on:submit|preventDefault>
 			<div class="mb-3 text-center">
 				<div class="form-text"><h6>Voting Power</h6></div>
@@ -76,25 +76,29 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
 				<div class="mt-5 text-small text-info">No STX is transferred by voting.</div>
 			</div>
 		</form>
+    {/if}
     <div class="my-5">
       <div class="d-flex justify-content-around">
         <div>
+          {#if canVote}
           <div>
             <button class="btn btn-outline-info" on:click={() => castVote(true)}>FOR</button>
           </div>
+          {/if}
           <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} votes</p>
         </div>
-        <h2>Cast your Vote</h2>
+        {#if canVote}<h2>Cast your Vote</h2>{:else}<h2>Voting Ended</h2>{/if}
         <div>
+          {#if canVote}
           <div>
             <button class="btn btn-outline-success" on:click={() => castVote(false)}>AGAINST</button>
           </div>
+          {/if}
           <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} votes</p>
       </div>
     </div>
     </div>
   </div>
-  {/if}
   {#if txId}
   <div>Your vote is being counted - thank you.</div>
   <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a>.</div>

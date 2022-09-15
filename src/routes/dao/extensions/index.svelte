@@ -18,6 +18,9 @@
     sourceCode = item.contract.source_code;
     toggleModal();
   }
+  const explorerUrl = (txId:string) => {
+      return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
+  }
 
   let sortDir = true;
   let sortField = 'title';
@@ -53,16 +56,28 @@
               <tr>
               <th scope="col" class="pointer" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Name</th>
               <th scope="col">Connected</th>
+              <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {#each sortedProps as item}
               <tr>
-              <th class:text-white={item.valid} class:bg-success={item.valid} scope="row" class="py-3"><span on:click={() => { openSesame(item) }} class="pointer mr-2">{item.contract.contract_id.split('.')[1]}</span></th>
+              <th class:text-white={item.valid} class:bg-success={item.valid} scope="row" class="py-3"><span class="pointer mr-2">{item.contract.contract_id.split('.')[1]}</span></th>
               <td class:text-white={item.valid} class:bg-success={item.valid} class="pointer py-3" data-bs-toggle="tooltip" data-bs-placement="top" title="State of extension. Connected means this is an active extension in the DAO. Extensions can be activated by proposals">
                 <span>
                   {item.valid}
                 </span>
+              </td>
+              <td class:text-white={item.valid} class:bg-success={item.valid} class="pointer py-3">
+                <div class="dropdown">
+                  <span class="dropdown px-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ...
+                  </span>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}>Show Clarity Source Code</a>
+                    <a class="dropdown-item pointer text-info" href={explorerUrl(item.contractId)} target="_blank">Show on Explorer</a>
+                  </div>
+                </div>
               </td>
             </tr>
             {/each}
