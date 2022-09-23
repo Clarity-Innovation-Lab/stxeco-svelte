@@ -77,7 +77,7 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
+<section class="text-white">
 	<div class="container">
 		<div class="d-flex justify-content-between">
 			<div class="text-small">
@@ -89,7 +89,7 @@
 			</div>
 		</div>
 		<div class="">
-			<table class="table table-striped text-small">
+			<table class="table text-white">
 				<thead>
 					<tr>
 						<th scope="col" class="pointer" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</th>
@@ -111,7 +111,7 @@
 					<td class="py-3">
 						<a target="_blank" class="mr-2 text-info" href={issue.htmlUrl}>
 							<span data-bs-toggle="tooltip" data-bs-placement="top" title="View on GitHub">
-								<ArrowUpRightCircle fill="purple" width={20} height={20} />
+								<ArrowUpRightCircle fill="white" width={20} height={20} />
 							</span>
 						</a>
 					</td>

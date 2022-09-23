@@ -28,6 +28,21 @@
 body, html {
   height: 100%;
 }
+
+
+input, textarea {
+  border-radius: unset !important;
+}
+.btn {
+  border-radius: unset!important;
+}
+
+.bg-grey {
+  background-color: #333333;
+}
+.bg-card {
+  background-color: #262626;
+}
 /*
 #svelte {
   min-height: 100vh;
@@ -90,6 +105,33 @@ button:focus:not(:focus-visible) {
   }
 }
 
+h1 {
+  font-family: Gilroy-ExtraBold;
+  text-transform: uppercase;
+  line-height: 3.3rem;
+  font-size: 3.2rem;
+}
+.strokeme-white {
+  color: #333333;
+	-webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #ededed;
+}
+.strokeme-warning {
+  color: #333333;
+	-webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #FFA701;
+}
+.strokeme-info {
+  color: #333333;
+	-webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #4786cd;
+}
+.strapline {
+  font-family: Gilroy-Light;
+  color: #ededed;
+  font-size: 1.0rem;
+}
+
 .text-small {
   font-size: small;
 }
@@ -103,24 +145,22 @@ button:focus:not(:focus-visible) {
   padding: 10px 40px;
   overflow-y: auto;
   max-height: 400px;
-  border-radius: 10px;
   margin: 5% 5%;
   text-align: left;
   color: #000;
   background: white;
-  border: 1pt solid #aeaeae;
-  border-radius: 10px;
+  border: 1pt solid #ededed;
+  border-radius: 0px;
 }
 .source-code {
   padding: 10px 10px;
   overflow-y: auto;
   min-height: 600px;
-  border-radius: 10px;
   text-align: left;
-  color: #000;
-  background: #cecece;
+  color: #ededed;
+  background: #262626;
   border: 1pt solid #aeaeae;
-  border-radius: 10px;
+  border-radius: 0px;
   font-family: monospace;
 }
 .content {
@@ -150,15 +190,46 @@ button:focus:not(:focus-visible) {
   line-height: 2em;
   color: #ededed;
 }
+
+
+
+
+/* https://codepen.io/sosuke/pen/Pjoqqp */
+.filter-success{
+	filter: invert(73%) sepia(56%) saturate(410%) hue-rotate(74deg) brightness(88%) contrast(84%);
+}
+.filter-warning{
+	filter: invert(90%) sepia(18%) saturate(6119%) hue-rotate(330deg) brightness(100%) contrast(99%);
+}
+.filter-danger{
+	filter: invert(23%) sepia(100%) saturate(7325%) hue-rotate(21deg) brightness(97%) contrast(87%);
+}
+
+
+.upper {
+	text-transform: uppercase;
+}
+
+
+
 /* nav styles */
 /* burger menu styles */
 .navbar-toggler {
   background-color: #fff;
   opacity: 0.6;
 }
+.nav-logo {
+  width: 198px;
+  height: auto; 
+}
+
 @media screen and (min-width: 0px) and (max-width: 756px) {
   .navbar-collapse {
     float: right;
+  }
+  .nav-logo {
+    width: 140px;
+    height: auto; 
   }
   .navbar-collapse .navbar-nav {
     background-color: #333;
@@ -188,6 +259,13 @@ button:focus:not(:focus-visible) {
 	font-size: 1.0rem;
   color: #fff;
 }
+.nav-link {
+  text-transform: lowercase;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+}
+
 nav {
 	display: flex;
 	z-index: 20;
@@ -310,4 +388,10 @@ a.dropdown-item {
 
 .token.entity {
 	cursor: help;
+}
+
+
+
+.text-white {
+  color: #ededed;
 }

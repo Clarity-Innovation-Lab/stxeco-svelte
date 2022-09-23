@@ -141,7 +141,7 @@ section {
 }
 .btn {
   border: 1pt solid #fff;
-  border-radius: 50px;
+  border-radius: 50px!important;
   color: #fff;
   padding: 15px 20px;
   font-weight: 600;

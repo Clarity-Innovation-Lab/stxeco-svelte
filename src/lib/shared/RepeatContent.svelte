@@ -28,10 +28,8 @@ const isText = (/** @type {any} */ tabContent) => {
 	<p>Loading...</p>
   {:then prismicResponse}
 	{#if isText(prismicResponse.data.tab_content)}
-		<h1>Yes Divs</h1>
   		{@html prismicH.asText(prismicResponse.data.tab_content)}
 	{:else}
-		<h1>No Divs</h1>
 		{@html prismicH.asHTML(prismicResponse.data.tab_content)}
 	{/if}
   <!--

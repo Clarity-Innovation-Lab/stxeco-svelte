@@ -50,61 +50,64 @@ const castVote = async (vfor:boolean) => {
     });
 }
 
-let canVote = stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight;
+$: canVote = stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight;
 if (balanceAtHeight === 0 || balanceAtHeight < 1) {
   canVote = false;
 }
 </script>
 
-<section>
-  <div class="jumbo">
-    <div>
-      <h4>Snapshot Voting</h4>
-      <p>Vote with at least 1 STX or any amount up to your balance at the block height where voting started. 
-      Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
-  </div>
+{#if canVote}
+<div class="bg-card p-5 mt-3 text-white" >
   <div class="row">
-    {#if canVote}
-		<form on:submit|preventDefault>
-			<div class="mb-3 text-center">
-				<div class="form-text"><h6>Voting Power</h6></div>
-				<div class="form-text"><a href="/" on:click|preventDefault={() => amount = 1}>min</a> / <a href="/" on:click|preventDefault={() => amount = balanceAtHeight}>max</a></div>
-				{#if errorMessage}
-        <div class="text-small text-danger">{errorMessage}</div>
-        {/if}
-				<div class="d-flex justify-content-center"><input class="w-25 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/> </div>
-				<div class="mt-5 text-small text-info">No STX is transferred by voting.</div>
-			</div>
-		</form>
-    {/if}
-    <div class="my-5">
+    <h4>Cast Your Vote</h4>
+    <div class="text-small">Enter the voting power and cast your vote. No STX is transferred by voting.</div>
+    {#if !txId}
+    <div class="my-3">
+      <form on:submit|preventDefault>
+        <div class="mb-3 text-center">
+          <div class="d-flex justify-content-center"><input class="w-25 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/> </div>
+          <div class="form-text text-white"><a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = 1; errorMessage = undefined}}>min</a>  <a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = balanceAtHeight; errorMessage = undefined}}>max</a></div>
+        </div>
+      </form>
       <div class="d-flex justify-content-around">
         <div>
-          {#if canVote}
-          <div>
-            <button class="btn btn-outline-info" on:click={() => castVote(true)}>FOR</button>
-          </div>
-          {/if}
-          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} votes</p>
+          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(true)}}>FOR</button>
         </div>
-        {#if canVote}<h2>Cast your Vote</h2>{:else}<h2>Voting Ended</h2>{/if}
         <div>
-          {#if canVote}
-          <div>
-            <button class="btn btn-outline-success" on:click={() => castVote(false)}>AGAINST</button>
-          </div>
-          {/if}
-          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} votes</p>
+          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(false)}}>AGAINST</button>
+        </div>
       </div>
+      {#if errorMessage}
+        <div class="mt-3 text-small text-danger  text-center">{errorMessage}</div>
+      {/if}
     </div>
+    {:else}
+    <div class="my-5">
+      <div>Your vote is being counted - thank you.</div>
+      <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a></div>
     </div>
+    {/if}
   </div>
-  {#if txId}
-  <div>Your vote is being counted - thank you.</div>
-  <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a>.</div>
-  {/if}
 </div>
-</section>
+{:else}
+<div class="bg-card p-5 mt-3 text-white" >
+  <div class="row">
+    <h4>Unable to to Vote</h4>
+    <div class="text-small">Need at least 1 STX in your accoutn at time proposal was submitted.</div>
+  </div>
+</div>
+{/if}
+
+<div class="bg-card py-4 px-5 mt-3">
+  <div class="text-white">
+    <h4>How Voting Works</h4>
+    <p>Vote with at least 1 STX or any amount up to your balance at the block height where voting started. 
+    Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
+  </div>
+</div>
 
 <style>
+  h4 {
+    color: #fdad37;
+  }
 </style>

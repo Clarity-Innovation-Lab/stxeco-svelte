@@ -3,22 +3,61 @@ import DaoUtils from '$lib/service/DaoUtils';
 import type { ProposalType } from "../../../../types/stxeco.type";
 
 export let proposal:ProposalType;
+const proposalMeta = DaoUtils.getMetaData(proposal);
+const color = proposal.status.color;
 </script>
 
-<div class="preamble my-4">
-	<div class="py-2 px-4">
-	<p class="my-0 py-0">{@html DaoUtils.getMetaData(proposal)}</p>
+<div class="container">
+	<div class="col-12 p-4">
+		<div class="row">
+			<div class="cols-12 box">
+				<div class="row mx-0 mb-2">
+					<h4 class={'m-0 px-0 text-' + color} style="position: relative; top: 0px; left: -35px;" >
+						<img style="position: relative; top: -20px; left: 0px;" src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="15px" height="auto" />
+						PROPOSAL OVERVIEW</h4>
+				</div>
+				<div class="row">
+					<div class={'col-4 border-' + color}><p class={'text-' + color}>DAO</p></div>
+					<div class={'col-8 border-' + color}><p class="text-white">{proposalMeta.dao}</p></div>
+					<div class={'col-4 border-' + color}><p class={'text-' + color}>Title</p></div>
+					<div class={'col-8 border-' + color}><p class="text-white">{proposalMeta.title}</p></div>
+					<div class={'col-4 border-' + color}><p class={'text-' + color}>Author</p></div>
+					<div class={'col-8 border-' + color}><p class="text-white">{proposalMeta.author}</p></div>
+				</div>
+				<div class="row mt-4">
+					<div class={'col-4 border-' + color}><p class={'text-' + color}>Synopsis</p></div>
+					<div class={'col-12 border-' + color}><p class="text-white">{proposalMeta.synopsis}</p></div>
+				</div>
+				<div class="row mt-4">
+					<div class={'col-4 border-' + color}><p class={'text-' + color}>Description</p></div>
+					<div class={'col-12 border-' + color}><p class="text-white">{proposalMeta.description}</p></div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
 <style>
-.preamble {
-	width: 60%;
-	background: #4f5997;
-	margin: 10px auto;
-	padding: 10px;
-	text-align: left;
-	border-radius: 10px;
-	color: #fff;
+p {
+	font-family: Gilroy-Light;
+	padding: 3px;
+	margin: 0 !important;
+	font-size: 1.0rem;
+	text-transform: lowercase;
+}
+.border-yellow {
+	border: 1pt solid #fdad37;
+}
+.border-primary {
+	border: 1pt solid #4B515D;
+}
+.border-info {
+	border: 1pt solid #4786cd;
+}
+.border-success {
+	border: 1pt solid #64c872;
+}
+.border-danger {
+	border: 1pt solid #dd216e;
 }
 </style>

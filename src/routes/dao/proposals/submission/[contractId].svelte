@@ -6,7 +6,7 @@ import FundedSubmissionVoting from '$lib/components/dao/submission/FundedSubmiss
 import ThresholdSubmissionVoting from '$lib/components/dao/submission/ThresholdSubmissionVoting.svelte'
 import { ChevronDoubleLeft } from "svelte-bootstrap-icons";
 import settings from '$lib/settings';
-import ExecutedBanner from '$lib/components/dao/proposals/ExecutedBanner.svelte'
+import EmergencyExecuted from '$lib/components/dao/proposals/EmergencyExecuted.svelte'
 import DaoRules from '$lib/components/dao/proposals/DaoRules.svelte';
 
 let contractId = $page.params.contractId
@@ -85,7 +85,7 @@ const showEmergencySubmitForm = () => {
 				{/if}
 			</div>
 			{:else}
-			<ExecutedBanner {proposal} />
+			<EmergencyExecuted {proposal} />
 			{/if}
 		</div>
 		{#if showFundedProposal}

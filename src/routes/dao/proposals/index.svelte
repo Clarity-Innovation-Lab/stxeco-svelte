@@ -1,89 +1,73 @@
 <script lang="ts">
-  import settings from '$lib/settings';
-	import Modal from '$lib/shared/Modal.svelte';
-	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
-  import ProposalFilter from '$lib/components/dao/proposals/ProposalFilter.svelte'
-  import { SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
-  import { goto } from '$app/navigation';
-  import type { ProposalType } from "../../../types/stxeco.type";
-	import DaoUtils from '$lib/service/DaoUtils';
-	import { page } from '$app/stores';
+import settings from '$lib/settings';
+import Modal from '$lib/shared/Modal.svelte';
+import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
+import ProposalFilter from '$lib/components/dao/proposals/ProposalFilter.svelte'
+import ProposalGridItem from '$lib/components/dao/proposals/ProposalGridItem.svelte'
+import { SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
+import { goto } from '$app/navigation';
+import type { ProposalType } from "../../../types/stxeco.type";
+import DaoUtils from '$lib/service/DaoUtils';
+import { page } from '$app/stores';
+import { onMount } from 'svelte';
 
 
-  let showModal:boolean;
-	const toggleModal = () => {
-		showModal = !showModal;
-	}
+let showModal:boolean;
+const toggleModal = () => {
+  showModal = !showModal;
+}
+let componentKey = 0;
+let filter = 'All Proposals';  
+let proposal:ProposalType;
+let sourceCode: string|undefined = '';
+const openSourceModal = (evt) => {
+  proposal = evt.detail;
+  sourceCode = proposal.contract.source_code;
+  toggleModal();
+}
+const deployProposal = () => {
+  goto('/dao/proposals/deployment', { replaceState: false }) 
+}
 
-  const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
+$: matchesFilter = (proposal:ProposalType) => {
+  // const filterValues = ['all', 'emergexec', 'voting', 'funding', 'concluded', 'deployed', 'draft']
+  const status = proposal.status;
+  if (currentFilter === 'All Proposals' || currentFilter === 'all') return true;
+  if (currentFilter === 'executed') {
+    return status.name === 'emergexec' || status.name === 'passed' || status.name === 'failed';
+  }
+  if (currentFilter === 'deployed' || currentFilter === 'draft') {
+    return status.name === 'draft' || status.name === 'deployed' || status.name === 'deploying' || status.name === 'submitted' || status.name === 'submitting';
+  }
+  if (currentFilter === 'voting') {
+    return status.name === 'voting ended' || status.name === 'voting' || status.name === 'commencing soon';
+  }
+  if (currentFilter === 'concluded') {
+    return status.name === 'voting ended' || status.name === 'passed' || status.name === 'failed';
+  }
+  if (currentFilter === 'funding') {
+    return status.name === 'funding';
+  }
+  return currentFilter === status.name || currentFilter === 'all';
+}
+
+onMount(async () => {
   const isFiltered = $page.url.searchParams.has('filter');
-  const filter = (isFiltered) ? $page.url.searchParams.get('filter') : 'All Proposals';
-  $: currentFilter = filter;
-	const propFilterChange = (e: { detail: string; }) => {
-		currentFilter = e.detail
-	}
-	$: matchesFilter = (item:ProposalType) => {
-		if (currentFilter === 'All Proposals') return true;
-    if (currentFilter === 'executed') {
-      return item.executedAt && item.executedAt > 0;
-    }
-    if (currentFilter === 'deployed') {
-      return item.status === 'deploying' || item.status === 'deployed';
-    }
-    if (currentFilter === 'submitted') {
-      return item.status === 'submitted' || item.status === 'submitting';
-    }
-    return currentFilter === item.status || currentFilter === 'all';
-	}
-  
-	const fundingCost = Number($settings.daoProperties?.find((o) => o.id === 'funding-cost')?.value) / 1000000 || 0;
-
-  const explorerUrl = (txId:string) => {
-      return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
-  }
-
-  let prop:ProposalType;
-  let sourceCode: string|undefined = '';
-  const openSesame = (currentItem:ProposalType) => {
-    prop = currentItem;
-    sourceCode = currentItem.contract.source_code;
-    toggleModal();
-  }
-  const deployProposal = () => {
-    goto('/dao/proposals/deployment', { replaceState: false }) 
-  }
-  const stacksTipHeight = $settings.info?.stacks_tip_height || 0;
-
-  $settings.proposals?.forEach((item) => {
-    item.status = DaoUtils.getStatus(stacksTipHeight, item);
-  })
-
-  const status = (item:ProposalType) => {
-    item.status = DaoUtils.getStatus(stacksTipHeight, item);
-    return item.status;
-  }
-
-  const classList = (item:ProposalType) => {
-    let clazzes = 'py-3';
-    if (typeof item.executedAt === 'number' && item.executedAt > 0) {
-      clazzes = 'py-3 bg-success text-white';
-    } else if (item.funding > -1 && item.funding < fundingCost) {
-      clazzes = 'py-3 bg-warning text-white';
-    } else if (item.funding > -1 && item.funding >= fundingCost) {
-      clazzes = 'py-3 bg-danger text-white';
-    }
-    return clazzes;
-  }
-
-  let sortDir = true;
-  let sortField = 'title';
-
-  const reorder = (sf:string) => {
+  filter = (isFiltered) ? $page.url.searchParams.get('filter') : 'All Proposals';
+});
+let sortDir = true;
+let sortField = 'title';
+const reorder = (sf:string) => {
     sortField = sf;
     sortDir = !sortDir;
-  }
-  $: sortedProps = DaoUtils.sortProposals($settings?.proposals, sortDir, sortField);
-  </script>
+    componentKey++;
+}
+$: sortedProps = DaoUtils.sortProposals($settings.proposals, sortDir, sortField);
+$: currentFilter = filter;
+const propFilterChange = (e: { detail: string; }) => {
+		currentFilter = e.detail
+}
+</script>
   
   <svelte:head>
     <title>DAO Proposals</title>
@@ -93,7 +77,7 @@
   <Modal {showModal} on:click={toggleModal}>
     <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
     <div slot="title">
-      <h3>Proposal: {prop?.contract?.contract_id?.split('.')[1]}</h3>
+      <h3>Proposal: {proposal?.contract?.contract_id?.split('.')[1]}</h3>
     </div>
   </Modal>
   
@@ -101,61 +85,54 @@
   </section>
 
   <section>
-    <div class="container">
-
-      <div class="d-flex justify-content-end mb-4">
-        <div class="mx-3">
-          <button class="btn btn-outline-dark" on:click|preventDefault={() => { deployProposal() }}>
-            Deploy a Proposal Contract
-          </button>  
-        </div>
-        <div>
-          <ProposalFilter {currentFilter} on:propFilterChange={propFilterChange}/>
-        </div>
+    <div class="row">
+      <div class="cols-12">
+        <h1 class="text-white"><span class="strokeme-white">DAO</span> Proposals</h1>
+        <p class="strapline">Proposals are the lifeblood of the DAO - anyone can suggest a proposal
+          but to have a proposal accepted for voting requires STX to be sent to the DAO. This helps
+          fund the work of the DAO and also prevents the DAO from being spammed with trivial proposals.
+          To make it inclusive and fair we've included support for crowd funding proposals, so you don't have to 
+          be loaded to make a proposal.
+        </p>
+        <p class="text-center">
+          <button class="btn btn-outline-light" on:click|preventDefault={() => { deployProposal() }}>make a proposal</button>
+        </p>
       </div>
-
-      <div class="row">
-        <div class="col-12">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col" class="pointer my-2" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</th>
-                <th scope="col" class="pointer my-2" on:click={() => reorder('status')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} State</th>
-                <th scope="col" class="pointer my-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#each sortedProps as item}
-                {#if item && matchesFilter(item)}
-                <tr>
-                  <td class={classList(item)}><a class="text-white" href={'/dao/proposals/' + item.contract.contract_id}>{item.contractId.split('.')[1]}</a></td>
-                  <td class={classList(item)}>
-                    {status(item)}
-                    {#if status(item) === 'emergexec'}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}><span class="text-white">{item.emergencySignals}/{sigsRequired}</span></a>){/if}
-                    {#if status(item) === 'voting'} - <a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}><span class="text-white">{DaoUtils.getVotingMessage(item.proposalData, stacksTipHeight)}</span></a>{/if}
-                    {#if status(item) === 'funding'}(<a class="pointer text-info" href={'/dao/proposals/' + item.contract.contract_id}><span class="text-white">{item.funding}/{fundingCost}</span></a>){/if}
-                  </td>
-                  <td class={classList(item)}>
-                    <div class="dropdown">
-                      <span class="dropdown px-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        ...
-                      </span>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}>Show Clarity Source Code</a>
-                        <a class="dropdown-item pointer text-info" href={explorerUrl(item.contractId)} target="_blank">Show on Explorer</a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                {/if}
-              {/each}
-          </tbody>
-          </table>
-        </div>
+      <div class="cols-12">
+        <div class="m-5 d-flex justify-content-center">
+        <div class="filter pointer m-2" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</div>
+        <div class="filter pointer m-2" on:click={() => reorder('status')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Status</div>
+        <div class="filter pointer m-2"><ProposalFilter {currentFilter} on:propFilterChange={propFilterChange}/></div>
       </div>
     </div>
-  </section>
+    <div class="cols-12">
+      <div class="row">
+        {#key componentKey}
+          {#each sortedProps as item}
+            {#if item && matchesFilter(item)}
+              <div class="col-md-6 col-sm-12"><ProposalGridItem proposal={item}  on:openSourceModal={openSourceModal}/></div>
+            {/if}
+          {/each}
+        {/key}
+      </div>
+    </div>
+  </div>
+</section>
   
   <style>
-  </style>
+.filter {
+      border: 1pt solid #787878;
+      color: #787878;
+      padding: 3px 17px;
+}
+.btn {
+  border: 1pt solid #ededed;
+  font-size: 1.2rem;
+  border-radius: 50px!important;
+  color: #ededed;
+  padding: 15px 5px;
+  width: 250px;
+  letter-spacing: 0.2rem;
+}
+</style>
   

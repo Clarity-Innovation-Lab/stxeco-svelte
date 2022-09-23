@@ -78,34 +78,39 @@ console.log('title=' + fields.title)
 console.log('PROPOSAL_FORM=' + localStorage.getItem('PROPOSAL_FORM'))
 </script>
 
-<form on:submit|preventDefault={submitHandler}>
-    <div class="form-field">
-	    <label for="contractName">Contract Name (max 60 chars)</label>
-		<input maxlength="60" type="text" id="title" bind:value={fields.contractName} on:input={saveContractName}/>
-		<div class="error">{errors.contractName}</div>
-    </div>
-    <div class="form-field">
-	    <label for="title">Title (max 60 chars)</label>
-		<input maxlength="60" type="text" id="title" bind:value={fields.title} on:input={saveForm}/>
-		<div class="error">{errors.title}</div>
-    </div>
-    <div class="form-field">
-	    <label for="author">Author (max 60 chars)</label>
-		<input maxlength="60" type="text" id="author" bind:value={fields.author} on:input={saveForm}/>
-		<div class="error">{errors.author}</div>
-    </div>
-    <div class="form-field">
-	    <label for="synopsis">Synopsis (max 100 chars)</label>
-		<input maxlength="100" type="text" id="synopsis" bind:value={fields.synopsis} on:input={saveForm}/>
-		<div class="error">{errors.synopsis}</div>
-    </div>
-    <div class="form-field">
-	    <label for="description">Description (max 500 chars)</label>
-		<textarea maxlength="500" rows="3" type="text" id="description" bind:value={fields.description} on:input={saveForm}/>
-		<div class="error">{errors.description}</div>
-    </div>
-	<button class="btn btn-sm outline-light">Update</button>
-</form>
+<div class="text-white mb-4">
+	<p>Enter the information required then press 'update' - the information will be copied into the
+		contract template. Press deploy to deploy the contract on the Stacks Blockchain.
+	</p>
+	<form on:submit|preventDefault={submitHandler}>
+		<div class="form-field">
+			<label for="contractName">Contract Name (max 60 chars)</label>
+			<input class={'bg-card form-control border-white'} maxlength="60" type="text" id="title" bind:value={fields.contractName} on:input={saveContractName}/>
+			<div class="error">{errors.contractName}</div>
+		</div>
+		<div class="form-field">
+			<label for="title">Title (max 60 chars)</label>
+			<input class={'bg-card form-control border-white'} maxlength="60" type="text" id="title" bind:value={fields.title} on:input={saveForm}/>
+			<div class="error">{errors.title}</div>
+		</div>
+		<div class="form-field">
+			<label for="author">Author (max 60 chars)</label>
+			<input class={'bg-card form-control border-white'} maxlength="60" type="text" id="author" bind:value={fields.author} on:input={saveForm}/>
+			<div class="error">{errors.author}</div>
+		</div>
+		<div class="form-field">
+			<label for="synopsis">Synopsis (max 100 chars)</label>
+			<input class={'bg-card form-control border-white'} maxlength="100" type="text" id="synopsis" bind:value={fields.synopsis} on:input={saveForm}/>
+			<div class="error">{errors.synopsis}</div>
+		</div>
+		<div class="form-field">
+			<label for="description">Description (max 500 chars)</label>
+			<textarea class={'bg-card form-control border-white'} maxlength="500" rows="3" type="text" id="description" bind:value={fields.description} on:input={saveForm}/>
+			<div class="error">{errors.description}</div>
+		</div>
+		<button class="btn btn-sm outline-light text-white">Update</button>
+	</form>	
+</div>
 
 <style>
 	form {
@@ -118,11 +123,9 @@ console.log('PROPOSAL_FORM=' + localStorage.getItem('PROPOSAL_FORM'))
 	}
 	textarea {
 		width: 100%;
-		border-radius: 6px;
 	}
 	input {
 		width: 100%;
-		border-radius: 6px;
 	}
 	label {
 		vertical-align: top;

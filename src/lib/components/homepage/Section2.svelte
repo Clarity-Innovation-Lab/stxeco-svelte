@@ -1,5 +1,6 @@
 <script>
 import Sidebar from './Sidebar.svelte'
+import CallButtons1 from '$lib/shared/CallButtons1.svelte'
 
 const rowers = "https://images.prismic.io/edao/c5c4c13b-34a0-4c05-a3c1-01aaada52aef_stx_eco_rowing_%23image.png?auto=compress,format";
 function scrollTo() {
@@ -30,8 +31,9 @@ function scrollTo() {
                 It's the perfect place to get involved with our open source project - advancing
                 Stacks technology in a real-life DAO.
               </p>
-              <p class="mt-5"><button class="btn">JOIN THE FUTURE</button></p>
-              <p class="mt-4"><button class="btn btn-outline">LAUNCH A DAO</button></p>
+              <p class="my-5">
+                <CallButtons1 />
+              </p>
               </div>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12 hideme"  style="height: 100%;">
@@ -122,19 +124,6 @@ section {
   border: none;
 }
 
-.btn {
-  border: 2pt solid #e61d73;
-  border-radius: 50px;
-  color: #e61d73;
-  padding: 15px 5px;
-  width: 250px;
-  font-weight: 600;
-  letter-spacing: 0.2rem;
-}
-.btn-outline {
-  background-color: #262626;
-  border: none;
-}
 .section-footer {
   position: relative;
   height: auto;

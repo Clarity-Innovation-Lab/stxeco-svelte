@@ -40,6 +40,7 @@ const getSTXMintPostConds = function (amt:number) {
 
 let amount = 1;
 let txId: string;
+const color = proposal.status.color;
 
 const submit = async () => {
 	if (amount < 1) {
@@ -78,9 +79,14 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
 </script>
 
 <section>
-    <div class="">
-		{#if !fundingMet}
-			<p>{fundingCost - proposal.funding} STX is needed to fund this proposal - minimum contribution is 1 STX!</p>
+{#if !fundingMet}
+	<div class="bg-card p-5 text-white">
+		<h5 class="upper" style="position: relative; top: 0px; left: 0px;" >
+			<img style="position: relative; top: -20px; left: 0px;" src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="15px" height="auto" />
+			{fundingCost - proposal.funding} STX needed!
+		</h5>
+		<div style="margin-left: 20px;">
+			<p class="sub-text">(minimum contribution is 1 STX)</p>
 			{#if txId}
 				<div>
 					<a href={explorerUrl} target="_blank">View on explorer</a>
@@ -88,28 +94,44 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
 			{/if}
 			<form on:submit|preventDefault class="form-inline">
 				<div class="row">
-					<div class="col-md-6">
-						<input class="form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution">
+					<div class="col-10">
+						<input class={'bg-card form-control border-' + color} bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution">
 					</div>
-					<div class="col-md-4">
-						<button class="btn outline-light" on:click={() => submit()}>Fund</button>
+					<div class="col-2 p-0">
+						<button class={'btn btn-' + color} on:click={() => submit()}>Fund</button>
 					</div>
 				</div>
 			</form>
-			<p>Your current balance is {balance} STX</p>
-			<div class="my-4 card bg-light p-4">
-				<p>{startHeightMessage}</p>
-				<p>{durationMessage}</p>
-			</div>
-		{:else}
-			<p>Funding target met {proposal.funding} of {fundingCost} STX raised</p>
-			<div class="my-4 card bg-light p-4 text-center">
-				<p>{startHeightMessage}</p>
-				<p>{durationMessage}</p>
-			</div>
-		{/if}
+			<p class="sub-text">Your current balance is {balance} STX</p>
+		</div>
 	</div>
+	<div class="bg-card py-4 px-5 mt-3" >
+		<div class="">
+			<p>{startHeightMessage}</p>
+			<p>{durationMessage}</p>
+		</div>
+	</div>
+{:else}
+	<div class="bg-card">
+		<p>Funding target met {proposal.funding} of {fundingCost} STX raised</p>
+		<div class="my-4 card bg-light p-4 text-center">
+			<p>{startHeightMessage}</p>
+			<p>{durationMessage}</p>
+		</div>
+	</div>
+{/if}
 </section>
 
 <style>
+p {
+	font-family: Gilroy-Light;
+	color: #ededed;
+	padding: 3px;
+	margin: 0 !important;
+	font-size: 1.0rem;
+	text-transform: lowercase;
+}
+.sub-text {
+	font-size: 0.8rem;
+}
 </style>

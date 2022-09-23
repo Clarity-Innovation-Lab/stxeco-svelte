@@ -1,35 +1,33 @@
 <script lang="ts">
-  import settings from '$lib/settings'
-	import Modal from '$lib/shared/Modal.svelte';
-	import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
-  import type { ExtensionType } from "../../../types/stxeco.type";
-	import DaoUtils from '$lib/service/DaoUtils';
-  import { SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
+import settings from '$lib/settings'
+import Modal from '$lib/shared/Modal.svelte';
+import ClaritySytaxHighlighter from '$lib/shared/ClaritySytaxHighlighter.svelte';
+import type { ExtensionType } from "../../../types/stxeco.type";
+import DaoUtils from '$lib/service/DaoUtils';
+import { SortAlphaDown, SortAlphaUp } from "svelte-bootstrap-icons";
+import ExtensionGridItem from '$lib/components/dao/extensions/ExtensionGridItem.svelte'
 
-  let item:ExtensionType;
-  let sourceCode: string|undefined = '';
-  let showModal:boolean;
-	const toggleModal = () => {
-		showModal = !showModal
-	}
+let item:ExtensionType;
+let componentKey = 0;
+let sourceCode: string|undefined = '';
+let showModal:boolean;
+const toggleModal = () => {
+  showModal = !showModal
+}
 
-  const openSesame = (currentItem:ExtensionType) => {
-    item = currentItem;
-    sourceCode = item.contract.source_code;
-    toggleModal();
-  }
-  const explorerUrl = (txId:string) => {
-      return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
-  }
-
-  let sortDir = true;
-
-  const reorder = () => {
+const openSourceModal = (evt) => {
+  const item = evt.detail;
+  sourceCode = item.contract.source_code;
+  toggleModal();
+}
+let sortDir = true;
+let sortField = 'title';
+const reorder = (sf:string) => {
+    sortField = sf;
     sortDir = !sortDir;
-  }
-
-  $: sortedProps = DaoUtils.sortExtensions($settings.extensions, sortDir);
-
+    componentKey++;
+}
+$: sortedProps = DaoUtils.sortExtensions($settings.extensions, sortDir, sortField);
 </script>
   
 <svelte:head>
@@ -46,46 +44,40 @@
 
   <section>
     <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <h4>Extensions</h4>
-          <table class="table table-striped text-small">
-            <thead>
-              <tr>
-              <th scope="col" class="pointer" on:click={() => reorder()}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Name</th>
-              <th scope="col">Connected</th>
-              <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+      <div class="row">    
+        <div class="cols-12">
+            <h1 class="text-white"><span class="strokeme-white">DAO</span> Extensions</h1>
+            <p class="strapline">The toolkit of the DAO. The active extensions are the mechanics of the DAO. 
+              They define how the internals work, governing everything from proposal submission to voting to governance
+              to treasury management. We name the extension contracts according to the convention EDEXXX where EDE 
+              stands for Ecosystem DAO Extension and XXX is the extension number.
+            </p>
+          </div>
+          <div class="cols-12">
+            <div class="m-5 d-flex justify-content-center">
+            <div class="filter pointer m-2" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</div>
+            <div class="filter pointer m-2" on:click={() => reorder('status')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Status</div>
+          </div>
+        </div>
+        <div class="cols-12">
+          <div class="row">
+            {#key componentKey}
               {#each sortedProps as item}
-              <tr>
-              <th class:text-white={item.valid} class:bg-success={item.valid} scope="row" class="py-3"><span class="pointer mr-2">{item?.contract?.contract_id?.split('.')[1]}</span></th>
-              <td class:text-white={item.valid} class:bg-success={item.valid} class="pointer py-3" data-bs-toggle="tooltip" data-bs-placement="top" title="State of extension. Connected means this is an active extension in the DAO. Extensions can be activated by proposals">
-                <span>
-                  {item.valid}
-                </span>
-              </td>
-              <td class:text-white={item.valid} class:bg-success={item.valid} class="pointer py-3">
-                <div class="dropdown">
-                  <span class="dropdown px-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ...
-                  </span>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item pointer text-info" href="/" on:click|preventDefault={() => { openSesame(item) }}>Show Clarity Source Code</a>
-                    <a class="dropdown-item pointer text-info" href={explorerUrl(item.contractId)} target="_blank">Show on Explorer</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            {/each}
-            </tbody>
-          </table>
+                  <div class="col-md-6 col-sm-12"><ExtensionGridItem extension={item} on:openSourceModal={openSourceModal}/></div>
+              {/each}
+            {/key}
+          </div>
         </div>
       </div>
     </div>
   </section>
   
   <style>
+    .filter {
+      border: 1pt solid #787878;
+      color: #787878;
+      padding: 3px 17px;
+}
+
   </style>
   

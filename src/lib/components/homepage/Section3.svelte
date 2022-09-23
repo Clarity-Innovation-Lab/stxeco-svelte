@@ -1,5 +1,6 @@
 <script>
   import { CaretRightFill } from "svelte-bootstrap-icons";
+  import CallButtons1 from '$lib/shared/CallButtons1.svelte'
   import Sidebar from './Sidebar.svelte'
 
   const img1 = "https://images.prismic.io/edao/86ff5a4f-62f6-4961-b872-b22ab3dc2a67_stx_eco_hands_%23image.png?auto=compress,format";
@@ -82,8 +83,7 @@
             </div>
           </div>
           <div class="col-12 text-center my-5">
-            <button class="btn mx-4 mb-4">JOIN THE FUTURE</button>
-            <button class="btn btn-outline mx-4 mb-4">LAUNCH A DAO</button>
+            <CallButtons1 />
           </div>
         </div>
       </div>
@@ -140,17 +140,5 @@ h3 {
   font-size: 1.3rem;
   color: #ededed;
   line-height: 1.4rem;
-}
-.btn {
-  border: 1pt solid #FFA701;
-  border-radius: 50px;
-  color: #FFA701;
-  font-size: 1.15rem;;
-  padding: 15px 5px;
-  width: 250px;
-}
-.btn-outline {
-  background-color: #262626;
-  border: none;
 }
 </style>

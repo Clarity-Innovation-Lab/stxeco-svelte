@@ -83,7 +83,7 @@ export type ProposalType = {
   emergencySignals?: number;
   executedAt?: number;
   proposer: string|undefined;
-  status: string;
+  status: { name: string, color: string, colorCode: string };
   contract:Contract;
   proposalData?:ProposalDataType;
   githubIssue?: string;

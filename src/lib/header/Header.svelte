@@ -2,10 +2,10 @@
 import { page } from '$app/stores';
 import WalletConnectButton from './WalletConnectButton.svelte'
 
-let transparent = 'bg-warning';
-if ($page.url.pathname === '/') {
-	transparent = 'transparent';
-}
+//let transparent = 'bg-warning';
+//if ($page.url.pathname === '/') {
+//	transparent = 'transparent';
+//}
 
 </script>
 <!--
@@ -15,17 +15,17 @@ if ($page.url.pathname === '/') {
 	</div>
 </div>
 -->
-<nav class="navbar navbar-expand-md navbar-light {transparent} py-4">
-	<div class="container-fluid mx-4">
-	  	<a class="navbar-brand" href="/">
-			<img src="/img/png-assets/stx_eco_logo_white.png" alt="stacks ecosystem dao logo" width="198" height="auto"/>
+<nav class="navbar navbar-expand-md navbar-light transparent py-2">
+	<div class="container mt-1">
+	  	<a class="navbar-brand mx-0 px-0" href="/">
+			<img class="nav-logo" src="/img/png-assets/stx_eco_logo_white.png" alt="stacks ecosystem dao logo" />
 		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
-				<li class="nav-item"><a class:text-danger={$page.url.pathname === '/about'} href="/about">About</a></li>
+				<li class="nav-item"><a href="/about">About</a></li>
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					  votes
@@ -43,8 +43,8 @@ if ($page.url.pathname === '/') {
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 					  <li><a class="dropdown-item text-white" href="/sip">Processes</a></li>
-					  <li><a class="dropdown-item" href="/sip/issues">Ongoing</a></li>
-					  <li><a class="dropdown-item" href="/sip/sip-voting">Upgrades</a></li>
+					  <li><a class="dropdown-item" href="/sip/issues">SIP Board</a></li>
+					  <li><a class="dropdown-item" href="/blog/posts/twopointone">Upgrades</a></li>
 					</ul>
 				</li>
 				<li class="nav-item mb-1">
@@ -56,7 +56,4 @@ if ($page.url.pathname === '/') {
 </nav>
 
 <style>
-.active {
-	color: purple;
-}
 </style>

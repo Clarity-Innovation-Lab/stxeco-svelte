@@ -1,8 +1,8 @@
 <script>
 </script>
 
-<div class="my-5 container jumbo p-4">
-	<h1>Log In to Continue</h1>
+<div class="my-5 container bg-card p-5 text-white">
+	<h1><span class="strokeme-white">Log In</span> to Continue</h1>
 	<p class="text-warning">Please connect your Stacks Wallet to continue.</p>
 	<p>Need a wallet? Download Hiro's <a href="https://wallet.hiro.so/#download" target="_blank">Stacks Wallet</a>. 
 	</p>

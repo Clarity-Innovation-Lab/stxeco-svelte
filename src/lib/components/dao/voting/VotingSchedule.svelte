@@ -4,6 +4,7 @@ import settings from '$lib/settings';
 import { contractPrincipalCV } from 'micro-stacks/clarity';
 import { PostConditionMode } from 'micro-stacks/transactions';
 import { getOpenContractCall } from '@micro-stacks/svelte';
+import ChainUtils from '$lib/service/ChainUtils';
 
 const contractCall = getOpenContractCall();
 
@@ -15,6 +16,8 @@ const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, co
 const endBH = proposalData.endBlockHeight - proposalData.startBlockHeight
 const currentBH = stacksTipHeight - proposalData.startBlockHeight
 $: currentBHN = (currentBH / endBH) * 100 
+let txId: string;
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 
 const concludeVote = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
@@ -27,6 +30,7 @@ const concludeVote = async () => {
         functionName: 'conclude',
         functionArgs: [proposalCV],
         onFinish: data => {
+          txId = data.txId
           console.log('finished contract call!', data);
         },
         onCancel: () => {
@@ -36,38 +40,51 @@ const concludeVote = async () => {
 }
 </script>
 
-<section class="jumbo mb-5">
-  <div class="preview">
-    <h4>Voting in Progress</h4>
-
+<div class="bg-card py-4 px-5 text-white" >
     {#if stacksTipHeight > proposalData.endBlockHeight}
-      {#if proposalData.concluded}
-        <div class="py-3 text-center">Vote concluded: </div>
+      {#if proposalData.concluded && proposalData.passed}
+        <h4>Vote Passed</h4>
+      {:else if proposalData.concluded && !proposalData.passed}
+        <h4>Vote Failed to Pass</h4>
       {:else}
-        <div class="py-3 text-center">Too late to vote on this one</div>
-        <div class="py-3 text-center"><button class="btn btn-outline-success" on:click={() => concludeVote()}>Conclude this Vote</button></div>
+        <h4>Voting Closed</h4>
+        {#if txId}
+        <div class="text-small">Votes are being counted.</div>
+        <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a></div>
+        {:else}
+        <div class="text-small">Please conclude for votes to be counted.</div>
+        <div class="py-4"><button class="btn btn-outline-warning" on:click={() => concludeVote()}>Conclude this Vote</button></div>
+        {/if}
       {/if}
     {:else if stacksTipHeight < proposalData.startBlockHeight}
-      <div class="py-3 text-center">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
+      <h4>Voting Opens Soon</h4>
+      <div class="text-small">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
     {:else}
-    <div class="row mt-5">
-      <div cols="12">
-        <h6>Currently at block { stacksTipHeight }: </h6>
-        <div class="progress">
-          <div class="progress-bar progress-bar-striped" role="progressbar" style={'width:' + (currentBHN) + '%'}
-                aria-valuenow={stacksTipHeight - proposalData.startBlockHeight} aria-valuemin={0} aria-valuemax={(proposalData.endBlockHeight - proposalData.startBlockHeight)}>
-                &nbsp;
-          </div>
+      <h4>Voting Open</h4>
+      <p class="text-small">Currently at block { stacksTipHeight } - closes at {proposalData.endBlockHeight}</p>
+      <div class="my-5 d-flex justify-content-around text-warning">
+        <div>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} votes for</p>
         </div>
-        <div class="d-flex justify-content-between text-small">
-          <div>{ proposalData.startBlockHeight }</div>
-          <div>{ proposalData.endBlockHeight }</div>
+        <div>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} votes against</p>
         </div>
       </div>
-    </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped" role="progressbar" style={'width:' + (currentBHN) + '%'}
+              aria-valuenow={stacksTipHeight - proposalData.startBlockHeight} aria-valuemin={0} aria-valuemax={(proposalData.endBlockHeight - proposalData.startBlockHeight)}>
+              &nbsp;
+        </div>
+      </div>
+      <div class="d-flex justify-content-between text-small">
+        <div>{ proposalData.startBlockHeight }</div>
+        <div>{ proposalData.endBlockHeight }</div>
+      </div>
     {/if}
-  </div>
-</section>
+</div>
 
 <style>
+  h4 {
+    color: #fdad37;
+  }
 </style>

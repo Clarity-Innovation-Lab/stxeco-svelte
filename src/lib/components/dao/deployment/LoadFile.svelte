@@ -23,7 +23,7 @@
 <main>
 	<div>
 		<label for="fileinput">Choose Clarity File: </label>
-		<input class="btn btn-info" type="file" id="fileinput" bind:files />
+		<input class="btn btn-white" type="file" id="fileinput" bind:files />
 	</div>
 </main>
 	

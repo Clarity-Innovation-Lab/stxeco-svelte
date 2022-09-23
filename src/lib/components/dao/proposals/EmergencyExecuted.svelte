@@ -4,17 +4,16 @@
 	export let proposal:ProposalType;
 </script>
 
-<section>
-  {#if  typeof proposal.executedAt === 'number' && proposal.executedAt > 0}
-  <div class="">
+<div class="bg-card py-4 px-5" >
+  <div class="text-white">
+    <h4>Proposal Executed by Executive Team</h4>
     <p>Proposal was executed at block {proposal.executedAt}.
       {#if typeof proposal.emergencySignals === 'number' && proposal.emergencySignals > 0}
         And was executed by the executive team with {proposal.emergencySignals} votes.
       {/if}
     </p>
-    </div>
-  {/if}
-</section>
+  </div>
+</div>
 
 <style>
 </style>

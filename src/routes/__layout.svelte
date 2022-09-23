@@ -10,8 +10,10 @@ import Notifications from 'svelte-notifications';
 import { mountClient } from "@micro-stacks/svelte";
 import { getAccount, getNetwork } from '@micro-stacks/svelte';
 import { getAuth } from "@micro-stacks/svelte";
-import { afterNavigate } from '$app/navigation';
+import { afterNavigate, beforeNavigate } from '$app/navigation';
 import Four01 from '$lib/shared/Four01.svelte';
+
+export const prerender = true;
 
 let origin = import.meta.env.VITE_ORIGIN;
 if (typeof window !== 'undefined') {
@@ -22,7 +24,6 @@ let homepage = false;
 if ($page.url.pathname === '/') {
   homepage = true;
 }
-
 const config = {
   appName: 'Ecosystem DAO',
   appIconUrl: origin + '/img/logo.png',
@@ -31,7 +32,6 @@ const config = {
 mountClient(config);
 const network = getNetwork();
 const auth = getAuth();
-$network.setNetwork(import.meta.env.VITE_NETWORK);
 const account = getAccount();
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
@@ -40,10 +40,14 @@ let four01 = false;
 let appInitialized:boolean = false;
 afterNavigate((nav) => {
   if (nav.to.pathname === '/') {
+    document.body.classList.remove('bg-grey');
     homepage = true;
   } else {
+    document.body.classList.add('bg-grey');
     homepage = false;
   }
+  console.log('homepage is: ' + homepage)
+  console.log('nav.to.pathname: ' + nav.to.pathname)
 
   if (!$auth.isSignedIn && !$auth.isRequestPending) {
     if (nav.to?.pathname && nav.to.pathname.indexOf('/dao/proposals/') > -1) {
@@ -57,20 +61,24 @@ afterNavigate((nav) => {
       four01 = false;
   }
 })
+beforeNavigate((nav) => {
+  console.log('homepage is: ' + homepage)
+  console.log('nav.to.pathname: ', nav)
+})
 onMount(async () => {
   try {
-      bootstrap = (await import('bootstrap'));
-      await settings.init($account.stxAddress);     
-      appInitialized = true;
-      console.log("Page=", page);
-      await tick();
-      setTimeout(function () {
-        const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-        const popoverTriggerList = window.document.querySelectorAll('[data-bs-toggle="dropdown"]');
-        if (popoverTriggerList) [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Dropdown(popoverTriggerEl));
-      }, 1000)
-
+    // $network.setNetwork(import.meta.env.VITE_NETWORK);
+    bootstrap = (await import('bootstrap'));
+    await settings.init($account.stxAddress);     
+    appInitialized = true;
+    console.log("Page=", page);
+    await tick();
+    setTimeout(function () {
+      const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+      const popoverTriggerList = window.document.querySelectorAll('[data-bs-toggle="dropdown"]');
+      if (popoverTriggerList) [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Dropdown(popoverTriggerEl));
+    }, 1000)
   } catch(error) {
         console.log(error);
   }
@@ -79,12 +87,12 @@ onMount(async () => {
 
 <Notifications>
 {#if !homepage}
-  <Header />
+  <Header class="bg-grey"/>
   {#if four01}
     <Four01 />
   {/if}
   {#if appInitialized}
-  <main class="my-5" style="min-height: 70vh; background-size: contain;">
+  <main id="main" class="bg-grey my-5" style="min-height: 70vh; background-size: contain;">
     <slot />
   </main>
   {/if}

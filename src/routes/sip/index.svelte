@@ -31,12 +31,16 @@ let st4 = '<p>A <strong>Proposal</strong> is a Pull Request in GitHub lingo</p><
 	<meta name="description" content="Help build the foundation for the User Owned Internet" />
 </svelte:head>
 
-<section>
+<section class="text-white">
     <div class="container my-0">
       <div class="row mb-5">
         <div class="col">
-          <h1 class="mb-2">Stacks Improvement Proposals (SIPs)</h1>
-          <h6 class="mb-5">Everything you wanted to know but were afraid to ask!</h6>
+          <h1><span class="strokeme-white">SIPs<br/></span> Stacks Improvement Proposals</h1>
+          <h6 class="strapline">Everything you wanted to know but were afraid to ask!</h6>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col">
           <Tabs {items} />
         </div>
       </div>

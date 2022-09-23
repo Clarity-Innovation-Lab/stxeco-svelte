@@ -40,22 +40,29 @@
 </script>
 
 <section>
-  {#if canVote}
-  <div class="row">
-    <div class="my-3">
-      <h4>{proposal.contractId.split('.')[1]}</h4>
-      <h6>Signal support for this proposal via multisig voting by executive team</h6>
-      <p>{proposal.emergencySignals} of {sigsRequired} signal(s) received so far.</p>
-      {#if !txId}<button class="btn btn-outline-success" on:click={() => signalSupport()}>{buttonLabel}</button>{/if}
+{#if canVote}
+	<div class="bg-card p-5 text-white">
+    <div class="row">
+      <div class="">
+        <h4 class="">Emergency Execute</h4>
+        <div class="text-small">Signal support for this proposal via multisig voting by executive team.</div>
+        <p class="mt-5">{proposal.emergencySignals} of {sigsRequired} signal(s) received so far.</p>
+        {#if !txId}<button class="btn btn-outline-success" on:click={() => signalSupport()}>{buttonLabel}</button>{/if}
+      </div>
+      {#if txId}
+      <div>
+        <a href={explorerUrl} target="_blank">View on explorer</a>
+      </div>
+      {/if}
     </div>
-    {#if txId}
-    <div>
-      <a href={explorerUrl} target="_blank">View on explorer</a>
-    </div>
-    {/if}
   </div>
-  {/if}
+{/if}
 </section>
 
 <style>
+  p {
+	font-family: Gilroy-Light;
+	color: #ededed;
+}
+
 </style>
