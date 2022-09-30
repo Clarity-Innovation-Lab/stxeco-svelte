@@ -1,7 +1,7 @@
 <script lang="ts">
 import { page } from '$app/stores';
 import settings from '$lib/settings';
-import { contractPrincipalCV, uintCV } from 'micro-stacks/clarity';
+import { contractPrincipalCV, uintCV, someCV } from 'micro-stacks/clarity';
 import { FungibleConditionCode, PostConditionMode, makeStandardSTXPostCondition } from 'micro-stacks/transactions';
 import ChainUtils from '$lib/service/ChainUtils';
 import { getNotificationsContext } from 'svelte-notifications';
@@ -54,17 +54,18 @@ const submit = async () => {
 	}
 	const amountUSTX = ChainUtils.toOnChainAmount(amount)
 	const amountCV = uintCV(amountUSTX)
+	const thresholdCV = someCV(uintCV(8000));
 	const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
-	let functionArgs = [proposalCV, amountCV];
+	let functionArgs = [proposalCV, amountCV, thresholdCV];
 	await $contractCall.openContractCall({
 		postConditions: getSTXMintPostConds(amountUSTX),
 		postConditionMode: PostConditionMode.Deny,
 		contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-		contractName: 'ede008-funded-proposal-submission',
+		contractName: 'ede008-funded-proposal-submission-v2',
 		functionName: 'fund',
 		functionArgs: functionArgs,
 		onFinish: async (data) => {
-			proposal.status = 'submitting'
+			proposal.status = { name: 'submitting', color: '', colorCode: '' },
 			txId = data.txId
 			proposal.submitTxId = data.txId
 			const resp = await ChainUtils.postToApi('/v2/proposals', proposal)

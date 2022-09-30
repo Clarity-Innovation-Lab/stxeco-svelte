@@ -2,6 +2,9 @@
 import Section1 from '$lib/components/homepage/Section1.svelte'
 import Section2 from '$lib/components/homepage/Section2.svelte'
 import Section3 from '$lib/components/homepage/Section3.svelte'
+
+export /** @type {boolean} */ let homepage;
+
 </script>
   
 <svelte:head>
@@ -10,7 +13,7 @@ import Section3 from '$lib/components/homepage/Section3.svelte'
 </svelte:head>
 
 <div>
-	<Section1/>
+	<Section1 {homepage}/>
 	<Section2/>
 	<Section3/>
 </div>

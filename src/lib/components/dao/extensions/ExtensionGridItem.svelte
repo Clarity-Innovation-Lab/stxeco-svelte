@@ -44,14 +44,14 @@ const headerStyle = () => {
 		<div class="col-11">
 				<div class="row">
 					<div class="cols-12">
-						<h2><a class={headerStyle()} href={'/dao/proposals/' + extension.contract.contract_id}>{extension.contractId.split('.')[1]}</a></h2>
+						<h2 class={headerStyle()}>{extension.contractId.split('.')[1]}</h2>
 					</div>
 				</div>
 				<div class="row">
 					<div class="cols-12">
 						<p  class="p-2" style={statusStyle()}>
 							{status.name}
-						</p>		
+						</p>
 					</div>
 				</div>
 				<div class="row">

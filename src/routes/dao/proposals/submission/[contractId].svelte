@@ -21,7 +21,7 @@ const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName
 const thresholdProposalExt = $settings.extensions.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede002-threshold-proposal-submission') > 0);
 const thresholdProposal = thresholdProposalExt && thresholdProposalExt.valid;
 
-const fundedProposalExt = $settings.extensions.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission') > 0);
+const fundedProposalExt = $settings.extensions.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission-v2') > 0);
 const fundedProposal = fundedProposalExt && fundedProposalExt.valid;
 
 let showExecutiveProposal = false;

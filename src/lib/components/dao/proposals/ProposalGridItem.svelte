@@ -11,7 +11,8 @@ export let proposal:ProposalType;
 const stacksTipHeight = $settings.info?.stacks_tip_height || 0;
 const sigsRequired = Number($settings.daoProperties?.find((o) => o.id === 'get-signals-required')?.value) || 0;
 const fundingCost = Number($settings.daoProperties?.find((o) => o.id === 'funding-cost')?.value) / 1000000 || 0;
-const status = proposal.status;
+const status = DaoUtils.getStatus(stacksTipHeight, proposal);
+const proposalMeta = DaoUtils.getMetaData(proposal);
 
 const openSesame = () => {
 	dispatch('openSourceModal', proposal)
@@ -72,6 +73,7 @@ const headerStyle = () => {
 				<div class="row">
 					<div class="cols-12">
 						<h2><a class={headerStyle()} href={'/dao/proposals/' + proposal.contract.contract_id}>{proposal.contractId.split('.')[1]}</a></h2>
+						<p class={'pb-3 ' + headerStyle()}>{proposalMeta.synopsis}</p>
 					</div>
 				</div>
 				<div class="row">
@@ -111,7 +113,6 @@ const headerStyle = () => {
 	padding: 3px;
 	margin: 0 !important;
 	font-size: 1.0rem;
-	text-transform: lowercase;
 }
 .col-9 {
 	padding-left: 0 !important;

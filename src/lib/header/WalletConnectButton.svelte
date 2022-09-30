@@ -47,13 +47,13 @@ onMount(async () => {
 {:else if $auth.isSignedIn}
 	<span class="nav-item">
 		<a href="/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}>
-			<span  class="px-1"><img src="/img/png-assets/stx_eco_wallet_on.png" alt="Wallet Connected" width="40" height="auto" /></span> Connected
+			<span  class="px-2"><img src="/img/png-assets/stx_eco_wallet_on.png" alt="Wallet Connected" width="40" height="auto" /></span> Connected
 		</a>
 	</span>
 {:else if $auth.isRequestPending}
-	<span class="nav-item"><a href="/" on:click|preventDefault={login}><span  class="px-1"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
+	<span class="nav-item"><a href="/" on:click|preventDefault={login}><span  class="px-2"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
 {:else}
-	<span class="nav-item"><a href="/" class="pointer" on:click|preventDefault={login} ><span  class="px-1"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
+	<span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={login} ><span  class="px-1"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
 {/if}
 
 <style>

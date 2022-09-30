@@ -80,7 +80,7 @@ const closeModal = () => {
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 const thresholdProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede002-threshold-proposal-submission') > 0);
 const thresholdProposalsValid = thresholdProposalExt && thresholdProposalExt.valid;
-const fundedProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission') > 0);
+const fundedProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission-v2') > 0);
 const fundedProposalsValid = fundedProposalExt && fundedProposalExt.valid;
 const executiveProposalsValid = false;
 const emergencyProposalsValid = true;
@@ -110,13 +110,11 @@ onMount(async () => {
   {#if showSourceModal}
     <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>
   {:else}
-    <div class="source-modal"><DaoRules /></div>
+    <div class="blog-modal"><DaoRules /></div>
   {/if}
     <div slot="title">
       {#if showSourceModal}
       <h3>Proposal: {proposal.contract.contract_id?.split('.')[1]}</h3>
-      {:else}
-        <h3>DAO Rules</h3>
       {/if}
     </div>
 </Modal>
@@ -141,9 +139,11 @@ onMount(async () => {
   <div class="row">
     <div class="cols-12 text-end my-3">
       <p class="w-100 text-right">
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { openSourceModal() }}>source code</button>
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { openRulesModal() }}>dao rules</button>
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(explorerUrl) }}>Explorer</button>
+        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(`/dao/forum/${contractId}`) }}>forum</button>
+        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(`/dao/voting/${contractId}`) }}>voting</button>
+        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { openSourceModal() }}>clarity</button>
+        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { openRulesModal() }}>about</button>
+        <a class={'btn btn-outline-' + color} href={explorerUrl} target="_blank">explorer</a>
         <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(`/dao/proposals`) }}>back</button>
       </p>
     </div>
@@ -165,16 +165,13 @@ onMount(async () => {
         {#if proposal.proposalData && proposal.votingContract === 'ede001-proposal-voting'}
           <VotingSchedule {proposal}/>
           <PropBallotBox {proposal} />
-        {:else if proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting'}
+        {:else if proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting-v2'}
           <VotingSchedule {proposal}/>
           <SnapBallotBox {proposal} {balanceAtHeight}/>
         {/if}
-      {:else if propStatus === 'deploying' || propStatus === 'submitting'}
-        <h1>Proposal Deploying</h1>
-        <p>Contract deployment is pending - check explorer for updates...</p>
       {:else if propStatus === 'funding'}
           <FundedSubmissionVoting/>
-      {:else if propStatus === 'deployed' }
+      {:else if propStatus === 'deployed' || propStatus === 'deploying' || propStatus === 'submitted' || propStatus === 'submitting' }
         <div class="">
           {#if fundedProposalsValid}
             <div class="">

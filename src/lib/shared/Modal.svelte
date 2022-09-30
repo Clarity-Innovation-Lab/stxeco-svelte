@@ -26,13 +26,10 @@
     }
     .sv-modal {
         padding: 10px;
-        padding-top: 20px;
-        border-radius: 10px;
+        border-radius: 0px;
         min-width: 400px;
-        height: 70vh;
+        min-height: 70vh;
         margin: 10% 10%;
-        text-align: center;
-        color: #000;
-        background: white;
+        background: transparent;
     }
 </style>

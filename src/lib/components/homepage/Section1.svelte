@@ -5,11 +5,12 @@ import Header from "$lib/header/Header.svelte";
 
 // medium 
 const bgvideo = 'https://prismic-io.s3.amazonaws.com/edao/ea5c92b8-d910-479c-813b-a3ef19292578_stx_eco_colour_balls_animation_medium.mp4';
+export /** @type {boolean} */ let homepage;
 
 let playing = true;
 // Get the button
 const openVoting = () => {
-  goto('/blog/posts/twopointone', { replaceState: false })
+  goto('/dao/proposals/ST167Z6WFHMV0FZKFCRNWZ33WTB0DFBCW9M1FW3AY.edp015-1-sip-015-activation', { replaceState: false })
 }
 
 // Pause and play the video, and change the button text
@@ -31,7 +32,7 @@ function scrollTo() {
 </script>
   
 <section id="section1" style="">
-  <Header />
+  <Header {homepage}/>
   <video autoplay muted loop id="myVideo">
     <source src={bgvideo} type="video/mp4">
   </video>
@@ -41,8 +42,7 @@ function scrollTo() {
       vote. voice. contribute.
       <br/>collaborate. create.
     </h1>
-    <p>Use your voice to participate in key decision making processes
-      <br/>to build the future of Stacks decentralised technologies.
+    <p>Be the future of decentralised democracy.
     </p>
     <button class="btn " on:click={() => { openVoting() }}>Vote for Stacks 2.1</button>
   </div>
@@ -115,16 +115,18 @@ section {
 
 .content h1 {
   color: #fff;
-  font-size: 6.0rem;
+  font-size: 4.5rem;
   letter-spacing: 0.1rem;
-  line-height: 5.0rem;
+  line-height: 4.0rem;
+  text-shadow: 5px 5px 30px rgb(40, 39, 36);
 }
 .content p {
-  font-size: 2.0rem;
+  font-size: 1.6rem;
   letter-spacing: 0.1rem;
   font-weight: 700;
   line-height: auto;
   color: #ededed;
+  text-shadow: 5px 5px 30px rgb(40, 39, 36);
 }
 @media screen and (min-width: 0px) and (max-width: 940px) {
   .content { 
@@ -133,18 +135,27 @@ section {
   .content h1 { 
     font-size: 4.0rem; 
     line-height: 4.0rem;
+    text-shadow: 5px 5px 30px rgb(40, 39, 36);
   }
   .content p { 
     font-size: 1.8rem; 
     line-height: 2.4rem;
+    text-shadow: 5px 5px 30px rgb(40, 39, 36);
   }  /* show it on small screens */
 }
 .btn {
-  border: 1pt solid #fff;
+  border: none;
   border-radius: 50px!important;
-  color: #fff;
   padding: 15px 20px;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 0.8rem;
   letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: #4786cd;
+}
+.btn:hover {
+  background-color: #fff;
+  color: #4786cd;
 }
 </style>

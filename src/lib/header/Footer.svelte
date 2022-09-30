@@ -2,12 +2,11 @@
 import FooterLinks from './FooterLinks.svelte'
 </script>
   
-<div class="footer">
-  <div>
-    <div class="container text-left pt-5">
-      <div class="row">
-        <div class="col-4">
-          <div class="px-0">
+<div class="container-fluid footer">
+    <div class=" pt-5">
+      <div class="row mx-5">
+        <div class="px-0 col-4">
+          <div class="">
             <a class="navbar-brand" href="/">
               <img src="/img/png-assets/stx_eco_logo_white.png" alt="stacks ecosystem dao logo" width="198" height="auto"/>
             </a>
@@ -30,7 +29,6 @@ import FooterLinks from './FooterLinks.svelte'
         </div>
       </div>
     </div>
-  </div>
   </div>  
   <style>
   .footer {

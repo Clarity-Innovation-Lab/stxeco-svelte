@@ -12,33 +12,6 @@ const DaoUtils = {
     if (proposal && typeof proposal.executedAt === 'number' && proposal.executedAt > 0 && typeof proposal.emergencySignals === 'number' && proposal.emergencySignals > 0) {
       return { name: 'emergexec', color: 'success', colorCode: success }
     }
-    /**
-    if (typeof proposal.executedAt === 'number' && proposal.executedAt > 0) {
-      clazzes = 'border-top: 1pt solid #64c872; border-left: 1pt solid #64c872; border-right: 1pt solid #64c872; color: #64c872;';
-    } else if (proposal.funding > -1 && proposal.funding < fundingCost) {
-		  clazzes = 'border-top: 1pt solid #fdad37; border-left: 1pt solid #fdad37; border-right: 1pt solid #fdad37; color: #fdad37;';
-    } else if (proposal.funding > -1 && proposal.funding >= fundingCost) {
-		  clazzes = 'border-top: 1pt solid #dd216e; border-left: 1pt solid #dd216e; border-right: 1pt solid #dd216e; color: #dd216e;';
-    }
-
-    let propStatus = 'unknown';
-  if (typeof (proposal.executedAt) === 'number' && proposal.executedAt > 0) {
-    propStatus = 'executed';
-  } else if (proposal.deployTxId && !proposal.proposalData && proposal.contract.tx_status === 'pending') {
-    propStatus = 'deploying';
-  } else if (proposal.deployTxId && !proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting') {
-    propStatus = 'readyToFund';
-  } else if (proposal.deployTxId && !proposal.proposalData && proposal.votingContract !== 'ede007-snapshot-proposal-voting') {
-    propStatus = 'readyToSubmit';
-  } else if (proposal.proposalData && proposal.votingContract === 'ede001-proposal-voting') {
-    propStatus = 'readyToVoteViaGovernanceToken';
-  } else if (proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting') {
-    propStatus = 'readyToVoteViaSnapshot';
-  } else if (!proposal.proposalData && !proposal.submitTxId && proposal.deployTxId) {
-    propStatus = 'readyToSubmit';
-  }
-
-    **/
     if (!proposal.proposalData) {
       if (proposal.funding > 0) {
         status = { name: 'funding', color: 'info', colorCode: info };
@@ -57,7 +30,7 @@ const DaoUtils = {
         } else {
           status = { name: 'voting', color: 'warning', colorCode: warning };
         }
-      } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting') {
+      } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting-v2') {
         status = { name: 'voting', color: 'warning', colorCode: warning };
       }
       if (proposal.proposalData.concluded) {
@@ -83,7 +56,7 @@ const DaoUtils = {
   getMetaData: function (proposal: ProposalType) {
     // const preamble:Array<string> = [];
     let lines = proposal.contract.source_code?.split('\n');
-    lines = lines?.filter((l) => l.indexOf(';;') > -1) || []
+    lines = lines?.filter((l) => l.startsWith(';;')) || []
     const proposalMeta = { dao: '', title: '', author: '', synopsis: '', description: '', };
     lines.forEach((l) => {
       l = l.replace(/;;/, "");
@@ -125,6 +98,20 @@ const DaoUtils = {
       return 0;
     })
     return proposals;
+  },
+  dynamicSort: function (property: any) {
+    let sortOrder = 1;
+    if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substring(1);
+    }
+    return function (a:any, b:any) {
+        /* next line works with strings and numbers, 
+         * and you may want to customize it to your needs
+         */
+        const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
   },
   sortExtensions: function (extensions: ExtensionType[], asc:boolean, sortField:string) {
     if (!extensions) return []

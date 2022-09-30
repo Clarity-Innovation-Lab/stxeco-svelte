@@ -16,7 +16,7 @@ const toggleModal = () => {
 }
 
 const openSourceModal = (evt) => {
-  const item = evt.detail;
+  item = evt.detail;
   sourceCode = item.contract.source_code;
   toggleModal();
 }

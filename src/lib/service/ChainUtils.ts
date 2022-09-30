@@ -46,21 +46,13 @@ const ChainUtils = {
       return 0
     }
   },
-  fromOnChainAmount: function (amountMicroStx: string, gftPrecision: number) {
+  fromOnChainAmount: function (amountMicroStx: number, gftPrecision?: number|undefined) {
     try {
-      let amountMStx = parseInt(amountMicroStx, 16)
-      if (typeof amountMicroStx === 'string') {
-        amountMStx = Number(amountMStx)
-      }
-      if (amountMStx === 0) return 0
-      if (!gftPrecision) {
-        amountMStx = amountMStx / precision
-        return Math.round(amountMStx * precision) / precision
-      } else {
-        const newPrec = Math.pow(10, gftPrecision)
-        amountMStx = amountMStx / newPrec
-        return Math.round(amountMStx * newPrec) / newPrec
-      }
+      if (amountMicroStx === 0) return 0;
+      if (!gftPrecision) gftPrecision = 6;
+      const val = (Math.round(amountMicroStx) / 1000000).toFixed(6)
+      const parts = val.split('.');
+      return '<span class="text-warning" style="font-size: 1.2rem;">' + parts[0] + '</span>.<span class="part1">' + parts[1] + '</span>'
     } catch {
       return 0
     }

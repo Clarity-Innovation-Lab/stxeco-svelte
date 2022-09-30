@@ -5,12 +5,15 @@ import { contractPrincipalCV } from 'micro-stacks/clarity';
 import { PostConditionMode } from 'micro-stacks/transactions';
 import { getOpenContractCall } from '@micro-stacks/svelte';
 import ChainUtils from '$lib/service/ChainUtils';
+import type { ProposalType } from "../../../../types/stxeco.type";
+import DaoUtils from '$lib/service/DaoUtils';
 
 const contractCall = getOpenContractCall();
 
 let contractId = $page.params.contractId;
 let stacksTipHeight = $settings.info.stacks_tip_height;
-export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
+export let proposal:ProposalType; // = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
+proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
 if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
 const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, concluded: false, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
 const endBH = proposalData.endBlockHeight - proposalData.startBlockHeight
@@ -18,6 +21,12 @@ const currentBH = stacksTipHeight - proposalData.startBlockHeight
 $: currentBHN = (currentBH / endBH) * 100 
 let txId: string;
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
+
+const inFavour = Number(((proposalData.votesFor / (proposalData.votesFor + proposalData.votesAgainst)) * 100).toFixed(2));
+let winning = 'danger';
+if (inFavour > 80) {
+  winning = 'success';
+}
 
 const concludeVote = async () => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
@@ -40,34 +49,47 @@ const concludeVote = async () => {
 }
 </script>
 
-<div class="bg-card py-4 px-5 text-white" >
+<div class="bg-card py-4 px-5" >
     {#if stacksTipHeight > proposalData.endBlockHeight}
       {#if proposalData.concluded && proposalData.passed}
-        <h4>Vote Passed</h4>
+        <h4 class={'text-' + proposal.status.color}>Vote Passed</h4>
       {:else if proposalData.concluded && !proposalData.passed}
-        <h4>Vote Failed to Pass</h4>
+        <h4 class={'text-' + proposal.status.color}>Vote Failed to Pass</h4>
       {:else}
-        <h4>Voting Closed</h4>
+        <h4 class={'text-' + proposal.status.colorCode}>Voting Closed</h4>
         {#if txId}
         <div class="text-small">Votes are being counted.</div>
         <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a></div>
         {:else}
         <div class="text-small">Please conclude for votes to be counted.</div>
-        <div class="py-4"><button class="btn btn-outline-warning" on:click={() => concludeVote()}>Conclude this Vote</button></div>
+        <div class="py-4"><button class={'btn btn-outline-' + proposal.status.color} on:click={() => concludeVote()}>Conclude this Vote</button></div>
         {/if}
       {/if}
-    {:else if stacksTipHeight < proposalData.startBlockHeight}
-      <h4>Voting Opens Soon</h4>
-      <div class="text-small">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
-    {:else}
-      <h4>Voting Open</h4>
-      <p class="text-small">Currently at block { stacksTipHeight } - closes at {proposalData.endBlockHeight}</p>
-      <div class="my-5 d-flex justify-content-around text-warning">
+      <div class={'my-5 d-flex justify-content-around text-' + proposal.status.color}>
         <div>
-          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} votes for</p>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} <span class="text-white">votes for</span></p>
         </div>
         <div>
-          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} votes against</p>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} <span class="text-white">votes against</span></p>
+        </div>
+      </div>
+    {:else if stacksTipHeight < proposalData.startBlockHeight}
+      <h4 class={'text-' + proposal.status.color}>Voting Opens Soon</h4>
+      <div class="text-small text-white">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
+    {:else}
+      <h4 class={'text-' + proposal.status.color}>Voting Open</h4>
+      <p class="text-small text-white">Currently at block { stacksTipHeight } - closes at {proposalData.endBlockHeight}</p>
+      <div class={'mt-5 d-flex justify-content-around text-' + proposal.status.color}>
+        <div>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} <span class="text-white">votes for</span></p>
+        </div>
+        <div>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} <span class="text-white">votes against</span></p>
+        </div>
+      </div>
+      <div class={'mb-4 d-flex justify-content-around text-' + winning}>
+        <div>
+          <span class="text-center">{inFavour}%</span> <span class="text-white"> currently in favour of this proposal</span>
         </div>
       </div>
       <div class="progress">
@@ -76,7 +98,7 @@ const concludeVote = async () => {
               &nbsp;
         </div>
       </div>
-      <div class="d-flex justify-content-between text-small">
+      <div class="d-flex justify-content-between text-small text-white">
         <div>{ proposalData.startBlockHeight }</div>
         <div>{ proposalData.endBlockHeight }</div>
       </div>
@@ -84,7 +106,10 @@ const concludeVote = async () => {
 </div>
 
 <style>
-  h4 {
-    color: #fdad37;
+  .progress {
+    border-radius: none !important;
+  }
+  .progress-bar {
+    border-radius: none !important;
   }
 </style>

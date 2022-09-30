@@ -5,15 +5,18 @@ import { PostConditionMode } from 'micro-stacks/transactions';
 import type { ProposalType } from "../../../../types/stxeco.type";
 import ChainUtils from '$lib/service/ChainUtils';
 import { getOpenContractCall } from '@micro-stacks/svelte';
+import DaoUtils from '$lib/service/DaoUtils';
 
 const contractCall = getOpenContractCall();
 
 export let proposal:ProposalType;
 export let balanceAtHeight:number = 0;
 
-const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
-
 let stacksTipHeight = $settings.info.stacks_tip_height;
+const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
+proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
+const propStatus = proposal.status.name;
+
 let errorMessage:string|undefined;
 let txId: string;
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
@@ -37,7 +40,7 @@ const castVote = async (vfor:boolean) => {
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,
-        contractName: 'ede007-snapshot-proposal-voting',
+        contractName: 'ede007-snapshot-proposal-voting-v2',
         functionName: 'vote',
         functionArgs: [amountCV, forCV, proposalCV],
         onFinish: data => {
@@ -50,7 +53,7 @@ const castVote = async (vfor:boolean) => {
     });
 }
 
-$: canVote = stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight;
+$: canVote = propStatus === 'voting' && stacksTipHeight >= proposalData.startBlockHeight && stacksTipHeight < proposalData.endBlockHeight;
 if (balanceAtHeight === 0 || balanceAtHeight < 1) {
   canVote = false;
 }
@@ -59,13 +62,13 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
 {#if canVote}
 <div class="bg-card p-5 mt-3 text-white" >
   <div class="row">
-    <h4>Cast Your Vote</h4>
+    <h4  class={'text-' + proposal.status.color}>Cast Your Vote</h4>
     <div class="text-small">Enter the voting power and cast your vote. No STX is transferred by voting.</div>
     {#if !txId}
     <div class="my-3">
       <form on:submit|preventDefault>
         <div class="mb-3 text-center">
-          <div class="d-flex justify-content-center"><input class="w-25 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/> </div>
+          <div class="d-flex justify-content-center"><input class="w-50 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/> </div>
           <div class="form-text text-white"><a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = 1; errorMessage = undefined}}>min</a>  <a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = balanceAtHeight; errorMessage = undefined}}>max</a></div>
         </div>
       </form>
@@ -90,24 +93,32 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
   </div>
 </div>
 {:else}
-<div class="bg-card p-5 mt-3 text-white" >
-  <div class="row">
-    <h4>Unable to to Vote</h4>
-    <div class="text-small">Need at least 1 STX in your accoutn at time proposal was submitted.</div>
-  </div>
-</div>
+  {#if propStatus === 'concluded' || propStatus === 'voting ended'}
+    <div class="bg-card p-5 mt-3 text-white" >
+      <div class="row">
+        <h4  class={'text-' + proposal.status.color}>Voting Over</h4>
+        <div class="text-small">Voting window on this proposal has closed.</div>
+      </div>
+    </div>
+  {:else if propStatus === 'commencing soon' || propStatus === 'voting'}
+    <div></div>
+  {:else if propStatus !== 'failed' && propStatus !== 'passed'}
+    <div class="bg-card p-5 mt-3 text-white" >
+      <div class="row">
+        <h4  class={'text-' + proposal.status.color}>Unable to to Vote</h4>
+        <div class="text-small">Need at least 1 STX in your accoutn at time proposal was submitted.</div>
+      </div>
+    </div>
+  {/if}
 {/if}
 
 <div class="bg-card py-4 px-5 mt-3">
   <div class="text-white">
-    <h4>How Voting Works</h4>
+    <h4  class={'text-' + proposal.status.color}>How Voting Works</h4>
     <p>Vote with at least 1 STX or any amount up to your balance at the block height where voting started. 
     Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
   </div>
 </div>
 
 <style>
-  h4 {
-    color: #fdad37;
-  }
 </style>

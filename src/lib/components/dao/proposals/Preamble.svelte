@@ -26,11 +26,11 @@ const color = proposal.status.color;
 				</div>
 				<div class="row mt-4">
 					<div class={'col-4 border-' + color}><p class={'text-' + color}>Synopsis</p></div>
-					<div class={'col-12 border-' + color}><p class="text-white">{proposalMeta.synopsis}</p></div>
+					<div class={'col-12 py-1 border-' + color}><p class="text-white">{proposalMeta.synopsis}</p></div>
 				</div>
 				<div class="row mt-4">
 					<div class={'col-4 border-' + color}><p class={'text-' + color}>Description</p></div>
-					<div class={'col-12 border-' + color}><p class="text-white">{proposalMeta.description}</p></div>
+					<div class={'col-12 py-1 border-' + color}><p class="text-white">{proposalMeta.description}</p></div>
 				</div>
 			</div>
 		</div>
@@ -43,7 +43,7 @@ p {
 	padding: 3px;
 	margin: 0 !important;
 	font-size: 1.0rem;
-	text-transform: lowercase;
+	padding: 5px 0;
 }
 .border-yellow {
 	border: 1pt solid #fdad37;

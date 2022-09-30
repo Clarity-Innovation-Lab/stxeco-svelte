@@ -17,9 +17,11 @@ const toggleModal = () => {
   showModal = !showModal;
 }
 let componentKey = 0;
-let filter = 'All Proposals';  
+const titleFilters = [ 'edp014', 'edp015-1' ];
+let filter = 'All Proposals';
 let proposal:ProposalType;
 let sourceCode: string|undefined = '';
+
 const openSourceModal = (evt) => {
   proposal = evt.detail;
   sourceCode = proposal.contract.source_code;
@@ -30,25 +32,33 @@ const deployProposal = () => {
 }
 
 $: matchesFilter = (proposal:ProposalType) => {
-  // const filterValues = ['all', 'emergexec', 'voting', 'funding', 'concluded', 'deployed', 'draft']
-  const status = proposal.status;
-  if (currentFilter === 'All Proposals' || currentFilter === 'all') return true;
-  if (currentFilter === 'executed') {
-    return status.name === 'emergexec' || status.name === 'passed' || status.name === 'failed';
+  if (titleFilters.length > 0) {
+    let matched = false;
+    titleFilters.forEach((o) => {
+      if (proposal.contractId.split('.')[1].startsWith(o)) matched = true;
+    })
+    return matched;
+  } else {
+    // const filterValues = ['all', 'emergexec', 'voting', 'funding', 'concluded', 'deployed', 'draft']
+    const status = proposal.status;
+    if (currentFilter === 'All Proposals' || currentFilter === 'all') return true;
+    if (currentFilter === 'executed') {
+      return status.name === 'emergexec' || status.name === 'passed' || status.name === 'failed';
+    }
+    if (currentFilter === 'deployed' || currentFilter === 'draft') {
+      return status.name === 'draft' || status.name === 'deployed' || status.name === 'deploying' || status.name === 'submitted' || status.name === 'submitting';
+    }
+    if (currentFilter === 'voting') {
+      return status.name === 'voting ended' || status.name === 'voting' || status.name === 'commencing soon';
+    }
+    if (currentFilter === 'concluded') {
+      return status.name === 'voting ended' || status.name === 'passed' || status.name === 'failed';
+    }
+    if (currentFilter === 'funding') {
+      return status.name === 'funding';
+    }
+    return currentFilter === status.name || currentFilter === 'all';
   }
-  if (currentFilter === 'deployed' || currentFilter === 'draft') {
-    return status.name === 'draft' || status.name === 'deployed' || status.name === 'deploying' || status.name === 'submitted' || status.name === 'submitting';
-  }
-  if (currentFilter === 'voting') {
-    return status.name === 'voting ended' || status.name === 'voting' || status.name === 'commencing soon';
-  }
-  if (currentFilter === 'concluded') {
-    return status.name === 'voting ended' || status.name === 'passed' || status.name === 'failed';
-  }
-  if (currentFilter === 'funding') {
-    return status.name === 'funding';
-  }
-  return currentFilter === status.name || currentFilter === 'all';
 }
 
 onMount(async () => {
@@ -62,6 +72,7 @@ const reorder = (sf:string) => {
     sortDir = !sortDir;
     componentKey++;
 }
+
 $: sortedProps = DaoUtils.sortProposals($settings.proposals, sortDir, sortField);
 $: currentFilter = filter;
 const propFilterChange = (e: { detail: string; }) => {
@@ -110,7 +121,7 @@ const propFilterChange = (e: { detail: string; }) => {
         {#key componentKey}
           {#each sortedProps as item}
             {#if item && matchesFilter(item)}
-              <div class="col-md-6 col-sm-12"><ProposalGridItem proposal={item}  on:openSourceModal={openSourceModal}/></div>
+              <div class="col-md-12 col-sm-12"><ProposalGridItem proposal={item}  on:openSourceModal={openSourceModal}/></div>
             {/if}
           {/each}
         {/key}
@@ -119,7 +130,7 @@ const propFilterChange = (e: { detail: string; }) => {
   </div>
 </section>
   
-  <style>
+<style>
 .filter {
       border: 1pt solid #787878;
       color: #787878;

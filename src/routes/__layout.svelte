@@ -1,5 +1,6 @@
 <script lang="ts">
 import "../app.scss";
+import "../forum.scss";
 import settings from '$lib/settings';
 import {tick, onMount} from 'svelte';
 import Homepage from "$lib/components/homepage/Homepage.svelte";
@@ -7,11 +8,12 @@ import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { page } from "$app/stores";
 import Notifications from 'svelte-notifications';
-import { mountClient } from "@micro-stacks/svelte";
 import { getAccount, getNetwork } from '@micro-stacks/svelte';
 import { getAuth } from "@micro-stacks/svelte";
 import { afterNavigate, beforeNavigate } from '$app/navigation';
 import Four01 from '$lib/shared/Four01.svelte';
+import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
+import { client } from "../stores/client";
 
 export const prerender = true;
 
@@ -30,6 +32,7 @@ const config = {
   network: import.meta.env.VITE_NETWORK
 };
 mountClient(config);
+client.set(getMicroStacksClient());
 const network = getNetwork();
 const auth = getAuth();
 const account = getAccount();
@@ -87,7 +90,7 @@ onMount(async () => {
 
 <Notifications>
 {#if !homepage}
-  <Header class="bg-grey"/>
+  <Header class="bg-grey" {homepage}/>
   {#if four01}
     <Four01 />
   {/if}
@@ -98,7 +101,7 @@ onMount(async () => {
   {/if}
   <Footer />
 {:else}
-  <Homepage />
+  <Homepage {homepage}/>
   <Footer />
 {/if}
 </Notifications>

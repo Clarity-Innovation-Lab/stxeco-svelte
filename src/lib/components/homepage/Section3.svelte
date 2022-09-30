@@ -27,10 +27,10 @@
                 <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
-                <h2>Crowd Fund Proposal</h2>
-                <p class="text3">Get together to decide which proposals are worth voting for.
+                <h2>Stacks 2.1 Voting</h2>
+                <p class="text3">Polls open soon - show your support for the Stacks Upgrade by voting!
                 </p>
-                <h3 class="pointer"><CaretRightFill width={10} height={10}/> vote now</h3>
+                <h3 class="pointer"><a class="text-warning" href="/dao/proposals/ST167Z6WFHMV0FZKFCRNWZ33WTB0DFBCW9M1FW3AY.edp015-1-sip-015-activation"><CaretRightFill width={10} height={10}/> vote now</a></h3>
               </div>
             </div>
           </div>
@@ -43,10 +43,10 @@
                 <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
-                <h2>Crowd Fund Proposal</h2>
-                <p class="text3">Get together to decide which proposals are worth voting for.
+                <h2>Stacks 2.1 Upgrade</h2>
+                <p class="text3">The Stacks 2.1 Upgrade brings improvements to Stacking and closer links with Bitcoin
                 </p>
-                <h3 class="pointer"><CaretRightFill width={10} height={10}/> vote now</h3>
+                <h3 class="pointer"><a class="text-warning" href="/blog/posts/twopointone"><CaretRightFill width={10} height={10}/> find out more</a></h3>
               </div>
             </div>
           </div>
@@ -59,10 +59,10 @@
                 <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
-                <h2>Crowd Fund Proposal</h2>
-                <p class="text3">Get together to decide which proposals are worth voting for.
+                <h2>Crowd Fund Proposals</h2>
+                <p class="text3">Deploy your proposal and crowd fund support from the community
                 </p>
-                <h3 class="pointer"><CaretRightFill width={10} height={10}/> vote now</h3>
+                <h3 class="pointer"><a class="text-warning" href="/dao/proposals/deployment"><CaretRightFill width={10} height={10}/> start here</a></h3>
               </div>
             </div>
           </div>
@@ -75,10 +75,9 @@
                 <img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" />
               </div>
               <div class="col-11 mt-3">
-                <h2>Crowd Fund Proposal</h2>
-                <p class="text3">Get together to decide which proposals are worth voting for.
-                </p>
-                <h3 class="pointer"><CaretRightFill width={10} height={10}/> vote now</h3>
+                <h2>Learn Clarity</h2>
+                <p class="text3">DAO Extensions are human readable and written in Clarity</p>
+                <h3 class="pointer"><a class="text-warning" href="https://clarity-lang.org/" target="_blank"><CaretRightFill width={10} height={10}/> find out more</a></h3>
               </div>
             </div>
           </div>
@@ -137,7 +136,7 @@ h3 {
 
 .text3 {
   font-family: Gilroy-Light;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #ededed;
   line-height: 1.4rem;
 }
