@@ -6,3 +6,6 @@
 
 </script>
 <RepeatContent docType="sip_tab" uid={slug} />
+
+<style>
+</style>

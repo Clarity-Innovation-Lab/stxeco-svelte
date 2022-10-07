@@ -1,71 +1,105 @@
 <script lang="ts">
-	import Tab1 from "$lib/components/sips/tabs/Tab1.svelte";
-	import Tab2 from "$lib/components/sips/tabs/Tab2.svelte";
-	import Tab3 from "$lib/components/sips/tabs/Tab3.svelte";
-  import Tabs from "$lib/shared/Tabs.svelte";
+  import RepeatContent from '$lib/shared/RepeatContent.svelte';
 
-/**
-let st1 = '<p>Getting the community involved via the DAO</p><ol><li>Activate SIP becomes a DAO Proposal</li><li>Rules of the DAO apply - e.g.</li><li>Voting starts in 1 day / ends in 1 week</li></ol>'
-let st2 = '<p>About CABs - Advisory Boards!</p><ol><li>Goverance - join discussions</li><li>Tokenomics - join discussions</li><li>Technical - join discussions</li></ol>'
-let st3 = '<p>SIPs start out as suggestions or issues registered on GitHub</p><ol><li>GitHub is complicated - learn about why we use it.</li><li>Have a suggestion for improving Stacks?</li><li>Comment on someone else\'s suggestion?</li></ol>'
-let st4 = '<p>A <strong>Proposal</strong> is a Pull Request in GitHub lingo</p><ol><li>SIP workflow.</li><li>Review open proposals</li><li>Comment on open proposals</li></ol>'
-**/
-  let items = [
-    { label: "SIP Process",
-		 value: 1,
-		 component: Tab1
-		},
-    { label: "Making Suggestions",
-		 value: 2,
-		 component: Tab2
-		},
-    { label: "Advisory Boards",
-		 value: 3,
-		 component: Tab3
-		}
-  ];
+  let componentKey = 0;
+  let sipTab = 'sip_tab1';
+  $: sipTab;
+
+  const changeSipTab = (tab:string) => {
+    sipTab = tab;
+    componentKey++;
+  }
+
+  const classes = (link:string) => {
+    if (link === sipTab) return 'p-0 px-sm-3 px-md-5 m-0 btn btn-info';
+    else return 'p-0 px-sm-3 px-md-5 m-0 btn btn-outline-info';
+  }
 </script>
 
 <svelte:head>
 	<title>Stacks Improvement Proposals</title>
 	<meta name="description" content="Help build the foundation for the User Owned Internet" />
 </svelte:head>
+<!-- HEADER PANEL -->
 
-<section class="text-white">
-    <div class="container my-0">
-      <div class="row mb-5">
-        <div class="col">
-          <h1><span class="strokeme-white">SIPs<br/></span> Stacks Improvement Proposals</h1>
-          <h6 class="strapline">Everything you wanted to know but were afraid to ask!</h6>
-        </div>
+<div class="mb-4">
+  <img width="100%" src="https://images.prismic.io/edao/bedc7562-279a-454d-a2dc-91b25eec00a7_stx_eco_SIP_banner_image.png?auto=compress,format" alt="Stacks 2.1 banner"/>
+  <div class="float-panel text-info">
+    <div class="row px-2">
+      <div class="col-1 text-right">
+        <img class="arrow" style="position:relative; top:3px; left:0px;" width="10px" src="https://images.prismic.io/edao/1ee869e3-1b10-4cdc-9745-6bc5c1f45eef_stx_eco_directional_arrow.png?auto=compress,format" alt="Stacks 2.1 banner"/>
       </div>
-      <div class="row mb-5">
-        <div class="col">
-          <Tabs {items} />
-        </div>
+      <div class="col-11 mx-3">
+        <h1 class="text-info"><span class="strokeme-info">SIP</span> Stacks<br/>Improvement<br/>Proposals</h1>
+        <p class="strapline-bold">Everything you wanted to know <br/>but were afraid to ask!</p>
       </div>
-      <!--
-      <div class="row">
-        <div class="col-6 my-2">
-          <CardWithParams title="Suggestions" subtitle="" image="/img/bg/ecosys.jpg"
-            linkTarget="/sip/issues" linkName="Browse Suggestions"/>
-        </div>
-        <div class="col-6 my-2">
-          <CardWithParams title="Proposals" subtitle="" image="/img/bg/tree.jpg"
-            linkTarget="/sip/issues?filter=pulls" linkName="Browse Proposals"/>
-        </div>
-        <div class="col-6 my-2">
-          <CardWithParams title="Activating SIP" subtitle="" image="/img/bg/ecosys.jpg"
-            linkTarget="/sip/sip-voting" linkName="About Voting"/>
-        </div>
-        <div class="col-6 my-2">
-          <CardWithParams title="Advisory Boards" subtitle="" image="/img/bg/tree.jpg"
-            linkTarget="/sip/sip-cabs" linkName="About the CABs"/>
-        </div>
-      </div>
-      -->
     </div>
-  </section>
+  </div>
+</div>
+<!-- BUTTON PANEL -->
+{#key componentKey}
+<div class="mb-4">
+  <div class="d-flex justify-content-center">
+    <p class="text-small">
+      <span><a href="/sip" on:click|preventDefault={() => { changeSipTab('sip_tab1')}} class={classes('sip_tab1')}>PROCESSES</a></span>
+      <span><a href="/sip" on:click|preventDefault={() => { changeSipTab('sip_tab2')}} class={classes('sip_tab2')}>SUGGESTIONS</a></span>
+      <span><a href="/sip" on:click|preventDefault={() => { changeSipTab('sip_tab3')}} class={classes('sip_tab3')}>GOVERNANCE</a></span>
+    </p>
+  </div>
+</div>
+  
+  
+<div class="mb-5">
+  <div class="">
+    <RepeatContent docType="sip_tab" uid={sipTab} />
+  </div>
+</div>
+{/key}
 
 <style>
+h1 {
+  font-size: 2.2rem;
+  line-height: 2.2rem;
+}
+p { font-size: 0.9rem; margin: 10px 0px 10px 0px; color: #fff; } 
+
+.btn { padding: 15px 15px!important; }
+.text-small a {
+  font-size: 0.7rem; padding: 5px 20px;
+}
+.float-panel {
+  width: 100%; 
+  background-color: #111;
+  opacity: 0.85;
+  position: absolute; 
+  left: 0;
+  right: 0;
+  margin: 0 auto; 
+  top: 220px; 
+  width: 300px; 
+  text-align: start;
+  padding: 5px 5px;
+}
+@media (max-width: 900px) {
+  h1 {
+    font-size: 1.8rem;
+    line-height: 1.7rem;
+  }
+  p { font-size: 0.7rem; margin: 2px; }
+  .float-panel { 
+    width: 300px; top: 210px;;
+  }
+  .text-small  a { font-size: 0.8rem;}
+}
+@media (max-width: 700px) {
+  h1 {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
+  p { font-size: 0.6rem; margin: 2px; }
+  .float-panel { 
+    width: 200px; top: 190px;;
+  }
+  .text-small  a { font-size: 0.7rem;}
+}
 </style>

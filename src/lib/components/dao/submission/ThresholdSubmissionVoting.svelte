@@ -36,7 +36,7 @@ const submit = async () => {
 		functionName: 'propose',
 		functionArgs: functionArgs,
 		onFinish: data => {
-			proposal.status = 'submitting'
+			proposal.status = {name: 'submitting'};
 			proposal.submitTxId = data.txId
 			let url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/proposals';
 			postData(url, proposal)

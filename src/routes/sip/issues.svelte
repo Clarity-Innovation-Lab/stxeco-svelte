@@ -42,15 +42,15 @@
 	let numbProposals = issues.filter((o) => o.pullRequest).length
 	let numbIssues = issues.filter((o) => !o.pullRequest).length
 
-	let menuClasses = ' pointer mr-5 '
-	$: issueClassList = (filter1 === 'issues') ? menuClasses + ' text-danger' : menuClasses
-	$: propClassList = (filter1 === 'issues') ? menuClasses : menuClasses + ' text-danger'
+	let menuClasses = ' pointer btn '
+	$: issueClassList = (filter1 === 'issues') ? menuClasses + ' btn-danger text-dark' : menuClasses + ' btn-outline-danger' 
+	$: propClassList = (filter1 === 'issues') ? menuClasses + ' btn-outline-danger' : menuClasses + ' btn-danger text-dark'
 
 	const back = () => {
 		goto(`/sip`, { replaceState: false })
 	}
 
-	let filter1 = 'issues'
+	let filter1 = 'proposals'
 	let filtered = issues
 	function filter(newfilter:string) {
 		if (newfilter === 'issues') {
@@ -73,31 +73,39 @@
 </script>
 
 <svelte:head>
-	<title>SIP Suggestions</title>
+	<title>SIP PROCESS</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section class="text-white">
+<section class="">
 	<div class="container">
+		{#if filter1 === 'issues'}
+        <h1 class="text-danger">SIP <span class="strokeme-danger">SUGGESTIONS</span></h1>
+        <p class="strapline">Improvements raised as suggestions and pending feedback from the community</p>
+		{:else}
+        <h1 class="text-danger">SIP <span class="strokeme-danger">PROPOSALS</span></h1>
+        <p class="strapline">Improvements currently under consideration by advisory boards</p>
+		{/if}
 		<div class="d-flex justify-content-between">
-			<div class="text-small">
-				<span class={issueClassList} on:click={() => {filter('issues')}}>Suggestions ({numbIssues})</span>
-				<span class={propClassList} on:click={() => {filter('proposals')}}>Proposals ({numbProposals})</span>
+			<div class="">
+				<button class={propClassList} on:click={() => {filter('proposals')}}>Proposals</button><button class="btn btn-outline-danger" on:click={() => {filter('proposals')}}>{numbProposals}</button>
+				<span class="mx-1">&nbsp;</span>
+				<button class={issueClassList} on:click={() => {filter('issues')}}>Suggestions</button><button class="btn btn-outline-danger" on:click={() => {filter('proposals')}}>{numbIssues}</button>
 			</div>
 			<div>
 				<button class="btn btn-sm outline-light" on:click|preventDefault={() => { back() }}>BACK</button>
 			</div>
 		</div>
-		<div class="">
+		<div class="bg-card mt-4 p-5">
 			<table class="table text-white">
 				<thead>
 					<tr>
-						<th scope="col" class="pointer" on:click={() => reorder('title')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</th>
-						<th scope="col" class="pointer" on:click={() => reorder('labels')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} State</th>
-						<th scope="col">Comments</th>
-						<th scope="col" class="pointer" on:click={() => reorder('date')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Created</th>
-						<th scope="col" class="pointer" on:click={() => reorder('updatedAt')}>{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Updated</th>
-						<th scope="col">Actions</th>
+						<th scope="col" on:click={() => reorder('title')}><div class="cell-fill pointer">{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Title</div></th>
+						<th scope="col" on:click={() => reorder('labels')}><div class="cell pointer">{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} State</div></th>
+						<th scope="col"><div class="cell pointer">Comments</div></th>
+						<th scope="col" on:click={() => reorder('date')}><div class="cell pointer">{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Created</div></th>
+						<th scope="col" on:click={() => reorder('updatedAt')}><div class="cell pointer">{#if sortDir}<SortAlphaDown/>{:else}<SortAlphaUp/>{/if} Updated</div></th>
+						<th scope="col"><div class="cell pointer">Actions</div></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -130,5 +138,57 @@
 		justify-content: center;
 		align-items: center;
 		flex: 1;
+	}
+	th {
+		padding: 0;
+		margin: 0;
+		font-size: 0.9rem;
+	}
+	td {
+		font-size: 0.9rem;
+	}
+	tbody>tr>td {
+    border-color: #dd216e;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    border-bottom: 1pt solid #dd216e;
+	font-family: Gilroy-Light;
+}
+tbody>tr>th {
+    border-color: #dd216e;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    border-bottom: 1pt solid #dd216e;
+	font-family: Gilroy-Light;
+}
+thead{
+		border: unset;
+		border: none!important;
+	}
+	thead>tr{
+		border: unset;
+		border: none!important;
+	}
+	thead>tr>th{
+		border: unset;
+		border: none!important;
+	}
+	.cell {
+		border: 1pt solid #dd216e;
+		color: #cbcbcb;
+		text-transform: uppercase;
+		padding: 3px 10px;
+		margin-right: 3px;
+		white-space: nowrap;
+	}
+	.cell-fill {
+		background-color: #dd216e;
+		border: 1pt solid #dd216e;
+		color: #111;
+		text-transform: uppercase;
+		padding: 3px 2px;
+		margin-right: 2px;
 	}
 </style>

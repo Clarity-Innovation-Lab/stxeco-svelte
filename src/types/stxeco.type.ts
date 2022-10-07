@@ -1,3 +1,6 @@
+export type HoldingsType = {
+  nfts: any;
+};
 export type SettingsType = {
   extensions: any;
   proposals?: Array<ProposalType>;

@@ -26,18 +26,18 @@ const DaoUtils = {
       if (proposal.votingContract === 'ede001-proposal-voting') {
         status = { name: 'submitted', color: 'primary', colorCode: primary };
         if (stacksTipHeight < proposal.proposalData.startBlockHeight) {
-          status = { name: 'commencing soon', color: 'warning', colorCode: warning };
+          status = { name: 'commencing soon', color: 'info', colorCode: info };
         } else {
-          status = { name: 'voting', color: 'warning', colorCode: warning };
+          status = { name: 'voting', color: 'info', colorCode: info };
         }
       } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting-v2') {
-        status = { name: 'voting', color: 'warning', colorCode: warning };
+        status = { name: 'voting', color: 'info', colorCode: info };
       }
       if (proposal.proposalData.concluded) {
         if (proposal.proposalData.passed) status = { name: 'passed', color: 'success', colorCode: success };
         else status = { name: 'failed', color: 'danger', colorCode: danger };
       } else if (stacksTipHeight > proposal.proposalData.endBlockHeight) {
-        status = { name: 'voting ended', color: 'warning', colorCode: warning };
+        status = { name: 'voting ended', color: 'info', colorCode: info };
       }
     }
     return status;

@@ -20,7 +20,7 @@ import FooterLinks from './FooterLinks.svelte'
           </div>
         </div>
       </div>
-      <div class="mt-5 d-flex justify-content-between copy">
+      <div class=" mx-5 mt-5 d-flex justify-content-between copy">
         <div class=" mb-4">
             <div class="copywright">EcosystemDAO&copy; 2022</div>
         </div>

@@ -41,8 +41,7 @@ input, textarea {
 }
 .btn-rounded {
   border-radius: 50px !important;
-  padding: 15px 5px;
-  width: 250px;
+  padding: 10px 15px;
 }
 
 .bg-grey {
@@ -148,6 +147,11 @@ h1 {
   color: #333333;
 	-webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #dd216e;
+}
+.strapline-bold {
+  font-family: Gilroy-ExtraBold;
+  color: #ededed;
+  font-size: 1.0rem;
 }
 .strapline {
   font-family: Gilroy-Light;

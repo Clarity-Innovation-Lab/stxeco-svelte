@@ -9,8 +9,8 @@ const makeProposal = () => {
 }
 </script>
 
-<button class="btn mx-4 mb-4 btn-rounded" on:click={makeProposal}>Make a Proposal</button>
-<button class="btn btn-outline mx-4 mb-4 btn-rounded" on:click={viewProposals}>View All Proposals</button>
+<button class="btn mx-4 mb-4 btn-rounded" style="width: 250px;" on:click={makeProposal}>Make a Proposal</button>
+<button class="btn btn-outline mx-4 mb-4 btn-rounded" style="width: 250px;" on:click={viewProposals}>View All Proposals</button>
 
 <style>
 .btn {

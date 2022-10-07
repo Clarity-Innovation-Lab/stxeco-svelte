@@ -127,11 +127,11 @@ onMount(async () => {
 <section>
   <div class="row">
     {#if proposal?.status?.name === 'funding'}
-      <div class="cols-12"><h1 class={'text-' + color}><span class={'strokeme-' + color}>Crowd Fund</span><br/>{ proposal.title }</h1></div>
+      <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Crowd Fund</span><br/>{ proposal.title }</h1></div>
       <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes<br/>
         and take this proposal to a vote.</p></div>
     {:else}
-      <div class="cols-12"><h1 class={'text-' + color}><span class={'strokeme-' + color}>Proposal</span><br/>{ proposal.title }</h1></div>
+      <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Proposal</span><br/>{ proposal.title }</h1></div>
       <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes to bring about change<br/>
         and improvements to the Stacks Network.</p></div>
     {/if}
@@ -139,12 +139,12 @@ onMount(async () => {
   <div class="row">
     <div class="cols-12 text-end my-3">
       <p class="w-100 text-right">
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(`/dao/forum/${contractId}`) }}>forum</button>
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(`/dao/voting/${contractId}`) }}>voting</button>
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { openSourceModal() }}>clarity</button>
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { openRulesModal() }}>about</button>
-        <a class={'btn btn-outline-' + color} href={explorerUrl} target="_blank">explorer</a>
-        <button class={'btn btn-outline-' + color} on:click|preventDefault={() => { goto(`/dao/proposals`) }}>back</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/forum/${contractId}`) }}>forum</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/${contractId}`) }}>voting</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { openSourceModal() }}>clarity</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { openRulesModal() }}>about</button>
+        <a class={'btn btn-outline-info'} href={explorerUrl} target="_blank">explorer</a>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/proposals`) }}>back</button>
       </p>
     </div>
   </div>
@@ -163,12 +163,11 @@ onMount(async () => {
         <EmergencyExecuted {proposal} />
       {:else if propStatus === 'commencing soon' ||  propStatus === 'failed' ||  propStatus === 'passed' ||  propStatus === 'concluded' || propStatus === 'voting ended' || propStatus === 'voting'}
         {#if proposal.proposalData && proposal.votingContract === 'ede001-proposal-voting'}
-          <VotingSchedule {proposal}/>
           <PropBallotBox {proposal} />
         {:else if proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting-v2'}
-          <VotingSchedule {proposal}/>
           <SnapBallotBox {proposal} {balanceAtHeight}/>
         {/if}
+        <VotingSchedule {proposal} {balanceAtHeight}/>
       {:else if propStatus === 'funding'}
           <FundedSubmissionVoting/>
       {:else if propStatus === 'deployed' || propStatus === 'deploying' || propStatus === 'submitted' || propStatus === 'submitting' }

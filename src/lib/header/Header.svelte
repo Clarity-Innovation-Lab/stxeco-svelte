@@ -31,7 +31,7 @@ export let homepage:boolean;
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
-				<li class="nav-item"><a href="/blog/posts/twopointone">About 2.1</a></li>
+				<li class="nav-item"><a href="/sip/twopointone">About 2.1</a></li>
 				<li class="nav-item"><a href="/forum">Forum</a></li>
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -40,6 +40,7 @@ export let homepage:boolean;
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/dao/proposals">All Proposals</a></li>
 						<li><a class="dropdown-item" href="/dao/extensions">DAO Extensions</a></li>
+						<li><a class="dropdown-item" href="/dao/claim-badge">Claim Badge</a></li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">

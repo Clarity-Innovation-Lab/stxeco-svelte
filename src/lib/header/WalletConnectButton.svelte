@@ -1,7 +1,7 @@
 <script>
 import { getAuth,  } from "@micro-stacks/svelte";
-import settings from '$lib/settings'
 import { getAccount } from '@micro-stacks/svelte';
+import settings from '$lib/settings'
 // import { onNoWalletFound } from 'micro-stacks/connect';
 import { onMount } from 'svelte';
 
@@ -10,7 +10,6 @@ const account = getAccount();
 
 const logout = () => {
 	$auth.signOut();
-	// window.location.reload();
 }
 let webWalletNeeded = false;
 const login = () => {
@@ -18,6 +17,7 @@ const login = () => {
 		$auth.openAuthRequest({
 			onFinish: payload => {
 				console.log(payload);
+				window.location.reload();
 				settings.init($account.stxAddress)           
 			},
 			onCancel: () => {

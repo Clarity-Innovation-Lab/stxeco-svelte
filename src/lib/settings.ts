@@ -39,8 +39,9 @@ function createStore() {
         res.balance = ChainUtils.fromMicroAmount(res.balance);
         res.locked = ChainUtils.fromMicroAmount(res.locked);
         daoData.accountInfo = res;
-        const result = await fetchNamesByAddress({ url: import.meta.env.VITE_APP_STACKS_API, blockchain: "stacks", address: stxAddress });
-        daoData.accountInfo.bnsName = result && result.names && result.names[0];
+        fetchNamesByAddress({ url: import.meta.env.VITE_APP_STACKS_API, blockchain: "stacks", address: stxAddress }).then((result) => {
+          daoData.accountInfo.bnsName = result && result.names && result.names[0];
+        })
       }
 
       if (res.ok) set(daoData);

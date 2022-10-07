@@ -10,7 +10,8 @@ export /** @type {boolean} */ let homepage;
 let playing = true;
 // Get the button
 const openVoting = () => {
-  goto('/dao/proposals/ST167Z6WFHMV0FZKFCRNWZ33WTB0DFBCW9M1FW3AY.edp015-1-sip-015-activation', { replaceState: false })
+  //goto('/dao/proposals/ST132K8CVJ9B2GEDHTQS5MH3N7BR5QDMN1P1RZG3Y.edp015-stacks-2-1-activation', { replaceState: false })
+  goto('/sip/twopointone', { replaceState: false })
 }
 
 // Pause and play the video, and change the button text

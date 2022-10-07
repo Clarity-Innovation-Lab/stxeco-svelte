@@ -53,7 +53,8 @@ afterNavigate((nav) => {
   console.log('nav.to.pathname: ' + nav.to.pathname)
 
   if (!$auth.isSignedIn && !$auth.isRequestPending) {
-    if (nav.to?.pathname && nav.to.pathname.indexOf('/dao/proposals/') > -1) {
+    const pname = nav.to?.pathname||'/';
+    if (pname.indexOf('/dao/proposals/') > -1 || pname.indexOf('/dao/claim-badge') > -1) {
       console.log('to: ', nav.to);
       //goto(`/401`, { replaceState: true })
       four01 = true;
@@ -72,7 +73,8 @@ onMount(async () => {
   try {
     // $network.setNetwork(import.meta.env.VITE_NETWORK);
     bootstrap = (await import('bootstrap'));
-    await settings.init($account.stxAddress);     
+    await settings.init($account.stxAddress);
+    //holdings.init($account.stxAddress);
     appInitialized = true;
     console.log("Page=", page);
     await tick();
@@ -90,7 +92,7 @@ onMount(async () => {
 
 <Notifications>
 {#if !homepage}
-  <Header class="bg-grey" {homepage}/>
+  <Header {homepage}/>
   {#if four01}
     <Four01 />
   {/if}

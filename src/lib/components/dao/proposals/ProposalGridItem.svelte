@@ -21,7 +21,7 @@ const explorerUrl = () => {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + proposal.deployTxId + '?chain=' + import.meta.env.VITE_NETWORK;
 }
 const statusStyle = () => {
-    let clazzes = 'border-top: 1pt solid ' + status.colorCode + '; border-left: 1pt solid ' + status.colorCode + '; border-right: 1pt solid ' + status.colorCode + ';';
+    let clazzes = 'border-top: 1pt solid ' + '#4786cd' + '; border-left: 1pt solid ' + '#4786cd' + '; border-right: 1pt solid ' + '#4786cd' + ';';
     /**
 	let clazzes = '';
     if (typeof proposal.executedAt === 'number' && proposal.executedAt > 0) {
@@ -36,20 +36,20 @@ const statusStyle = () => {
 }
 
 const actionStyle = () => {
-    let clazzes = 'border-top: 1pt solid ' + status.colorCode + '; border-left: 1pt solid ' + status.colorCode + '; border-bottom: 1pt solid ' + status.colorCode + ';';
+    let clazzes = 'border-top: 1pt solid ' + '#4786cd' + '; border-left: 1pt solid ' + '#4786cd' + '; border-bottom: 1pt solid ' + '#4786cd' + ';';
     return clazzes;
 }
 
 const actionRightStyle = () => {
-    let clazzes = 'border: 1pt solid ' + status.colorCode + ';';
+    let clazzes = 'border: 1pt solid ' + '#4786cd' + ';';
     return clazzes;
 }
 const filter = () => {
-    let clazzes = 'filter-' + status.color;
+    let clazzes = 'filter-' + '#4786cd';
     return clazzes;
 }
 const headerStyle = () => {
-    let clazzes = 'upper text-' + status.color;
+    let clazzes = 'upper text-info';
     /**
 	if (typeof proposal.executedAt === 'number' && proposal.executedAt > 0) {
       clazzes += 'text-success';
@@ -78,7 +78,7 @@ const headerStyle = () => {
 				</div>
 				<div class="row">
 					<div class="cols-12">
-						<p  class="p-2" style={statusStyle()}>
+						<p  class={'p-2 text-' + status.color} style={statusStyle()}>
 							{status.name}
 							{#if status.name === 'emergexec'}(<a class={'pointer text-' + status.color} href={'/dao/proposals/' + proposal.contract.contract_id}><span class="">{proposal.emergencySignals}/{sigsRequired}</span></a>){/if}
 							{#if status.name === 'voting'} - <a class={'pointer text-' + status.color} href={'/dao/proposals/' + proposal.contract.contract_id}><span class="">{DaoUtils.getVotingMessage(proposal.proposalData, stacksTipHeight)}</span></a>{/if}

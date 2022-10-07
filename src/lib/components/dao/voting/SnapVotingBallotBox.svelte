@@ -6,6 +6,7 @@ import type { ProposalType } from "../../../../types/stxeco.type";
 import ChainUtils from '$lib/service/ChainUtils';
 import { getOpenContractCall } from '@micro-stacks/svelte';
 import DaoUtils from '$lib/service/DaoUtils';
+import { goto } from "$app/navigation";
 
 const contractCall = getOpenContractCall();
 
@@ -46,6 +47,7 @@ const castVote = async (vfor:boolean) => {
         onFinish: data => {
           txId = data.txId
           console.log('finished contract call!', data);
+          goto(`/dao/claim-badge`);
         },
         onCancel: () => {
           console.log('popup closed!');
@@ -60,7 +62,7 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
 </script>
 
 {#if canVote}
-<div class="bg-card p-5 mt-3 text-white" >
+<div class="bg-card p-5 mb-3 text-white" >
   <div class="row">
     <h4  class={'text-' + proposal.status.color}>Cast Your Vote</h4>
     <div class="text-small">Enter the voting power and cast your vote. No STX is transferred by voting.</div>
@@ -94,7 +96,7 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
 </div>
 {:else}
   {#if propStatus === 'concluded' || propStatus === 'voting ended'}
-    <div class="bg-card p-5 mt-3 text-white" >
+    <div class="bg-card p-5 text-white" >
       <div class="row">
         <h4  class={'text-' + proposal.status.color}>Voting Over</h4>
         <div class="text-small">Voting window on this proposal has closed.</div>
@@ -103,7 +105,7 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
   {:else if propStatus === 'commencing soon' || propStatus === 'voting'}
     <div></div>
   {:else if propStatus !== 'failed' && propStatus !== 'passed'}
-    <div class="bg-card p-5 mt-3 text-white" >
+    <div class="bg-card p-5 text-white" >
       <div class="row">
         <h4  class={'text-' + proposal.status.color}>Unable to to Vote</h4>
         <div class="text-small">Need at least 1 STX in your accoutn at time proposal was submitted.</div>
@@ -111,14 +113,6 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
     </div>
   {/if}
 {/if}
-
-<div class="bg-card py-4 px-5 mt-3">
-  <div class="text-white">
-    <h4  class={'text-' + proposal.status.color}>How Voting Works</h4>
-    <p>Vote with at least 1 STX or any amount up to your balance at the block height where voting started. 
-    Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
-  </div>
-</div>
 
 <style>
 </style>

@@ -17,7 +17,7 @@ const toggleModal = () => {
   showModal = !showModal;
 }
 let componentKey = 0;
-const titleFilters = [ 'edp014', 'edp015-1' ];
+const titleFilters = [ 'edp015-stacks' ];
 let filter = 'All Proposals';
 let proposal:ProposalType;
 let sourceCode: string|undefined = '';
@@ -28,7 +28,7 @@ const openSourceModal = (evt) => {
   toggleModal();
 }
 const deployProposal = () => {
-  goto('/dao/proposals/deployment', { replaceState: false }) 
+  goto('/dao/proposals/deployment', { replaceState: false })
 }
 
 $: matchesFilter = (proposal:ProposalType) => {
