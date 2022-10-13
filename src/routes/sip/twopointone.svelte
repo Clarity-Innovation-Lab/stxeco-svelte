@@ -19,7 +19,7 @@
       </div>
       <div class="col-11 mx-3">
         <h1 class="text-info"><span class="">Stacks 2.1 <br/><span class="strokeme-info">Upgrade</span></h1>
-        <a href="/dao/proposals/ST132K8CVJ9B2GEDHTQS5MH3N7BR5QDMN1P1RZG3Y.edp015-stacks-2-1-activation" class="btn btn-info btn-rounded p-0 px-4">Vote Now</a>
+        <a href="/dao/proposals/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.edp015-2-1-activation" class="btn btn-info btn-rounded p-0 px-4">Vote Now</a>
       </div>
     </div>
   </div>

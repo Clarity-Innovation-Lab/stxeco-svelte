@@ -1,5 +1,4 @@
-import { serializeCV, deserializeCV, standardPrincipalCV, uintCV, cvToJSON } from 'micro-stacks/clarity';
-import { bytesToHex } from "micro-stacks/common";
+import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
 
 const precision = 1000000
 const btcPrecision = 100000000
@@ -20,6 +19,11 @@ const ChainUtils = {
     });
     return response.json();
   },  
+  updateVoters: async () => {
+    const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/contract/events/recent';
+    const response = await fetch(url);
+    return response.json();
+  },
   isValidAddress: function (addr: string) {
     try {
       standardPrincipalCV(addr)

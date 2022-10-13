@@ -8,7 +8,7 @@ import Section2 from '$lib/components/homepage/Section2.svelte'
 	<meta name="description" content="Ecosystem DAO" />
 </svelte:head>
 
-<Section1/>
+<Section1 homepage={true}/>
 <div class="container">
   <Section2/>
 </div>

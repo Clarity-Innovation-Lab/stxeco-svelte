@@ -54,14 +54,16 @@ export let proposal:ProposalType;
 export let contractId:string;
 
 const stacksTipHeight = $settings.info?.stacks_tip_height || 0;
-proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
-const propStatus = proposal.status.name;
+if (proposal) {
+  proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
+}
+const propStatus = proposal?.status.name;
 
 // export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-if (!proposal || proposal.contract.tx_status === 'failed') {
-  goto(`/dao/proposals/404?contractId=${contractId}`, { replaceState: false })
-}
-const sourceCode: string|undefined = proposal.contract.source_code;
+//f (!proposal || proposal.contract.tx_status === 'failed') {
+  //goto(`/dao/proposals/404?contractId=${contractId}`, { replaceState: false })
+//}
+const sourceCode: string|undefined = proposal?.contract.source_code;
 let showSourceModal:boolean;
 let showRulesModal:boolean;
 const openSourceModal = () => {
@@ -86,14 +88,14 @@ const executiveProposalsValid = false;
 const emergencyProposalsValid = true;
 
 $: balanceAtHeight = 0
-$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + proposal.deployTxId + '?chain=' + import.meta.env.VITE_NETWORK;
-const color = proposal.status.color;
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + proposal?.deployTxId + '?chain=' + import.meta.env.VITE_NETWORK;
+const color = proposal?.status.color;
 
 onMount(async () => {
-  if (proposal.proposalData) {
+  if (proposal?.proposalData) {
     try {
       const callData = {
-        path: '/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal.proposalData?.startBlockHeight,
+        path: '/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal?.proposalData?.startBlockHeight,
         httpMethod: 'get'
       }
       const response = await ChainUtils.postToApi('/v2/accounts', callData);
@@ -114,7 +116,7 @@ onMount(async () => {
   {/if}
     <div slot="title">
       {#if showSourceModal}
-      <h3>Proposal: {proposal.contract.contract_id?.split('.')[1]}</h3>
+      <h3>Proposal: {proposal?.contract?.contract_id?.split('.')[1]}</h3>
       {/if}
     </div>
 </Modal>
@@ -124,14 +126,23 @@ onMount(async () => {
 	<meta name="description" content="About this app" />
 </svelte:head>
 
+{#if !proposal}
+<section>
+  <div class="row">
+    <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Proposal Not Found</span></h1></div>
+    <div class="cols-12"><p class="strapline">Looks like this proposal is missing.</p>
+    </div>
+  </div>
+</section>
+{:else}
 <section>
   <div class="row">
     {#if proposal?.status?.name === 'funding'}
-      <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Crowd Fund</span><br/>{ proposal.title }</h1></div>
+      <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Crowd Fund</span><br/>{ proposal?.title }</h1></div>
       <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes<br/>
         and take this proposal to a vote.</p></div>
     {:else}
-      <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Proposal</span><br/>{ proposal.title }</h1></div>
+      <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Proposal</span><br/>{ proposal?.title }</h1></div>
       <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes to bring about change<br/>
         and improvements to the Stacks Network.</p></div>
     {/if}
@@ -139,7 +150,8 @@ onMount(async () => {
   <div class="row">
     <div class="cols-12 text-end my-3">
       <p class="w-100 text-right">
-        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/forum/${contractId}`) }}>forum</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/forum`) }}>forum</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/badge/${contractId}`) }}>badge</button>
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/${contractId}`) }}>voting</button>
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { openSourceModal() }}>clarity</button>
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { openRulesModal() }}>about</button>
@@ -162,7 +174,7 @@ onMount(async () => {
       {#if propStatus === 'emergexec'}
         <EmergencyExecuted {proposal} />
       {:else if propStatus === 'commencing soon' ||  propStatus === 'failed' ||  propStatus === 'passed' ||  propStatus === 'concluded' || propStatus === 'voting ended' || propStatus === 'voting'}
-        {#if proposal.proposalData && proposal.votingContract === 'ede001-proposal-voting'}
+        {#if proposal?.proposalData && proposal.votingContract === 'ede001-proposal-voting'}
           <PropBallotBox {proposal} />
         {:else if proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting-v2'}
           <SnapBallotBox {proposal} {balanceAtHeight}/>
@@ -196,6 +208,7 @@ onMount(async () => {
     <CallButtons1 />
   </p>
 </section>
+{/if}
 
 <style>
 section {

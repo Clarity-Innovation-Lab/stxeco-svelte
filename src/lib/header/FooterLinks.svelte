@@ -22,10 +22,10 @@ let stacksOrg = 'https://stacks.org'
       <a href="https://github.com/Clarity-Innovation-Lab" target="_blank">Clarity Lab</a>
     </div>
     <div class="demo-div">
-      <a href="https://github.com/Clarity-Innovation-Lab/executor-dao/issues" target="_blank">Raise Issues</a>
+      <a href="https://github.com/Clarity-Innovation-Lab/ecosystem-dao/issues" target="_blank">Raise Issues</a>
     </div>
     <div class="demo-div">
-      <a href="https://github.com/Clarity-Innovation-Lab/executor-dao" target="_blank">Executor DAO</a>
+      <a href="https://github.com/Clarity-Innovation-Lab/ecosystem-dao" target="_blank">Ecosystem DAO</a>
     </div>
   </div>
   <div class="col-md-2 col-sm-6 hideme">

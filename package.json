@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite dev --port=8080",
     "build": "vite build",
+    "build-prod": "vite build --mode production",
     "build-stag": "vite build --mode staging",
     "package": "svelte-kit package",
     "preview": "vite preview --port=8080",

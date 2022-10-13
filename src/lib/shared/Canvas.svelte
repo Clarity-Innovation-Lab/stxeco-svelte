@@ -8,6 +8,7 @@
 
     let bannerImageSrc = '/img/banner.jpg';
     export let imageSrc:string;
+    export let hasVotes:boolean;
     let canvas: HTMLCanvasElement;
     let canv;
     let img1; 
@@ -23,6 +24,12 @@
       link.download = 'I_Voted_For_Stacks_Two_Point_One.png'
       link.href = image
       link.click()
+    }
+
+    let borders = 'none';
+    const toggleRoundness= () => {
+      if (borders === 'none') borders = '50%';
+      else borders = 'none';
     }
 
     onDestroy(() => {
@@ -72,16 +79,18 @@
           canv.add(img1).renderAll();
           //canv.moveTo(img1, 50);
           //anv.on('img1:modified', modifiedHandler);
-          fabric.Image.fromURL(bannerImageSrc, function(img) {
-            img2 = img.set({scaleX: (canv.width / img.width), scaleY: (canv.height / img.height * 0.1), left: 0, top: 340, angle: 0});
-            canv.add(img2).renderAll();
-            canv.remove(text).renderAll();
-            //canv.moveTo(img2, 100);
-            //canv.on('img2:modified', modifiedHandler);
-            canv.on({
-              'object:modified' : modifiedHandler
-            });
-          }, { crossOrigin: 'anonymous' });
+          if (hasVotes) {
+            fabric.Image.fromURL(bannerImageSrc, function(img) {
+              img2 = img.set({scaleX: (canv.width / img.width), scaleY: (canv.height / img.height * 0.1), left: 0, top: 340, angle: 0});
+              canv.add(img2).renderAll();
+              canv.remove(text).renderAll();
+              //canv.moveTo(img2, 100);
+              //canv.on('img2:modified', modifiedHandler);
+              canv.on({
+                'object:modified' : modifiedHandler
+              });
+            }, { crossOrigin: 'anonymous' });
+          }
         }, { crossOrigin: 'anonymous' });
         // canv.add(rect);
         canv.add(text);
@@ -93,11 +102,17 @@
   <p class="strapline">Step 2: Download Badge</p>
   <p class="strapline">
     <span class="mx-2"><a href="/" on:click|preventDefault={toggleCanvas}>back</a></span>
+    <span class="mx-2"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>twitter preview</a></span>
     <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Download width={40} height={40}/></a></span>
   </p>
 </div>
+{#if !hasVotes}
+<div class="d-flex justify-content-center text-warning">
+  <p>Please register a vote on the proposal to see the I Voted Banner </p>
+</div>
+{/if}
 <div class="d-flex justify-content-center">
-  <canvas bind:this={canvas} width="400" height="400" />
+  <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
 </div>
 
 <style>

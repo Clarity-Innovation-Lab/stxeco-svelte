@@ -22,7 +22,7 @@ const constructDao = async () => {
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
     contractAddress: deployer,
-    contractName: 'executor-dao',
+    contractName: import.meta.env.VITE_DAO_CONTRACT_NAME,
     functionName: 'construct',
     functionArgs: [bootstrap],
     onFinish: data => {

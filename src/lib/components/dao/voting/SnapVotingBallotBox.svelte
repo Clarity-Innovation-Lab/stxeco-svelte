@@ -47,7 +47,8 @@ const castVote = async (vfor:boolean) => {
         onFinish: data => {
           txId = data.txId
           console.log('finished contract call!', data);
-          goto(`/dao/claim-badge`);
+          ChainUtils.updateVoters()
+          goto(`/dao/voting/badge/${proposal.contractId}`);
         },
         onCancel: () => {
           console.log('popup closed!');

@@ -5,17 +5,17 @@ import Header from "$lib/header/Header.svelte";
 
 // medium 
 const bgvideo = 'https://prismic-io.s3.amazonaws.com/edao/ea5c92b8-d910-479c-813b-a3ef19292578_stx_eco_colour_balls_animation_medium.mp4';
-export /** @type {boolean} */ let homepage;
+export let homepage;
 
 let playing = true;
 // Get the button
 const openVoting = () => {
-  //goto('/dao/proposals/ST132K8CVJ9B2GEDHTQS5MH3N7BR5QDMN1P1RZG3Y.edp015-stacks-2-1-activation', { replaceState: false })
+  //goto('/dao/proposals/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.edp015-2-1-activation', { replaceState: false })
   goto('/sip/twopointone', { replaceState: false })
 }
 
 // Pause and play the video, and change the button text
-function toggleVideo() {
+const toggleVideo = () => {
 	const video = document.getElementById("myVideo");
   	if (video.paused) {
    	 	video.play();
@@ -25,7 +25,7 @@ function toggleVideo() {
 		  playing = false;
   	}
 }
-function scrollTo() {
+const scrollTo = () => {
   const getMeTo = document.getElementById("section2");
   if (getMeTo) getMeTo.scrollIntoView({behavior: 'smooth'});
 }

@@ -26,10 +26,12 @@
 	{:else}
 	<img width="100%" src={'/img/questionmark.png'} alt={'Image for ' + item.tokenIdMap.tokenId}/>
 	{/if}
+	<!--
 	{#if owner}
-	<div>--> <input value={item.token_uri}/></div>
-	<div>--> <input value={item.asset_identifier}/></div>
+	<div><input value={item.token_uri}/></div>
+	<div><input value={item.asset_identifier}/></div>
 	{/if}
+	-->
 	</div>
 
 </div>

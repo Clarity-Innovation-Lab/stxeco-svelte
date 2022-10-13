@@ -40,7 +40,6 @@ export let homepage:boolean;
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/dao/proposals">All Proposals</a></li>
 						<li><a class="dropdown-item" href="/dao/extensions">DAO Extensions</a></li>
-						<li><a class="dropdown-item" href="/dao/claim-badge">Claim Badge</a></li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">

@@ -89,7 +89,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
       {#key componentKey}
       {#each sortedEvents as item}
         <tr>
-        <th scope="row" class="py-3">{item.voter}</th>
+        <th scope="row" class={(item.voter === $account.stxAddress) ? 'text-success' : ''} title={(item.voter === $account.stxAddress) ? 'I voted!' : ''}>{item.voter}</th>
         <td class="py-3">{@html ChainUtils.fromOnChainAmount(item.amount)}</td>
         <td class="py-3">{@html (item.for) ? '<span class="text-warning">for</span>' : 'against'}</td>
       </tr>

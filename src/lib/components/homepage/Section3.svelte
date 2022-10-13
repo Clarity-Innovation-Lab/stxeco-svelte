@@ -30,7 +30,7 @@
                 <h2>Stacks 2.1 Voting</h2>
                 <p class="text3">Polls open soon - show your support for the Stacks Upgrade by voting!
                 </p>
-                <h3 class="pointer"><a class="text-warning" href="/dao/proposals/ST132K8CVJ9B2GEDHTQS5MH3N7BR5QDMN1P1RZG3Y.edp015-stacks-2-1-activation"><CaretRightFill width={10} height={10}/> vote now</a></h3>
+                <h3 class="pointer"><a class="text-warning" href="/dao/proposals/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.edp015-2-1-activation"><CaretRightFill width={10} height={10}/> vote now</a></h3>
               </div>
             </div>
           </div>
