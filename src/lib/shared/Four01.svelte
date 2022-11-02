@@ -1,10 +1,14 @@
 <script>
+import WalletConnectButton from '$lib/header/WalletConnectButton.svelte'
+
 </script>
 
 <div class="my-5 container bg-card p-5 text-white">
-	<h1><span class="strokeme-white">Log In</span> to Continue</h1>
-	<p class="text-warning">Please connect your Stacks Wallet to continue.</p>
-	<p>Need a wallet? Download Hiro's <a href="https://wallet.hiro.so/#download" target="_blank">Stacks Wallet</a>. 
+	<h4><span class="strokeme-white">Log In</span> to Continue</h4>
+	<p class="mt-3 text-warning">Please connect your Stacks Wallet to continue.</p>
+	<p class="text-warning"><WalletConnectButton /></p>
+
+	<p class="mt-5">Need a wallet? Download Hiro's <a href="https://wallet.hiro.so/#download" target="_blank">Stacks Wallet</a>. 
 	</p>
 	<p>There are two types</p>
 	<ul>

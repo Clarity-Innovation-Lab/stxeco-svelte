@@ -41,14 +41,14 @@ const castVote = async (vfor:boolean) => {
         postConditions: [],
         postConditionMode: PostConditionMode.Deny,
         contractAddress: deployer,
-        contractName: 'ede007-snapshot-proposal-voting-v2',
+        contractName: 'ede007-snapshot-proposal-voting-v3',
         functionName: 'vote',
         functionArgs: [amountCV, forCV, proposalCV],
         onFinish: data => {
           txId = data.txId
           console.log('finished contract call!', data);
-          ChainUtils.updateVoters()
-          goto(`/dao/voting/badge/${proposal.contractId}`);
+          ChainUtils.updateVoters();
+          goto(`/dao/voting/badge/${proposal.contractId}?mempool=true`);
         },
         onCancel: () => {
           console.log('popup closed!');
@@ -66,7 +66,13 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
 <div class="bg-card p-5 mb-3 text-white" >
   <div class="row">
     <h4  class={'text-' + proposal.status.color}>Cast Your Vote</h4>
-    <div class="text-small">Enter the voting power and cast your vote. No STX is transferred by voting.</div>
+    <div class="text-small">
+      <p>Enter the voting power and cast your vote.</p>
+      <p><span class="text-warning">No STX is spent by voting but you will pay a gas fee.</span></p>
+      <p>Minimum voting power is 1 or any amount up to your balance at the block height where voting started. 
+        Your wallet balance at block <span class="text-bold">{proposal.proposalData?.startBlockHeight}</span> was <span class="text-bold">{balanceAtHeight}</span> STX.
+      </p>
+    </div>
     {#if !txId}
     <div class="my-3">
       <form on:submit|preventDefault>
@@ -109,7 +115,7 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
     <div class="bg-card p-5 text-white" >
       <div class="row">
         <h4  class={'text-' + proposal.status.color}>Unable to to Vote</h4>
-        <div class="text-small">Need at least 1 STX in your accoutn at time proposal was submitted.</div>
+        <div class="text-small">Need at least 1 STX in your account at time proposal was submitted.</div>
       </div>
     </div>
   {/if}

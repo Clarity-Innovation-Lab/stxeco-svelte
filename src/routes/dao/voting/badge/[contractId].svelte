@@ -5,13 +5,14 @@ import { getAccount, getNetwork } from '@micro-stacks/svelte';
 import MetaData from '$lib/components/nft/MetaData.svelte';
 import Canvas from '$lib/shared/Canvas.svelte';
 import DaoUtils from '$lib/service/DaoUtils';
-
+    
+const mempool = $page.url.searchParams.has('mempool');
 const account = getAccount();
 const network = getNetwork();
 let currentNetork = ($network.isMainnet) ? 'mainnet' : 'testnet'; 
 let votes: any[] = [];
 let assetIdList: any[] = [];
-let assetId:object;
+let assetId:any;
 let hasVotes = true;
 $: offset = 0;
 $: holdings = {
@@ -21,6 +22,9 @@ $: holdings = {
 $: currentPage = 0;
 let pageSize = 20;
 let loading = true;
+const gateway = "https://hashone.mypinata.cloud/";
+const gatewayAr = "https://arweave.net/";
+
 const nextPage = async (init:boolean) => {
   if (!init && holdings.total <= (currentPage * pageSize)) return;
   if (init) {
@@ -28,7 +32,7 @@ const nextPage = async (init:boolean) => {
     currentPage = 0;
   }
   loading = true;
-  const assetIdentifier = assetId.contractAddress + '.' + assetId.contractName + '::' + assetId.assetName;
+  const assetIdentifier = assetId?.contractAddress + '.' + assetId?.contractName + '::' + assetId?.assetName;
   const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi/v2/nft/' + $account.stxAddress + '/' + assetIdentifier + '/' + offset + '/' + pageSize;
   const res = await fetch(url).catch(error => {
     console.error('error was: ' + error);
@@ -36,17 +40,28 @@ const nextPage = async (init:boolean) => {
   if (res && res.ok) {
     let response = await res.json();
     holdings = response;
+    holdings.results.forEach((item:any) => {
+      let image = item?.metaData?.image || '';
+      if (image.startsWith('ipfs://')) {
+        image = item.metaData.image.replace('ipfs://', gateway)
+      } else if (image.startsWith('ipfs/')) {
+        image = gateway + image;
+      } else if (image.startsWith('ar://')) {
+        image = item.metaData.image.replace('ar://', gatewayAr)
+      }
+      if (item && item.metaData) item.metaData.image = image;
+    })
     offset += pageSize;
     currentPage++;
     loading = false;
   }
 }
-let imageSrc:string = 'https://hashone.mypinata.cloud/ipfs/QmRZA25mjkVBK6mXQVZeubAi9LmupYBWvS2oJCVPmbuw29/indige5-0.jpg';
+let imageSrc:string = '/img/bns.jpg';
 let canvasMode = false;
 const selectItem = (event: any) => {
   const item = event.detail.item;
+  imageSrc = item?.metaData?.image || '/img/bns.jpg';
   canvasMode = !canvasMode;
-  imageSrc = item.metaData.image;
 }
 const toggleCanvas = () => {
   canvasMode = !canvasMode;
@@ -90,6 +105,7 @@ onMount(async () => {
     <div class="container text-white">
       <h1 class="text-info"><span class="strokeme-info">Badge</span> Pickup</h1>
       {#if assetIdList.length > 0}
+      {#if !canvasMode}
       <div class="mb-5">
         <h4>Choose NFT Collection</h4>
         <select bind:value={assetId} on:change="{() => { nextPage(true) }}">
@@ -98,15 +114,19 @@ onMount(async () => {
           {/each}
         </select>
       </div>
-      {#if votes.length > 0 && holdings.total > 0}
+      {/if}
+      {#if mempool || votes.length > 0}
       <div>
-        <p>Thanks for voting on this proposal! To make a badge...</p>
+        <p>Thanks for voting on this proposal!</p>
+        <p>To make a badge...</p>
         <ol>
           <li>Click an NFT you like from your wallet - they are displayed 20 per page</li>
           <li>Align the I voted banner and background NFT image how you like</li>
           <li>Click the download icon - the image will be downloaded to your computer</li>
           <li>In twitter set the image as your profile pic!</li>
         </ol>
+        <p>Note: if you don't have any NFTs in this account you can transfer one and 
+          return here once the transfer confirms - it will still work.</p>
       </div>
       {/if}
         {#if !$account?.stxAddress}
@@ -118,7 +138,7 @@ onMount(async () => {
           {#if holdings.total > 0}
             {#if canvasMode}
             <div class="row">
-              <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={votes.length > 0}/>
+              <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={mempool || votes.length > 0}/>
             </div>
             {:else}
             <div class="d-flex justify-content-between">

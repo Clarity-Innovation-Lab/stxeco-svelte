@@ -162,6 +162,13 @@ h1 {
 .text-small {
   font-size: small;
 }
+.text-bold {
+  font-weight: 700;
+}
+.text-white {
+  color: #ededed;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -440,9 +447,6 @@ a.dropdown-item {
 
 
 
-.text-white {
-  color: #ededed;
-}
 
 
 .progress {

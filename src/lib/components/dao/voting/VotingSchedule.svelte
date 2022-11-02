@@ -13,7 +13,6 @@ const contractCall = getOpenContractCall();
 let contractId = $page.params.contractId;
 let stacksTipHeight = $settings.info.stacks_tip_height;
 export let proposal:ProposalType; // = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
-export let balanceAtHeight:number = 0;
 proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
 if (!proposal) throw new Error('Unexpected empty proposal for id: ' + contractId);
 const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, concluded: false, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
@@ -23,7 +22,8 @@ $: currentBHN = (currentBH / endBH) * 100
 let txId: string;
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 
-const inFavour = (proposalData) ? Number(((proposalData.votesFor / (proposalData.votesFor + proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
+
+const inFavour = (proposalData && (proposalData.votesFor + proposalData.votesAgainst) > 0) ? Number(((proposalData.votesFor / (proposalData.votesFor + proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
 let winning = 'danger';
 if (inFavour > 80) {
   winning = 'success';
@@ -114,18 +114,6 @@ const concludeVote = async () => {
         <div>{ proposalData.endBlockHeight }</div>
       </div>
     {/if}
-</div>
-<div class="bg-card py-4 px-5 mb-3">
-  <div class="text-white">
-    <h4  class={'text-info'}>How Voting Works</h4>
-    <p>Vote with at least 1 STX or any amount up to your balance at the block height where voting started. 
-    Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
-      
-    <p>You can vote as many times as you like but any votes over the amount of your balance
-      at the start height won't count. You can also vote from other accounts if you like - 
-    check the page reloads if you log out and log back in.</p>
-  
-  </div>
 </div>
 
 <style>

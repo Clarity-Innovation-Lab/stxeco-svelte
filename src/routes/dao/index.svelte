@@ -8,15 +8,15 @@ import type { ExtensionType } from "../../types/stxeco.type";
 
 const contractCall = getOpenContractCall();
 
-let st1 = '<p>Submit proposals to the DAO</p>'
-let st2 = '<p>Ongoing votes - delegate your vote</p>'
-let st3 = '<p>Get involved - join the discussion</p>'
-let st4 = '<p>The DAO is a community</p>'
+// let st1 = '<p>Submit proposals to the DAO</p>'
+// let st2 = '<p>Ongoing votes - delegate your vote</p>'
+// let st3 = '<p>Get involved - join the discussion</p>'
+// let st4 = '<p>The DAO is a community</p>'
 let txId: string;
 
 const constructDao = async () => {
   const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
-  const bootstrap = contractPrincipalCV(deployer, 'edp000-bootstrap-minimal')
+  const bootstrap = contractPrincipalCV(deployer, 'edp000-edao-bootstrap')
   // const bootstrap = contractPrincipalCV(deployer, 'edp010-set-phase1-extensions')
   await $contractCall.openContractCall({
     postConditions: [],
@@ -45,8 +45,13 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
 </svelte:head>
 
 <section>
+  <div class="row">
+    <h1 class="text-info">Welcome to <span class="strokeme-info">Ecosystem DAO</span></h1>
+  </div>
+</section>
+<section>
   {#if !constructed}
-  <div class="container text-center">
+  <div class="container my-5">
     <button type="button" class="btn btn-primary" on:click={constructDao}>CONSTRUCT DAO</button>
   </div>
   {/if}
@@ -55,7 +60,9 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
     <a href={explorerUrl} target="_blank">View on explorer</a>
   </div>
   {/if}
+</section>
 
+      <!--
     <div class="container my-5">
       <div class="row">
         <div class="col">
@@ -92,7 +99,7 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
         </div>
       </div>
     </div>
-  </section>
+      -->
 
 <style>
 </style>

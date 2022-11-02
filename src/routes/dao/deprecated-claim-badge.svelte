@@ -19,6 +19,7 @@ let loading = true;
 onMount(async () => {
   await nextPage(true)
 });
+const gateway = "https://hashone.mypinata.cloud/";
 const nextPage = async (init:boolean) => {
   if (!init && holdings.total <= (page * pageSize)) return;
   loading = true;
@@ -29,6 +30,15 @@ const nextPage = async (init:boolean) => {
   if (res && res.ok) {
     let response = await res.json();
     holdings = response;
+    holdings.results.forEach((item:any) => {
+      let image = item?.metaData?.image || '';
+      if (image.startsWith('ipfs://')) {
+        image = item.metaData.image.replace('ipfs://', gateway)
+      } else if (image.startsWith('ipfs/')) {
+        image = gateway + image;
+      }
+      item.metaData.image = image;
+    })
     offset += pageSize;
     page++;
     loading = false;

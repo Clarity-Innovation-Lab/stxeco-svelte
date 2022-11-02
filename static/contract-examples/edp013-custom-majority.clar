@@ -16,8 +16,8 @@
 			(list
 				{extension: .ede007-snapshot-proposal-voting, enabled: false}
 				{extension: .ede008-funded-proposal-submission, enabled: false}
-				{extension: .ede007-snapshot-proposal-voting-v2, enabled: true}
-				{extension: .ede008-funded-proposal-submission-v2, enabled: true}
+				{extension: .ede007-snapshot-proposal-voting-v3, enabled: true}
+				{extension: .ede008-funded-proposal-submission-v3, enabled: true}
 			)
 		))
 		(ok true)

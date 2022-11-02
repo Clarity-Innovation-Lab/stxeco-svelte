@@ -30,7 +30,9 @@ const DaoUtils = {
         } else {
           status = { name: 'voting', color: 'info', colorCode: info };
         }
-      } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting-v2') {
+      } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting-v3') {
+        status = { name: 'voting', color: 'info', colorCode: info };
+      } else if (proposal.votingContract === 'ede004-emergency-execute') {
         status = { name: 'voting', color: 'info', colorCode: info };
       }
       if (proposal.proposalData.concluded) {

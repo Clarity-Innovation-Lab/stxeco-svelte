@@ -6,7 +6,7 @@
 
     const dispatch = createEventDispatcher();
 
-    let bannerImageSrc = '/img/banner.jpg';
+    let bannerImageSrc = '/img/banner-white.png';
     export let imageSrc:string;
     export let hasVotes:boolean;
     let canvas: HTMLCanvasElement;

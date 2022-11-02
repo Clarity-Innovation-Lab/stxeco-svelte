@@ -14,7 +14,7 @@ const color = proposal.status.color;
 				<div class="row mx-0 mb-2">
 					<h4 class={'m-0 px-0 text-info'} style="position: relative; top: 0px; left: -35px;" >
 						<img style="position: relative; top: -20px; left: 0px;" src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="15px" height="auto" />
-						PROPOSAL OVERVIEW</h4>
+						THE PROPOSAL</h4>
 				</div>
 				<div class="row">
 					<div class={'col-4 border-info'}><p class={'text-info'}>DAO</p></div>

@@ -151,7 +151,7 @@ $: opColor = (showFromFile) ? 'warning' : 'grey';
     <div class="row">
       <div class="cols-12 text-end my-3">
         <p class="w-100 text-right">
-          <button class={'btn btn-outline-white'} on:click|preventDefault={() => { openRulesModal() }}>dao rules</button>
+          <!-- <button class={'btn btn-outline-white'} on:click|preventDefault={() => { openRulesModal() }}>dao rules</button>-->
           <button class={'btn btn-outline-white'} on:click|preventDefault={() => { goto(`/dao/proposals`) }}>back</button>
         </p>
       </div>
@@ -164,7 +164,7 @@ $: opColor = (showFromFile) ? 'warning' : 'grey';
             <button class={'mx-2 mb-3 btn rounded btn-outline-' + opColor} on:click={() => { showNoop = false; showFromFile = true; showDeployButton = false }}>Operational Proposal</button>
           </p>
           {:else}
-          <div class="container">Unable to deploy proposal</div>
+          <div class="container">The ability to create proposals is restricted to exec team members until after the 2.1 Upgrade Vote.</div>
           {/if}
       </div>
     </div>

@@ -17,7 +17,7 @@ const toggleModal = () => {
   showModal = !showModal;
 }
 let componentKey = 0;
-const titleFilters: any[] = ['edp015-2'];
+const titleFilters: any[] = ['edp015-', 'edp017-'];
 let filter = 'All Proposals';
 let proposal:ProposalType;
 let sourceCode: string|undefined = '';

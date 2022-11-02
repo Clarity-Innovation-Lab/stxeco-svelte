@@ -10,7 +10,7 @@ export let homepage;
 let playing = true;
 // Get the button
 const openVoting = () => {
-  //goto('/dao/proposals/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.edp015-2-1-activation', { replaceState: false })
+  //goto('/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-2-1-activation', { replaceState: false })
   goto('/sip/twopointone', { replaceState: false })
 }
 

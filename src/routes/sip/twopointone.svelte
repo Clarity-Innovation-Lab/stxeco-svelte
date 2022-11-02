@@ -11,7 +11,8 @@
 <!-- HEADER PANEL -->
 
 <div class="mb-4">
-  <img width="100%" src="https://images.prismic.io/edao/06e5f803-2bdc-4a93-ba00-1002315fa5b2_stx_eco_2.1_upgrade_banner_image.png?auto=compress,format" alt="Stacks 2.1 banner"/>
+  <img width="100%" src="https://images.prismic.io/edao/4c50f9d5-01fc-4bb5-80c1-722937cf1aaf_jennybg.png?auto=compress,format?auto=compress,format" alt="Stacks 2.1 banner"/>
+  <!--
   <div class="float-panel text-info pb-4">
     <div class="row px-2">
       <div class="col-1 text-right">
@@ -19,10 +20,11 @@
       </div>
       <div class="col-11 mx-3">
         <h1 class="text-info"><span class="">Stacks 2.1 <br/><span class="strokeme-info">Upgrade</span></h1>
-        <a href="/dao/proposals/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.edp015-2-1-activation" class="btn btn-info btn-rounded p-0 px-4">Vote Now</a>
+        <a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-2-1-activation" class="btn btn-info btn-rounded p-0 px-4">Vote Now</a>
       </div>
     </div>
   </div>
+  -->
 </div>
 <!-- BUTTON PANEL -->
 <div class="mb-5">
@@ -32,6 +34,8 @@
 </div>
 
 <style>
+/**
+
 h1 {
   font-size: 2.8rem;
   line-height: 2.2rem;
@@ -70,4 +74,5 @@ h1 {
     width: 260px; top: 190px;
   }
 }
+**/
 </style>
