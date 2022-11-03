@@ -14,7 +14,7 @@
 (define-public (execute (sender principal))
 	(begin
 		;; Set voting window to 2 weeks.
-		(try! (contract-call? .ede008-funded-proposal-submission-v3 set-parameter "proposal-duration" u2016)) 
+		(try! (contract-call? .ede008-funded-proposal-submission-v2 set-parameter "proposal-duration" u2016)) 
 		(ok true)
 	)
 )

@@ -10,9 +10,9 @@
 
 (define-public (execute (sender principal))
 	(begin
-		(try! (contract-call? .ede008-funded-proposal-submission-v3 set-parameter "funding-cost" u100000000))
-		(try! (contract-call? .ede008-funded-proposal-submission-v3 set-parameter "proposal-start-delay" u72)) ;; ~ 12 hours day
-		(try! (contract-call? .ede008-funded-proposal-submission-v3 set-parameter "proposal-duration" u360))  ;; 2.5 days
+		(try! (contract-call? .ede008-funded-proposal-submission-v2 set-parameter "funding-cost" u100000000))
+		(try! (contract-call? .ede008-funded-proposal-submission-v2 set-parameter "proposal-start-delay" u72)) ;; ~ 12 hours day
+		(try! (contract-call? .ede008-funded-proposal-submission-v2 set-parameter "proposal-duration" u360))  ;; 2.5 days
 		(ok true)
 	)
 )

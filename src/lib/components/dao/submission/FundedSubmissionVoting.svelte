@@ -52,9 +52,9 @@ const submit = async () => {
 		});
 		return
 	}
-	const amountUSTX = ChainUtils.toOnChainAmount(amount)
-	const amountCV = uintCV(amountUSTX)
-	const thresholdCV = someCV(uintCV(8000));
+	const amountUSTX = ChainUtils.toOnChainAmount(amount);
+	const amountCV = uintCV(amountUSTX);
+	const thresholdCV = someCV(uintCV(6600));
 	const proposalCV = contractPrincipalCV(contractId.split('.')[0], contractId.split('.')[1])
 	let functionArgs = [proposalCV, amountCV, thresholdCV];
 	await $contractCall.openContractCall({

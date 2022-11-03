@@ -51,9 +51,9 @@ onMount(async () => {
 		</a>
 	</span>
 {:else if $auth.isRequestPending}
-	<span class="nav-item"><a href="/" on:click|preventDefault={login}><span  class="px-2"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
+	<span class="nav-item"><a href="/" on:click|preventDefault={login}><span  class="px-2"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect wallet</a></span>
 {:else}
-	<span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={login} ><span  class="px-1"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
+	<span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={login} ><span  class="px-1"><img src="/img/png-assets/stx_eco_wallet_off.png" alt="Connect Wallet / Login" width="40" height="auto"/></span> connect wallet</a></span>
 {/if}
 
 <style>
