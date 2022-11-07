@@ -7,6 +7,7 @@ import { getOpenContractCall } from '@micro-stacks/svelte';
 import ChainUtils from '$lib/service/ChainUtils';
 import type { ProposalType } from "../../../../types/stxeco.type";
 import DaoUtils from '$lib/service/DaoUtils';
+import Countdown from '$lib/shared/Countdown.svelte'
 
 const contractCall = getOpenContractCall();
 
@@ -51,7 +52,7 @@ const concludeVote = async () => {
 </script>
 
 <div class="bg-card py-4 px-5 mb-3">
-    {#if stacksTipHeight > proposalData.endBlockHeight}
+  {#if stacksTipHeight > proposalData.endBlockHeight}
       {#if proposalData.concluded && proposalData.passed}
         <h4 class={'text-' + proposal.status.color}>Vote Passed</h4>
         <div class={'mb-4 d-flex justify-content-around text-' + winning}>
@@ -69,10 +70,10 @@ const concludeVote = async () => {
       {:else}
         <h4 class={'text-' + proposal.status.colorCode}>Voting Closed</h4>
         {#if txId}
-        <div class="text-small">Votes are being counted.</div>
+        <div class="">Votes are being counted.</div>
         <div><a href={explorerUrl} target="_blank">Track progress on the explorer</a></div>
         {:else}
-        <div class="text-small">Please conclude for votes to be counted.</div>
+        <div class="">Please conclude for votes to be counted.</div>
         <div class="py-4"><button class={'btn btn-outline-' + proposal.status.color} on:click={() => concludeVote()}>Conclude this Vote</button></div>
         {/if}
       {/if}
@@ -86,16 +87,19 @@ const concludeVote = async () => {
       </div>
     {:else if stacksTipHeight < proposalData.startBlockHeight}
       <h4 class={'text-' + proposal.status.color}>Voting Opens Soon</h4>
-      <div class="text-small text-white">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
+      <div class=" text-white">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
+      <Countdown endBlock={proposalData.startBlockHeight - stacksTipHeight} />
     {:else}
       <h4 class={'text-' + proposal.status.color}>Voting Open</h4>
-      <p class="text-small text-white">Currently at block { stacksTipHeight } - closes at {proposalData.endBlockHeight}</p>
+      <p class="text-white">Voting closes in {proposalData.endBlockHeight - stacksTipHeight} blocks;</p>
+      <Countdown endBlock={proposalData.endBlockHeight - stacksTipHeight} />
+      <!--
       <div class={'mt-5 d-flex justify-content-around text-' + proposal.status.color}>
         <div>
-          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} <span class="text-white">votes for</span></p>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesFor)} <span class="text-white">YES ON 2.1</span></p>
         </div>
         <div>
-          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} <span class="text-white">votes against</span></p>
+          <p class="text-center">{ChainUtils.fromMicroAmount(proposalData.votesAgainst)} <span class="text-white">NO ON 2.1</span></p>
         </div>
       </div>
       <div class={'mb-4 d-flex justify-content-around text-' + winning}>
@@ -103,13 +107,14 @@ const concludeVote = async () => {
           <span class="text-center">{inFavour}%</span> <span class="text-white"> currently in favour of this proposal</span>
         </div>
       </div>
+      -->
       <div class="progress">
         <div class="progress-bar progress-bar-striped" role="progressbar" style={'width:' + (currentBHN) + '%'}
               aria-valuenow={stacksTipHeight - proposalData.startBlockHeight} aria-valuemin={0} aria-valuemax={(proposalData.endBlockHeight - proposalData.startBlockHeight)}>
               &nbsp;
         </div>
       </div>
-      <div class="d-flex justify-content-between text-small text-white">
+      <div class="d-flex justify-content-between text-white">
         <div>{ proposalData.startBlockHeight }</div>
         <div>{ proposalData.endBlockHeight }</div>
       </div>

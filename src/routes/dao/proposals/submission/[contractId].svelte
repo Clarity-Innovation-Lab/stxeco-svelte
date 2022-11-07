@@ -55,8 +55,8 @@ const showEmergencySubmitForm = () => {
 </script>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <section>
@@ -68,26 +68,6 @@ const showEmergencySubmitForm = () => {
 			</div>
 		</div>
 		<DaoRules />
-		<div class="text-center my-5">
-			{#if !executed}
-			<div class="text-center my-5">
-				{#if fundedProposal}
-					<button class:text-success={showFundedProposal} class="btn outline-light mr-2" on:click={showFundedForm}>Fund Proposal</button>
-				{/if}
-				{#if thresholdProposal}
-					<button class:text-success={showThresholdProposal} class="btn outline-light mr-2" on:click={showThresholdForm}>Submit Threshold Proposal</button>
-				{/if}
-				{#if executiveTeamMember && execPropContractDeployed}
-					<button class:text-success={showExecutiveProposal} class="btn outline-light mr-2" on:click={showExecutiveProposalSubmitForm}>Submit Executive Proposal</button>
-				{/if}
-				{#if executiveTeamMember}
-					<button class:text-success={showEmergencyExecute} class="btn outline-light mr-2" on:click={showEmergencySubmitForm}>Open Emergency Execute</button>
-				{/if}
-			</div>
-			{:else}
-			<EmergencyExecuted {proposal} />
-			{/if}
-		</div>
 		{#if showFundedProposal}
 			<div class="jumbo">
 				<FundedSubmissionVoting/>
@@ -108,6 +88,26 @@ const showEmergencySubmitForm = () => {
 				<EmergencyExecuteSubmission/>
 			</div>
 		{/if}
+		<div class="text-center my-5">
+			{#if !executed}
+			<div class="text-center my-5">
+				{#if fundedProposal}
+					<button class:text-success={showFundedProposal} class="btn outline-light mr-2" on:click={showFundedForm}>Fund Proposal</button>
+				{/if}
+				{#if thresholdProposal}
+					<button class:text-success={showThresholdProposal} class="btn outline-light mr-2" on:click={showThresholdForm}>Submit Threshold Proposal</button>
+				{/if}
+				{#if executiveTeamMember && execPropContractDeployed}
+					<button class:text-success={showExecutiveProposal} class="btn outline-light mr-2" on:click={showExecutiveProposalSubmitForm}>Submit Executive Proposal</button>
+				{/if}
+				{#if executiveTeamMember}
+					<button class:text-success={showEmergencyExecute} class="btn outline-light mr-2" on:click={showEmergencySubmitForm}>Open Emergency Execute</button>
+				{/if}
+			</div>
+			{:else}
+			<EmergencyExecuted {proposal} />
+			{/if}
+		</div>
 		
 	</div>
 </section>

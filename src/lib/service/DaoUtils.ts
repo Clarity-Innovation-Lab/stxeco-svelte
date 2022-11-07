@@ -65,6 +65,7 @@ const DaoUtils = {
       if (l.indexOf('DAO:') > -1) proposalMeta.dao = l.split('DAO:')[1];
       else if (l.indexOf('Title:') > -1) proposalMeta.title = l.split('Title:')[1];
       else if (l.indexOf('Author:') > -1) proposalMeta.author = l.split('Author:')[1];
+      else if (l.indexOf('Author(s):') > -1) proposalMeta.author = l.split('Author(s):')[1];
       else if (l.indexOf('Synopsis:') > -1) proposalMeta.synopsis = l.split('Synopsis:')[1];
       else if (l.indexOf('Description:') > -1) proposalMeta.description = l.split('Description:')[1];
       else {

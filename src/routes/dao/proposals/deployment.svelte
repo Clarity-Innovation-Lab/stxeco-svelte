@@ -125,8 +125,8 @@ $: opColor = (showFromFile) ? 'warning' : 'grey';
 </script>
 
 <svelte:head>
-  <title>Contract Deployment</title>
-  <meta name="description" content="Contract Deployment" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <Modal showModal={showRulesModal} on:click={closeModal}>

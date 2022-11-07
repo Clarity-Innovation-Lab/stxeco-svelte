@@ -2,8 +2,8 @@
 </script>
 
 <svelte:head>
-	<title>DAO</title>
-	<meta name="description" content="Submit and vote on proposals" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <section>

@@ -97,7 +97,7 @@ onMount(async () => {
     <Four01 />
   {/if}
   {#if appInitialized}
-  <main id="main" class="bg-grey my-5" style="min-height: 70vh; background-size: contain;">
+  <main id="main" class="bg-grey my-3" style="min-height: 70vh; background-size: contain;">
     <slot />
   </main>
   {/if}

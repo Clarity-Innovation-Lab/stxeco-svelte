@@ -61,7 +61,7 @@ let stacksOrg = 'https://stacks.org'
       <a class="" href={webWalletLink} target="_blank">Hiro Wallet</a>
     </div>
     <div class="demo-div">
-      <a class="" href="https://www.trustmachines.co/" target="_blank">Trust Machines</a>
+      <a class="" href="https://www.xverse.app/" target="_blank">Xverse Wallet</a>
     </div>
   </div>
   <div class="col-md-2 col-sm-12 ">

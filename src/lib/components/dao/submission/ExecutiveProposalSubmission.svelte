@@ -46,11 +46,6 @@ const postData = async (url:string, data:any) => {
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 </script>
 
-<svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
-</svelte:head>
-
 <section>
 	{#if executiveTeamMember}
 	<div class="my-5">

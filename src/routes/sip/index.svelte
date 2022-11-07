@@ -17,8 +17,8 @@
 </script>
 
 <svelte:head>
-	<title>Stacks Improvement Proposals</title>
-	<meta name="description" content="Help build the foundation for the User Owned Internet" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 <!-- HEADER PANEL -->
 

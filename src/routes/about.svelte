@@ -12,8 +12,8 @@ const explorerUrl = function (address) {
 </script>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <div class="content bg-card p-5 text-white">

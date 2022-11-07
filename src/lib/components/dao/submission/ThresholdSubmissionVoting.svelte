@@ -59,11 +59,6 @@ const percentageBal = $settings.userProperties?.find((o) => o.functionName === '
 const canSubmit = percentageBal?.value.value || false;
 </script>
 
-<svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
-</svelte:head>
-
 <section>
     <div class="container my-5">
 		<div>

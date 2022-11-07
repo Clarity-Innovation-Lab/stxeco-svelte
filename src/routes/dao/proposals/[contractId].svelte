@@ -47,6 +47,7 @@ import EmergencyExecuteSubmission from '$lib/components/dao/submission/Emergency
 import ExecutiveProposalSubmission from '$lib/components/dao/submission/ExecutiveProposalSubmission.svelte'
 import Preamble from '$lib/components/dao/proposals/Preamble.svelte'
 import DaoUtils from '$lib/service/DaoUtils';
+import Countdown from '$lib/shared/Countdown.svelte'
 
 const account = getAccount();
 
@@ -54,7 +55,7 @@ export let proposal:ProposalType;
 export let contractId:string;
 
 const stacksTipHeight = $settings.info?.stacks_tip_height || 0;
-
+const endBlock = (proposal?.proposalData?.endBlockHeight || 0) - stacksTipHeight;
 // export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
 //f (!proposal || proposal.contract.tx_status === 'failed') {
   //goto(`/dao/proposals/404?contractId=${contractId}`, { replaceState: false })
@@ -74,6 +75,10 @@ const closeModal = () => {
   showSourceModal = false;
   showRulesModal = false;
 }
+const scrollTo = () => {
+  const getMeTo = document.getElementById("voting-section");
+  if (getMeTo) getMeTo.scrollIntoView({behavior: 'smooth'});
+}
 
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 const thresholdProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede002-threshold-proposal-submission') > 0);
@@ -84,7 +89,7 @@ const executiveProposalsValid = false;
 const emergencyProposalsValid = true;
 
 $: balanceAtHeight = 0
-$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + proposal?.deployTxId + '?chain=' + import.meta.env.VITE_NETWORK;
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/0xbf0609658dc238fd682e000f13c2cd273b2a3045a88c7218e79afeafa1e4c093?chain=' + import.meta.env.VITE_NETWORK;
 const color = proposal?.status.color;
 $: propStatus = proposal?.status.name;
 
@@ -123,8 +128,8 @@ onMount(async () => {
 </Modal>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 {#if !proposal}
@@ -142,16 +147,16 @@ onMount(async () => {
   <div class="row">
     {#if proposal?.status?.name === 'funding'}
       <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Crowd Fund</span><br/>{ proposal?.title }</h1></div>
-      <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes<br/>
+      <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes
         and take this proposal to a vote.</p></div>
     {:else}
       <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>Proposal</span><br/>{ proposal?.title }</h1></div>
-      <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes to bring about change<br/>
+      <div class="cols-12"><p class="strapline">Use your voice to participate in key decision making processes to bring about change
         and improvements to the Stacks Network.</p></div>
     {/if}
   </div>
   <div class="row">
-    <div class="cols-12 text-end my-3">
+    <div class="cols-12 text-end mb-3">
       <p class="w-100 text-right">
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/badge/${contractId}`) }}>badge</button>
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/${contractId}`) }}>voting</button>
@@ -165,32 +170,46 @@ onMount(async () => {
       </p>
     </div>
   </div>
-  <div class="bg-card py-4 px-5 mb-3">
-    <div class="text-white">
-      <h4  class={'text-info'}>How Voting Works</h4>
-      <p>Voting does not transfer or spend any STX (aside from the transaction fee). 
-        The proportion of your balance that you vote with (your voting power) expresses your strength 
-        of support for the proposal. Over 80% of the votes cast must
-        be in favour of the proposal for it to pass.</p>
-      <p>
-        The least voting power you can vote with is 1. But you can choose to vote with any amount 
-        up to your balance at the block height when voting began. You can vote as many times as you like,
-        up to your balance at the block height when voting began.</p>
-      <p>Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
+  <div class="row mb-5">
+    <div class="col-md-6 col-sm-12 mb-4">
+      <div class="bg-card p-3 border" style="min-height: 41vh">
+        <div class="text-white">
+          <h4  class={'text-info'}>HOW VOTING WORKS</h4>
+          <p>EcosystemDAO employs a mechanism called "Snapshot Voting," which allows any community member to vote, whether they're Stacking or not. Snapshot voting works by taking a snapshot of your STX balance (aka your "voting power") at a specific block height around the time that voting opens.</p>
+          <p>Voting does not transfer or spend any STX (aside from the transaction fee). The proportion of your balance that you choose to vote with (your voting power) expresses the strength of your support for a proposal.</p>
+          <p>Over 66% of the votes cast must be in favour of the proposal for it to pass.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 mb-4">
+      <div class="bg-card p-3 border" style="min-height: 41vh">
+        <div class="text-white">
+          <h4  class={'text-info'}>HOW TO VOTE</h4>
+          <ol>
+            <li>Make sure your wallet is connected (click 'Connect Wallet' in the top right corner of this page)</li>
+            <li>Scroll down to find the proposal voting form</li>
+            <li>Enter your voting power (the amount of STX in the account you want to commit) OR select 'Maximum Voting Power'</li>
+            <li>Click 'Yes on 2.1' or 'No on 2.1' depending on your preference</li>
+          </ol>
+          <p>After voting you'll be able to claim your "I Voted" badge for your profile picture to display on social media. So be sure to have your favorite profile picture NFTs in your voting wallet!</p>
+          {#if proposal.proposalData?.startBlockHeight}<p>Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
+          {:else}
+          <p>The proposal is not yet fully funded.</p>
+          {/if}
+      </div>
+      </div>
     </div>
   </div>
-  
-  <div class="row">
+  <div class="d-flex justify-content-center">
+    <div><span class="pointer text-akrobat-thin" on:click={scrollTo}><img class="mx-4" src="/img/png-assets/stx_eco_arrow_down.png" alt="Scroll down" width="30" height="auto" /> scroll to vote</span></div>
+  </div>
+
+  <div class="mt-5 pt-3 row" id="voting-section">
     <div class="col-md-6 col-sm-12 mb-4">
-      <div class="bg-card p-3"><Preamble {proposal}/></div>
+      <div class="bg-card p-3 border"><Preamble {proposal}/></div>
     </div>
     <div class="col-md-6 col-sm-12">
       <div>
-      {#if emergencyProposalsValid && executiveTeamMember}
-        <div class="mb-3 ">
-          <EmergencyExecuteSubmission/>
-        </div>
-      {/if}
       {#if propStatus === 'emergexec'}
         <EmergencyExecuted {proposal} />
       {:else if propStatus === 'commencing soon' ||  propStatus === 'failed' ||  propStatus === 'passed' ||  propStatus === 'concluded' || propStatus === 'voting ended' || propStatus === 'voting'}
@@ -207,6 +226,7 @@ onMount(async () => {
           {#if fundedProposalsValid}
             <div class="">
               <FundedSubmissionVoting/>
+              <Countdown endBlock={endBlock} />
             </div>
           {/if}
           {#if thresholdProposalsValid}
@@ -221,12 +241,19 @@ onMount(async () => {
           {/if}
         </div>
         {/if}
+        {#if emergencyProposalsValid && executiveTeamMember}
+        <div class="mb-3 ">
+          <EmergencyExecuteSubmission/>
+        </div>
+        {/if}
       </div>
     </div>
   </div>
+  <!--
   <p class="my-5 text-center">
     <CallButtons1 />
   </p>
+  -->
 </section>
 {/if}
 

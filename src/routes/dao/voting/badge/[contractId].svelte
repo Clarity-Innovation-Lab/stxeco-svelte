@@ -96,8 +96,8 @@ onMount(async () => {
 
 
 <svelte:head>
-	<title>DAO</title>
-	<meta name="description" content="Submit and vote on proposals" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <section>
@@ -118,15 +118,13 @@ onMount(async () => {
       {#if mempool || votes.length > 0}
       <div>
         <p>Thanks for voting on this proposal!</p>
-        <p>To make a badge...</p>
+        <p>To make a badge;</p>
         <ol>
-          <li>Click an NFT you like from your wallet - they are displayed 20 per page</li>
+          <li>Select a collection from your wallet and click an NFT</li>
           <li>Align the I voted banner and background NFT image how you like</li>
           <li>Click the download icon - the image will be downloaded to your computer</li>
           <li>In twitter set the image as your profile pic!</li>
         </ol>
-        <p>Note: if you don't have any NFTs in this account you can transfer one and 
-          return here once the transfer confirms - it will still work.</p>
       </div>
       {/if}
         {#if !$account?.stxAddress}
@@ -169,7 +167,7 @@ onMount(async () => {
         </div>
         {/if}
       </div>
-  </div>
+</div>
 </section>
 
 <style>

@@ -80,7 +80,7 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
 </script>
 
 <section>
-{#if !fundingMet}
+	{#if !fundingMet}
 	<div class="bg-card p-5 text-white">
 		<h5 class="upper" style="position: relative; top: 0px; left: 0px;" >
 			<img style="position: relative; top: -20px; left: 0px;" src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="15px" height="auto" />
@@ -130,9 +130,8 @@ p {
 	padding: 3px;
 	margin: 0 !important;
 	font-size: 1.0rem;
-	text-transform: lowercase;
 }
 .sub-text {
-	font-size: 0.8rem;
+	font-size: 0.95rem;
 }
 </style>

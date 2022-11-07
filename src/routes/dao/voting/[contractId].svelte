@@ -59,8 +59,8 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 </script>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <section>

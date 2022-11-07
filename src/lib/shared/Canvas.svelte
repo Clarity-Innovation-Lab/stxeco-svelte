@@ -6,13 +6,14 @@
 
     const dispatch = createEventDispatcher();
 
-    let bannerImageSrc = '/img/banner-white.png';
+    $: bannerImageSrc = '/img/banner-white.png';
     export let imageSrc:string;
     export let hasVotes:boolean;
     let canvas: HTMLCanvasElement;
     let canv;
     let img1; 
     let img2;
+    let componentKey = 0;
 
     const saveImage = (e) => {
       const dataUrl = canv.toDataURL({
@@ -40,14 +41,25 @@
       dispatch("toggle_canvas");
     }
 
+    const switchImage = function (img:number) {
+      if (img === 1) {
+        bannerImageSrc = '/img/banner-white.png';
+      } else {
+        bannerImageSrc = '/img/banner-blue.png';
+      }
+      //componentKey++;
+      canv.dispose();
+      mountCanvas();
+    };
+
     const modifiedHandler = function (evt) {
       const modifiedObject = evt.target;
       canv.sendToBack(img1);
       console.log(modifiedObject.get('left'), modifiedObject.get('top'));
     };
 
-    onMount(async () => {
-        canv = new fabric.Canvas(canvas, {
+    const mountCanvas = async function () {
+      canv = new fabric.Canvas(canvas, {
           preserveObjectStacking: true
         });
         var text = new fabric.Text('Loading image..', {
@@ -69,7 +81,7 @@
           fill: "blue"
         });
         fabric.Image.fromURL(imageSrc, function(img) {
-          img1 = img.set({scaleX: (canv.width / img.width), scaleY: (canv.height / img.height), left: 0, top: 0, angle: 0});
+          img1 = img.set({scaleX: (400 / img.width), scaleY: (400 / img.height), left: 0, top: 0, angle: 0});
           //img1.scaleToWidth(50);
           //img1.scaleToHeight(50);
           //canv.setBackgroundImage(img, canv.renderAll.bind(canv), {
@@ -79,9 +91,14 @@
           canv.add(img1).renderAll();
           //canv.moveTo(img1, 50);
           //anv.on('img1:modified', modifiedHandler);
-          if (hasVotes) {
+          if (bannerImageSrc.length === 0) {
+            canv.remove(text).renderAll();
+          }
+          canv.setDimensions({width:400, height:400})
+          if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
-              img2 = img.set({scaleX: (canv.width / img.width), scaleY: (canv.height / img.height * 0.1), left: 0, top: 340, angle: 0});
+              img2 = img.set({scaleX: (canv.width / img.width * 0.95), scaleY: (canv.height / img.height * 0.35), left: 10, top: 250, angle: 0});
+              //img2 = img.set({left: 0, top: 300, angle: 0});
               canv.add(img2).renderAll();
               canv.remove(text).renderAll();
               //canv.moveTo(img2, 100);
@@ -93,8 +110,12 @@
           }
         }, { crossOrigin: 'anonymous' });
         // canv.add(rect);
+        canv.setDimensions({width:400, height:400})
         canv.add(text);
+    };
 
+    onMount(async () => {
+      await mountCanvas();
     });
 </script>
 
@@ -111,10 +132,22 @@
   <p>Please register a vote on the proposal to see the I Voted Banner </p>
 </div>
 {/if}
-<div class="d-flex justify-content-center">
-  <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
+<div class="my-4 d-flex justify-content-between">
+  <div>
+    <div class="">Choose banner:
+      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src="/img/banner-white.png" alt="white banner"/></a>
+      <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="140px" src="/img/banner-blue.png" alt="blue banner"/></a>
+    </div>
+  </div>
+  <div><p class="">Hint: click the image to rotate, stretch, position the banner!</p></div>
 </div>
-
+{#key componentKey}
+<div class="d-flex justify-content-around">
+  <div>
+    <canvas bind:this={canvas} width="400" height="400" style={'width: 400px; height: 400px; border-radius: ' + borders + ';'}/>
+  </div>
+</div>
+{/key}
 <style>
   canvas {
     border: 1pt solid #ccc;

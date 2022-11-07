@@ -73,8 +73,8 @@
 </script>
 
 <svelte:head>
-	<title>SIP PROCESS</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <section class="">

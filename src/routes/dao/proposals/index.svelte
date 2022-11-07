@@ -17,7 +17,7 @@ const toggleModal = () => {
   showModal = !showModal;
 }
 let componentKey = 0;
-const titleFilters: any[] = ['edp015-', 'edp018-', 'edp019-', 'edp020-'];
+const titleFilters: any[] = ['edp015-', 'edp018-'];
 let filter = 'All Proposals';
 let proposal:ProposalType;
 let sourceCode: string|undefined = '';
@@ -80,10 +80,10 @@ const propFilterChange = (e: { detail: string; }) => {
 }
 </script>
   
-  <svelte:head>
-    <title>DAO Proposals</title>
-    <meta name="description" content="Ecosystem DAO proposals" />
-  </svelte:head>
+<svelte:head>
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
+</svelte:head>
   
   <Modal {showModal} on:click={toggleModal}>
     <div class="source-modal"><ClaritySytaxHighlighter {sourceCode} /></div>

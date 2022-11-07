@@ -31,8 +31,8 @@ $: sortedProps = DaoUtils.sortExtensions($settings.extensions, sortDir, sortFiel
 </script>
   
 <svelte:head>
-    <title>Extensions</title>
-    <meta name="description" content="DAO Extensions - Clarity Smart Contracts" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
   
 <Modal {showModal} on:click={toggleModal}>

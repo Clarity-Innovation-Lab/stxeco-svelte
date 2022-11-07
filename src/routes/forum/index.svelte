@@ -4,8 +4,8 @@ import RouteHome from "stacks-voice/components/route-home.svelte";
 </script>
 
 <svelte:head>
-	<title>Forum</title>
-	<meta name="description" content="About this app" />
+	<title>Forum DAO</title>
+	<meta name="description" content="Secure spoof free message board" />
 </svelte:head>
 
 <div id="forum">

@@ -8,8 +8,8 @@ export /** @type {boolean} */ let homepage;
 </script>
   
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Ecosystem DAO" />
+	<title>Ecosystem DAO</title>
+	<meta name="description" content="Governance of the Stacks Blockchain, Smart Contracts on Bitcoin" />
 </svelte:head>
 
 <div>

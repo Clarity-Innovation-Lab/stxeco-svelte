@@ -13,7 +13,7 @@ const contractCall = getOpenContractCall();
 export let proposal:ProposalType;
 export let balanceAtHeight:number = 0;
 
-let stacksTipHeight = $settings.info.stacks_tip_height;
+let stacksTipHeight = $settings?.info?.stacks_tip_height || 0;
 const proposalData = proposal.proposalData || { votesFor: 0, votesAgainst: 0, startBlockHeight: 0, endBlockHeight: 0, proposer: '' }
 proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
 const propStatus = proposal.status.name;
@@ -22,7 +22,7 @@ let errorMessage:string|undefined;
 let txId: string;
 $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chain=' + import.meta.env.VITE_NETWORK;
 
-let amount:number = 0;
+let amount:number = 1;
 const castVote = async (vfor:boolean) => {
     const deployer = import.meta.env.VITE_DAO_DEPLOY_ADDRESS;
     if (amount === 0 || amount < 1 || amount > balanceAtHeight) {
@@ -77,16 +77,18 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
     <div class="my-3">
       <form on:submit|preventDefault>
         <div class="mb-3 text-center">
-          <div class="d-flex justify-content-center"><input class="w-50 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/> </div>
-          <div class="form-text text-white"><a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = 1; errorMessage = undefined}}>min</a>  <a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = balanceAtHeight; errorMessage = undefined}}>max</a></div>
+          <div class="d-flex justify-content-center">
+            <input class="w-100 form-control" bind:value={amount} type="number" id="Contribution" aria-describedby="Contribution"/>
+          </div>
+          <div class="d-flex justify-content-between form-text text-small"><a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = 1; errorMessage = undefined}}>min</a>  <a class="mx-5 text-white" href="/" on:click|preventDefault={() => {amount = balanceAtHeight; errorMessage = undefined}}>max</a></div>
         </div>
       </form>
-      <div class="d-flex justify-content-around">
+      <div class="d-flex justify-content-between">
         <div>
-          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(true)}}>FOR</button>
+          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(true)}}>YES ON 2.1</button>
         </div>
         <div>
-          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(false)}}>AGAINST</button>
+          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(false)}}>NO ON 2.1</button>
         </div>
       </div>
       {#if errorMessage}

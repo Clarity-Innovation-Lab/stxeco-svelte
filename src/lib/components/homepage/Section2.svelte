@@ -38,7 +38,8 @@ function scrollTo() {
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12 hideme"  style="height: 100%;">
             <div class="">
-              <img src={rowers} alt="Rowing together" width="80%" height="auto" />
+              <img src={rowers} alt="Rowing together" width="100%" height="auto" />
+              <!--
               <div class="square-thing">
                 <div class="mb-2 text-left"><img src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="22" height="auto" /></div>
                 <h1>HERO DAO</h1>
@@ -48,6 +49,7 @@ function scrollTo() {
                 <button>› VOTE NOW</button>
                 <div class="w-100 d-flex justify-content-end"><img src="/img/png-assets/stx_eco_expand_window.png" alt="Scroll down" width="30" height="auto" /></div>
               </div>
+              -->
             </div>
           </div>
         </div>
@@ -94,6 +96,7 @@ section {
   color: #ededed;
   line-height: 2.2rem;
 }
+/**
 .square-thing {
   width: 230px;
   padding: 10px;
@@ -123,6 +126,7 @@ section {
   background-color: transparent;
   border: none;
 }
+*/
 
 .section-footer {
   position: relative;

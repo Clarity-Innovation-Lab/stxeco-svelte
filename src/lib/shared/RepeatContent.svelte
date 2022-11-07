@@ -16,13 +16,16 @@ const isText = (/** @type {any} */ tabContent) => {
 	}
 	return ans;
 }
+const filter = (text) => {
+	text = text.replaceAll('<h2>', '<h2 class="text-info">');
+	text = text.replaceAll('<strong>', '<h4 class="text-info">');
+	text = text.replaceAll('</strong>', '</h4>');
+	text = text.replaceAll('</i>', '</strong>');
+	text = text.replaceAll('<i>', '<strong>');
+	return text.replaceAll('<li>', '<li class="mb-4">');
+}
 </script>
   
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Ecosystem DAO" />
-</svelte:head>
-
 <section>
 	{#await document}
 	<p>Loading...</p>
@@ -30,7 +33,7 @@ const isText = (/** @type {any} */ tabContent) => {
 	{#if isText(prismicResponse.data.tab_content)}
   		{@html prismicH.asText(prismicResponse.data.tab_content)}
 	{:else}
-		{@html prismicH.asHTML(prismicResponse.data.tab_content)}
+		{@html filter(prismicH.asHTML(prismicResponse.data.tab_content))}
 	{/if}
   <!--
 	<h1>{prismicH.asText(prismicResponse.data.title)}</h1>
@@ -44,4 +47,10 @@ const isText = (/** @type {any} */ tabContent) => {
 </section>
 
 <style>
+h2 {
+  color: #4786cd !important;
+}
+h4 {
+	text-transform: none;
+}
 </style>
