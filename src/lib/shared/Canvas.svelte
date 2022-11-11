@@ -5,8 +5,9 @@
     import { createEventDispatcher } from "svelte";
 
     const dispatch = createEventDispatcher();
+    let downloaded = false;
 
-    $: bannerImageSrc = '/img/banner-white.png';
+    $: bannerImageSrc = '/img/banner-blue.png';
     export let imageSrc:string;
     export let hasVotes:boolean;
     let canvas: HTMLCanvasElement;
@@ -16,15 +17,26 @@
     let componentKey = 0;
 
     const saveImage = (e) => {
-      const dataUrl = canv.toDataURL({
+      let rawDataUrl = canv.toDataURL({
           format: 'png',
           quality: 0.8
-      });
-      const image = dataUrl.replace('image/png', 'image/octet-stream')
-      const link = document.createElement('a')
-      link.download = 'I_Voted_For_Stacks_Two_Point_One.png'
-      link.href = image
-      link.click()
+      })
+      //const dataUrl = rawDataUrl.replace('data:', '').replace(/^.+,/, '');;
+      const image1 = rawDataUrl; //.replace('image/png', 'image/octet-stream');
+      const link = document.createElement('a');
+      link.download = 'I_Voted_For_Stacks_Two_Point_One.png';
+      link.href = image1;
+      link.target = '_blank'
+      link.click();
+      downloaded = true;
+
+      try {
+        const image = document.createElement('img');
+        image.src = image1; //'data:image/png;base64,' + dataUrl.replace('data:', '').replace(/^.+,/, ''); //.split(';base64,')[1];
+        document.querySelector('.icontainer')?.appendChild(image);
+        //document.getElementById("dimage").src = rawDataUrl.split(';base64,')[1];
+        localStorage.removeItem('VOTED_FLAG');
+      } catch (err) {}
     }
 
     let borders = 'none';
@@ -97,7 +109,7 @@
           canv.setDimensions({width:400, height:400})
           if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
-              img2 = img.set({scaleX: (canv.width / img.width * 0.95), scaleY: (canv.height / img.height * 0.35), left: 10, top: 250, angle: 0});
+              img2 = img.set({scaleX: (canv.width / img.width), scaleY: ((canv.height * 0.22) / img.height), left: 10, top: 280, angle: 0});
               //img2 = img.set({left: 0, top: 300, angle: 0});
               canv.add(img2).renderAll();
               canv.remove(text).renderAll();
@@ -119,13 +131,15 @@
     });
 </script>
 
-<div class="d-flex justify-content-between">
-  <p class="strapline">Step 2: Download Badge</p>
-  <p class="strapline">
-    <span class="mx-2"><a href="/" on:click|preventDefault={toggleCanvas}>back</a></span>
-    <span class="mx-2"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>twitter preview</a></span>
-    <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Download width={40} height={40}/></a></span>
-  </p>
+<div class="row">
+  <div class="col-md-6 col-sm-12">Step 2: Download Badge</div>
+  <div class="col-md-6 col-sm-12 align-end text-right">
+    <div class="row">
+      <div class="col-4">
+        <span class="mx-2"><a href="/" on:click|preventDefault={toggleCanvas}>back</a></span>
+      </div>
+    </div>
+  </div>
 </div>
 {#if !hasVotes}
 <div class="d-flex justify-content-center text-warning">
@@ -134,13 +148,22 @@
 {/if}
 <div class="my-4 d-flex justify-content-between">
   <div>
-    <div class="">Choose banner:
-      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src="/img/banner-white.png" alt="white banner"/></a>
+    <div class="">Choose:
       <a href="/" on:click|preventDefault={() => switchImage(2)}><img width="140px" src="/img/banner-blue.png" alt="blue banner"/></a>
+      <a href="/" on:click|preventDefault={() => switchImage(1)}><img width="140px" src="/img/banner-white.png" alt="white banner"/></a>
     </div>
   </div>
-  <div><p class="">Hint: click the image to rotate, stretch, position the banner!</p></div>
 </div>
+<div><p class="">Hint: click the image to rotate, stretch, position the banner!</p></div>
+<div class="row text-center">
+  <div class="col-6">
+    <span class="mx-2"><a href="/" on:click|preventDefault={() => {toggleRoundness()}}>Twitter Preview</a></span>
+  </div>
+  <div class="col-6">
+    <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Download width={40} height={40}/></a></span>
+  </div>
+</div>
+{#if !downloaded}
 {#key componentKey}
 <div class="d-flex justify-content-around">
   <div>
@@ -148,6 +171,8 @@
   </div>
 </div>
 {/key}
+{/if}
+<div class="icontainer"></div>
 <style>
   canvas {
     border: 1pt solid #ccc;

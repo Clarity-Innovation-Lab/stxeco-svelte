@@ -48,7 +48,8 @@ const castVote = async (vfor:boolean) => {
           txId = data.txId
           console.log('finished contract call!', data);
           ChainUtils.updateVoters();
-          goto(`/dao/voting/badge/${proposal.contractId}?mempool=true`);
+          localStorage.setItem('VOTED_FLAG', JSON.stringify(proposal.contractId));
+          goto(`/dao/voting/badge/${proposal.contractId}`);
         },
         onCancel: () => {
           console.log('popup closed!');
@@ -60,6 +61,10 @@ $: canVote = propStatus === 'voting' && stacksTipHeight >= proposalData.startBlo
 if (balanceAtHeight === 0 || balanceAtHeight < 1) {
   canVote = false;
 }
+if (proposal.contractId.indexOf('edp015-sip-015-activation') > -1) {
+  canVote = false;
+}
+
 </script>
 
 {#if canVote}
@@ -70,7 +75,7 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
       <p>Enter the voting power and cast your vote.</p>
       <p><span class="text-warning">No STX is spent by voting but you will pay a gas fee.</span></p>
       <p>Minimum voting power is 1 or any amount up to your balance at the block height where voting started. 
-        Your wallet balance at block <span class="text-bold">{proposal.proposalData?.startBlockHeight}</span> was <span class="text-bold">{balanceAtHeight}</span> STX.
+        <span class="text-warning">Your snapshot balance at block <span class="text-bold">{proposal.proposalData?.startBlockHeight}</span> was <span class="text-bold">{balanceAtHeight}</span> STX.</span>
       </p>
     </div>
     {#if !txId}
@@ -85,10 +90,10 @@ if (balanceAtHeight === 0 || balanceAtHeight < 1) {
       </form>
       <div class="d-flex justify-content-between">
         <div>
-          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(true)}}>YES ON 2.1</button>
+          <button class="px-5 btn btn-success" on:click={() => {errorMessage = undefined; castVote(true)}}>YES ON 2.1</button>
         </div>
         <div>
-          <button class="px-5 btn btn-outline-warning" on:click={() => {errorMessage = undefined; castVote(false)}}>NO ON 2.1</button>
+          <button class="px-5 btn btn-danger" on:click={() => {errorMessage = undefined; castVote(false)}}>NO ON 2.1</button>
         </div>
       </div>
       {#if errorMessage}

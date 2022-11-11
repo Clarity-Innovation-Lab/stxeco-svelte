@@ -97,6 +97,9 @@ onMount(async () => {
   if (proposal) {
     proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
   }
+  if (proposal.contractId.indexOf('edp015-sip-015-activation') > -1) {
+    goto(`/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp-sip-activation`);
+  }
   propStatus = proposal?.status.name;
   if (proposal?.proposalData) {
     try {
@@ -105,7 +108,7 @@ onMount(async () => {
         httpMethod: 'get'
       }
       const response = await ChainUtils.postToApi('/v2/accounts', callData);
-      balanceAtHeight = ChainUtils.fromMicroAmount(response.stx.balance)
+      balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
     } catch (e) {
       balanceAtHeight = 0;
       console.log(e)
@@ -137,8 +140,8 @@ onMount(async () => {
   <div class="row">
     <div class="cols-12"><h1 class={'text-info'}><span class={'strokeme-info'}>SIP 15 Voting is Coming Soon</span></h1></div>
     <div class="cols-12">
-      <p class="strapline">The proposal for SIP-015 (the Stacks 2.1 Upgrade) will be deployed after the SIP review process.</p>
-      <p class="strapline">Once it is deployed there will be a 2 week voting window during which you'll be able to show your support and claim an "I Voted Badge."</p>
+      <p class="strapline">The proposal for SIP-015 (the Stacks 2.1 Upgrade) will be deployed soon.</p>
+      <p class="strapline">Voting will end roughly 4 weeks after the proposal opens.</p>
     </div>
   </div>
 </section>
@@ -192,7 +195,7 @@ onMount(async () => {
             <li>Click 'Yes on 2.1' or 'No on 2.1' depending on your preference</li>
           </ol>
           <p>After voting you'll be able to claim your "I Voted" badge for your profile picture to display on social media. So be sure to have your favorite profile picture NFTs in your voting wallet!</p>
-          {#if proposal.proposalData?.startBlockHeight}<p>Your wallet balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
+          {#if proposal.proposalData?.startBlockHeight}<p class="text-warning">Your snapshot balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
           {:else}
           <p>The proposal is not yet fully funded.</p>
           {/if}

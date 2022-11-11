@@ -6,7 +6,10 @@ import MetaData from '$lib/components/nft/MetaData.svelte';
 import Canvas from '$lib/shared/Canvas.svelte';
 import DaoUtils from '$lib/service/DaoUtils';
     
-const mempool = $page.url.searchParams.has('mempool');
+const json = localStorage.getItem('VOTED_FLAG');
+let voted: any;
+if (json) voted = JSON.parse(json);
+
 const account = getAccount();
 const network = getNetwork();
 let currentNetork = ($network.isMainnet) ? 'mainnet' : 'testnet'; 
@@ -115,7 +118,7 @@ onMount(async () => {
         </select>
       </div>
       {/if}
-      {#if mempool || votes.length > 0}
+      {#if voted || votes.length > 0}
       <div>
         <p>Thanks for voting on this proposal!</p>
         <p>To make a badge;</p>
@@ -136,7 +139,7 @@ onMount(async () => {
           {#if holdings.total > 0}
             {#if canvasMode}
             <div class="row">
-              <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={mempool || votes.length > 0}/>
+              <Canvas {imageSrc} on:toggle_canvas={toggleCanvas} hasVotes={voted || votes.length > 0}/>
             </div>
             {:else}
             <div class="d-flex justify-content-between">

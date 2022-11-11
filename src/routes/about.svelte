@@ -3,12 +3,29 @@
 import settings from '$lib/settings'
 import { getAccount } from '@micro-stacks/svelte';
 import { getAuth } from "@micro-stacks/svelte";
+import {onMount} from 'svelte'
+import ChainUtils from '$lib/service/ChainUtils';
 
 const auth = getAuth();
 const account = getAccount();
 const explorerUrl = function (address) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + address + '/?chain=' + import.meta.env.VITE_NETWORK;;
 }
+let balanceAtHeight = 0;
+onMount(async () => {
+    try {
+      const callData = {
+        path: '/extended/v1/address/' + $account.stxAddress + '/balances',
+        httpMethod: 'get'
+      }
+      const response = await ChainUtils.postToApi('/v2/accounts', callData);
+      balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
+    } catch (e) {
+      balanceAtHeight = 0;
+      console.log(e)
+    }
+})
+
 </script>
 
 <svelte:head>
@@ -24,7 +41,9 @@ const explorerUrl = function (address) {
 		<div class="col-12">
 			{#if $auth.isSignedIn}
 			<h4>Logged in as</h4>
-			<p class="text-warning">{#if $settings?.accountInfo?.bnsName}$settings?.accountInfo?.bnsName<br/>{/if}<a class="text-warning" href={explorerUrl($account.stxAddress)} target="_blank">{$account.stxAddress}</a></p>
+			<p class="text-warning">
+				<a class="text-warning" href={explorerUrl($account.stxAddress)} target="_blank">{$account.stxAddress}</a> 
+				<br/>Balance: {balanceAtHeight}</p>
 			{:else}
 			<p class="text-warning">Click the connect button above to connect your wallet</p>
 			{/if}

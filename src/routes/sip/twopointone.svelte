@@ -10,7 +10,8 @@
 </svelte:head>
 
 <div class="mb-4">
-  <img width="100%" src="https://images.prismic.io/edao/4c50f9d5-01fc-4bb5-80c1-722937cf1aaf_jennybg.png?auto=compress,format?auto=compress,format" alt="Stacks 2.1 banner"/>
+  <!--<img width="100%" src="https://images.prismic.io/edao/4c50f9d5-01fc-4bb5-80c1-722937cf1aaf_jennybg.png?auto=compress,format?auto=compress,format" alt="Stacks 2.1 banner"/>-->
+  <img style="border-radius: 20px;" width="100%" src="https://images.prismic.io/edao/bd2204de-8f04-4da7-b3b8-5889e5783dce_21wiggle.png?auto=compress,format" alt="Stacks 2.1 banner"/>
 </div>
 <!-- BUTTON PANEL -->
 <div class="mb-5">
@@ -18,7 +19,7 @@
     <RepeatContent docType="sip_tab" uid={sipTab} />
   </div>
   <div class="bg-card px-5 mb-4 py-4">
-    <h2 class="text-info"><img class="arrow" src="https://images.prismic.io/edao/1ee869e3-1b10-4cdc-9745-6bc5c1f45eef_stx_eco_directional_arrow.png?auto=compress,format"/> <span class="">General Information</span></h2>    
+    <h2 class="text-info"><img class="arrow" src="https://images.prismic.io/edao/1ee869e3-1b10-4cdc-9745-6bc5c1f45eef_stx_eco_directional_arrow.png?auto=compress,format" alt="indicates title"/> <span class="">General Information</span></h2>    
     <RepeatContent docType="sip_tab" uid="twoonefaq" />
   </div>
 </div>
@@ -27,15 +28,15 @@
 h2 {
   color: #4786cd !important;
 }
-  p, ul, li { color: #fff; }
   
   .arrow { position: relative; top:-18px; left:0px; width: 8px; }
   
+  
+/**
+  p, ul, li { color: #fff; }
   .sub-text { font-size: 0.95rem; margin-left: 15px; }
   
   .text-header { font-size: 1.4rem;  font-weight: 700; color: #4786cd; }
-  
-/**
 
 h1 {
   font-size: 2.8rem;

@@ -21,7 +21,7 @@ const color = proposal.status.color;
 					<div class={'col-8 border-info'}><p class="text-white">{proposalMeta.dao}</p></div>
 					<div class={'col-4 border-info'}><p class={'text-info'}>Title</p></div>
 					<div class={'col-8 border-info'}><p class="text-white">{proposalMeta.title}</p></div>
-					<div class={'col-4 border-info'}><p class={'text-info'}>Author</p></div>
+					<div class={'col-4 border-info'}><p class={'text-info'}>Author(s)</p></div>
 					<div class={'col-8 border-info'}><p class="text-white">{proposalMeta.author}</p></div>
 				</div>
 				<div class="row mt-4">
@@ -30,7 +30,7 @@ const color = proposal.status.color;
 				</div>
 				<div class="row mt-4">
 					<div class={'col-4 border-info'}><p class={'text-info'}>Description</p></div>
-					<div class={'col-12 py-1 border-info'}><p class="text-white">{proposalMeta.description}</p></div>
+					<div class={'col-12 py-1 border-info'}><p class="text-white">{@html proposalMeta.description}</p></div>
 				</div>
 			</div>
 		</div>

@@ -17,7 +17,7 @@ const toggleModal = () => {
   showModal = !showModal;
 }
 let componentKey = 0;
-const titleFilters: any[] = ['edp015-', 'edp018-'];
+const titleFilters: any[] = ['908Z1.edp015-sip-activation'];
 let filter = 'All Proposals';
 let proposal:ProposalType;
 let sourceCode: string|undefined = '';
@@ -35,7 +35,9 @@ $: matchesFilter = (proposal:ProposalType) => {
   if (titleFilters.length > 0) {
     let matched = false;
     titleFilters.forEach((o) => {
-      if (proposal.contractId.split('.')[1].startsWith(o)) matched = true;
+      if (proposal.contractId.indexOf(o) > -1) {
+        matched = true;
+      }
     })
     return matched;
   } else {

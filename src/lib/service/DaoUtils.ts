@@ -65,13 +65,22 @@ const DaoUtils = {
       if (l.indexOf('DAO:') > -1) proposalMeta.dao = l.split('DAO:')[1];
       else if (l.indexOf('Title:') > -1) proposalMeta.title = l.split('Title:')[1];
       else if (l.indexOf('Author:') > -1) proposalMeta.author = l.split('Author:')[1];
-      else if (l.indexOf('Author(s):') > -1) proposalMeta.author = l.split('Author(s):')[1];
-      else if (l.indexOf('Synopsis:') > -1) proposalMeta.synopsis = l.split('Synopsis:')[1];
+      //else if (l.indexOf('Synopsis:') > -1) proposalMeta.synopsis = l.split('Synopsis:')[1];
       else if (l.indexOf('Description:') > -1) proposalMeta.description = l.split('Description:')[1];
       else {
         proposalMeta.description += ' ' + l;
       }
     })
+    let alt = proposal.contract.source_code?.split('Synopsis:')[1] || '';
+    let alt1 = alt.split('Description:')[0];
+    proposalMeta.synopsis = alt1.replaceAll(';;', '');
+    if (proposal.contract && proposal.contract.source_code && proposal.contract.source_code.indexOf('Author(s):') > -1) {
+      alt = proposal.contract.source_code?.split('Author(s):')[1] || '';
+      alt1 = alt.split('Synopsis:')[0];
+      proposalMeta.author = alt1.replaceAll(';;', '');
+    }
+    proposalMeta.description = proposalMeta.description.replace('The upgrade is designed', '<br/><br/>The upgrade is designed');
+    proposalMeta.description = proposalMeta.description.replace('Should this upgrade pass', '<br/><br/>Should this upgrade pass');
     return proposalMeta;
   },
   sortProposals: function (proposals: ProposalType[]|undefined, asc:boolean, sortField:string) {

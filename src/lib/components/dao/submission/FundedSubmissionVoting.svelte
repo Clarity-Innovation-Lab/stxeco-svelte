@@ -8,11 +8,14 @@ import { getNotificationsContext } from 'svelte-notifications';
 import { getAccount } from '@micro-stacks/svelte';
 import { getOpenContractCall } from '@micro-stacks/svelte';
 
+
 const contractCall = getOpenContractCall();
 
 const account = getAccount();
+const isAdmin = $account.stxAddress === import.meta.env.VITE_DAO_DEPLOY_ADDRESS
 
 const { addNotification } = getNotificationsContext();
+
 
 let contractId = $page.params.contractId
 export const proposal = $settings.proposals?.find((p) => p.contract.contract_id === contractId);
@@ -86,6 +89,7 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
 			<img style="position: relative; top: -20px; left: 0px;" src="/img/png-assets/stx_eco_directional_arrow.png" alt="Scroll down" width="15px" height="auto" />
 			{fundingCost - proposal.funding} STX needed!
 		</h5>
+		{#if isAdmin}
 		<div style="margin-left: 20px;">
 			<p class="sub-text">(minimum contribution is 1 STX)</p>
 			{#if txId}
@@ -105,6 +109,7 @@ $: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txId + '?chai
 			</form>
 			<p class="sub-text">Your current balance is {balance} STX</p>
 		</div>
+		{/if}
 	</div>
 	<div class="bg-card py-4 px-5 mt-3" >
 		<div class="">
