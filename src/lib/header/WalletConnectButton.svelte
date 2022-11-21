@@ -18,7 +18,6 @@ const login = () => {
 			onFinish: payload => {
 				console.log(payload);
 				window.location.reload();
-				settings.init($account.stxAddress)           
 			},
 			onCancel: () => {
 				console.log('canceled');

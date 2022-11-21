@@ -28,7 +28,7 @@
       link.href = image1;
       link.target = '_blank'
       link.click();
-      downloaded = true;
+      // downloaded = true;
 
       try {
         const image = document.createElement('img');
@@ -131,21 +131,17 @@
     });
 </script>
 
-<div class="row">
-  <div class="col-md-6 col-sm-12">Step 2: Download Badge</div>
-  <div class="col-md-6 col-sm-12 align-end text-right">
-    <div class="row">
-      <div class="col-4">
-        <span class="mx-2"><a href="/" on:click|preventDefault={toggleCanvas}>back</a></span>
-      </div>
-    </div>
+<div class="d-flex justify-content-between">
+  <div class="">Step 2: Download Badge</div>
+  <div class="">
+    <button class={'btn btn-outline-info'} on:click|preventDefault={toggleCanvas}>back</button>
   </div>
 </div>
 {#if !hasVotes}
 <div class="d-flex justify-content-center text-warning">
   <p>Please register a vote on the proposal to see the I Voted Banner </p>
 </div>
-{/if}
+{:else}
 <div class="my-4 d-flex justify-content-between">
   <div>
     <div class="">Choose:
@@ -163,6 +159,7 @@
     <span class="mx-2"><a href="/" on:click|preventDefault={saveImage}><Download width={40} height={40}/></a></span>
   </div>
 </div>
+{/if}
 {#if !downloaded}
 {#key componentKey}
 <div class="d-flex justify-content-around">
@@ -171,8 +168,9 @@
   </div>
 </div>
 {/key}
-{/if}
+{:else}
 <div class="icontainer"></div>
+{/if}
 <style>
   canvas {
     border: 1pt solid #ccc;

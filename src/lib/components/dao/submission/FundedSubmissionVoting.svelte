@@ -64,7 +64,7 @@ const submit = async () => {
 		postConditions: getSTXMintPostConds(amountUSTX),
 		postConditionMode: PostConditionMode.Deny,
 		contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-		contractName: 'ede008-funded-proposal-submission-v3',
+		contractName: 'ede008-funded-proposal-submission-v5',
 		functionName: 'fund',
 		functionArgs: functionArgs,
 		onFinish: async (data) => {

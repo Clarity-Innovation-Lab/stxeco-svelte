@@ -73,16 +73,14 @@ onMount(async () => {
   try {
     // $network.setNetwork(import.meta.env.VITE_NETWORK);
     bootstrap = (await import('bootstrap'));
-    await settings.init($account.stxAddress);
-    //holdings.init($account.stxAddress);
-    appInitialized = true;
-    console.log("Page=", page);
     await tick();
+    await settings.init($account.stxAddress);
     setTimeout(function () {
       const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
       if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
       const popoverTriggerList = window.document.querySelectorAll('[data-bs-toggle="dropdown"]');
       if (popoverTriggerList) [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Dropdown(popoverTriggerEl));
+      appInitialized = true;
     }, 1000)
   } catch(error) {
         console.log(error);

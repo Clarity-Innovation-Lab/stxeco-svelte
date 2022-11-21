@@ -48,6 +48,7 @@ import ExecutiveProposalSubmission from '$lib/components/dao/submission/Executiv
 import Preamble from '$lib/components/dao/proposals/Preamble.svelte'
 import DaoUtils from '$lib/service/DaoUtils';
 import Countdown from '$lib/shared/Countdown.svelte'
+import FormatUtils from '$lib/service/FormatUtils';
 
 const account = getAccount();
 
@@ -83,31 +84,28 @@ const scrollTo = () => {
 const executiveTeamMember = $settings.userProperties?.find((o) => o.functionName === 'is-executive-team-member')?.value?.value || false
 const thresholdProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede002-threshold-proposal-submission') > 0);
 const thresholdProposalsValid = thresholdProposalExt && thresholdProposalExt.valid;
-const fundedProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission-v3') > 0);
+const fundedProposalExt = $settings.extensions?.find((o: { contract: { contract_id: string|string[]; }; }) => o.contract.contract_id.indexOf('ede008-funded-proposal-submission-v5') > 0);
 const fundedProposalsValid = fundedProposalExt && fundedProposalExt.valid;
 const executiveProposalsValid = false;
 const emergencyProposalsValid = true;
 
 $: balanceAtHeight = 0
-$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/0xbf0609658dc238fd682e000f13c2cd273b2a3045a88c7218e79afeafa1e4c093?chain=' + import.meta.env.VITE_NETWORK;
+$: explorerUrl = import.meta.env.VITE_STACKS_EXPLORER + '/txid/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.ede007-snapshot-proposal-voting-v5?chain=' + import.meta.env.VITE_NETWORK;
 const color = proposal?.status.color;
 $: propStatus = proposal?.status.name;
 
 onMount(async () => {
   if (proposal) {
     proposal.status = DaoUtils.getStatus(stacksTipHeight, proposal);
-  }
-  if (proposal.contractId.indexOf('edp015-sip-015-activation') > -1) {
-    goto(`/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp-sip-activation`);
+    if (proposal.contractId.indexOf('edp015-sip-015-activation') > -1) {
+      goto(`/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp-sip-activation`);
+    }
   }
   propStatus = proposal?.status.name;
   if (proposal?.proposalData) {
     try {
-      const callData = {
-        path: '/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal?.proposalData?.startBlockHeight,
-        httpMethod: 'get'
-      }
-      const response = await ChainUtils.postToApi('/v2/accounts', callData);
+      const response = await ChainUtils.getFromApi('/extended/v1/address/' + $account.stxAddress + '/balances?until_block=' + proposal?.proposalData.startBlockHeight);
+      // const response = await ChainUtils.postToApi('/v2/accounts', callData);
       balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
     } catch (e) {
       balanceAtHeight = 0;
@@ -195,7 +193,7 @@ onMount(async () => {
             <li>Click 'Yes on 2.1' or 'No on 2.1' depending on your preference</li>
           </ol>
           <p>After voting you'll be able to claim your "I Voted" badge for your profile picture to display on social media. So be sure to have your favorite profile picture NFTs in your voting wallet!</p>
-          {#if proposal.proposalData?.startBlockHeight}<p class="text-warning">Your snapshot balance at block {proposal.proposalData?.startBlockHeight} was {balanceAtHeight} STX.</p>
+          {#if proposal.proposalData?.startBlockHeight}<p class="text-warning">Your snapshot balance at block {FormatUtils.fmtNumber(proposal.proposalData?.startBlockHeight)} was {balanceAtHeight} STX.</p>
           {:else}
           <p>The proposal is not yet fully funded.</p>
           {/if}
@@ -218,7 +216,7 @@ onMount(async () => {
       {:else if propStatus === 'commencing soon' ||  propStatus === 'failed' ||  propStatus === 'passed' ||  propStatus === 'concluded' || propStatus === 'voting ended' || propStatus === 'voting'}
         {#if proposal?.proposalData && proposal.votingContract === 'ede001-proposal-voting'}
           <PropBallotBox {proposal} />
-        {:else if proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting-v3'}
+        {:else if proposal.proposalData && proposal.votingContract === 'ede007-snapshot-proposal-voting-v5'}
           <SnapBallotBox {proposal} {balanceAtHeight}/>
         {/if}
         <VotingSchedule {proposal} {balanceAtHeight}/>

@@ -5,25 +5,62 @@ import { getAccount } from '@micro-stacks/svelte';
 import { getAuth } from "@micro-stacks/svelte";
 import {onMount} from 'svelte'
 import ChainUtils from '$lib/service/ChainUtils';
+import { serializeCV, uintCV, standardPrincipalCV, cvToJSON, deserializeCV } from "micro-stacks/clarity";
+import { bytesToHex } from "micro-stacks/common";
 
 const auth = getAuth();
 const account = getAccount();
 const explorerUrl = function (address) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + address + '/?chain=' + import.meta.env.VITE_NETWORK;;
 }
+let historicLocked = null;
+let historicTotal = null;
+let historicVotingCap = null;
 let balanceAtHeight = 0;
-onMount(async () => {
+let lockedAtHeight = 0;
+let liquidAtHeight = 0;
+let stacksTipHeight = $settings.info.stacks_tip_height;
+let stxAddress = $account.stxAddress;
+const resetHeight = async () => {
+	stacksTipHeight = $settings.info.stacks_tip_height;
+	stxAddress = $account.stxAddress;
+	changeHeight();
+	historicData();
+}
+
+// /v2/contracts/call-read/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z/ede007-snapshot-proposal-voting-v5/get-historical-values
+const historicData = async () => {
+	const height = (stacksTipHeight === $settings.info.stacks_tip_height) ? stacksTipHeight - 1 : stacksTipHeight;
+	let functionArgs = [`0x${bytesToHex(serializeCV(uintCV(height)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(stxAddress)))}`];
+	const data = {
+		contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+		contractName: 'ede007-snapshot-proposal-voting-v5',
+		functionName: 'get-historical-values',
+		functionArgs
+	}
+	const raw = await ChainUtils.callContractReadOnly(data);
+    const historic = cvToJSON(deserializeCV(raw.result));
+	historicTotal = ChainUtils.fromMicroAmount(historic.value.value['user-balance'].value);
+	historicVotingCap = ChainUtils.fromMicroAmount(historic.value.value['voting-cap'].value);
+	historicLocked = balanceAtHeight - historicTotal;
+	console.log(historic);
+}
+
+const changeHeight = async () => {
     try {
-      const callData = {
-        path: '/extended/v1/address/' + $account.stxAddress + '/balances',
-        httpMethod: 'get'
-      }
-      const response = await ChainUtils.postToApi('/v2/accounts', callData);
-      balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
+      const response = await ChainUtils.getFromApi('/extended/v1/address/' + stxAddress + '/balances?until_block=' + stacksTipHeight);
+      balanceAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance))
+      lockedAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.locked))
+      liquidAtHeight = ChainUtils.fromMicroAmount(Number(response.stx.balance) - Number(response.stx.locked))
+	  historicData();
     } catch (e) {
       balanceAtHeight = 0;
       console.log(e)
     }
+}
+onMount(async () => {
+	changeHeight(stacksTipHeight);
+	historicData(stacksTipHeight);
 })
 
 </script>
@@ -43,7 +80,46 @@ onMount(async () => {
 			<h4>Logged in as</h4>
 			<p class="text-warning">
 				<a class="text-warning" href={explorerUrl($account.stxAddress)} target="_blank">{$account.stxAddress}</a> 
-				<br/>Balance: {balanceAtHeight}</p>
+			</p>
+			<h6>Balance</h6>
+			<div class="form-field mb-3">
+				<input class="w-75" style="height: 42px;" placeholder="Stacks block height" type="number" bind:value={stacksTipHeight}/>
+				<button class="outline-dark" on:click={changeHeight}>
+					Fetch
+				</button>
+				<button class="outline-dark" on:click={resetHeight}>
+					Reset
+				</button>
+			</div>
+			<div class="form-field mb-5">
+				<input class="w-75" style="height: 42px;" placeholder="Stacks address" type="string" bind:value={stxAddress}/>
+				<button class="outline-dark" on:click={changeHeight}>
+					Fetch
+				</button>
+				<button class="outline-dark" on:click={resetHeight}>
+					Reset
+				</button>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h6>User Balance From API</h6>
+					<div class="card text-dark my-3 p-4">
+						<div class="card-text py-2">Total Balance: {balanceAtHeight}</div>
+						<div class="card-text py-2">Locked Balance: {lockedAtHeight}</div>
+						<div class="card-text py-2">Liquid Balance: {liquidAtHeight}</div>
+					</div>
+				</div>
+				<!--
+				<div class="col-md-6 col-sm-12">
+					<h6>Data From POX Contract (via Voting contract)</h6>
+					<div class="card text-dark my-3 p-4">
+						<div class="card-text py-2">Total Balance: {historicTotal}</div>
+						<div class="card-text py-2">Locked Balance: {historicLocked}</div>
+						<div class="card-text py-2">Voting Cap: {historicVotingCap}</div>
+					</div>
+				</div>
+				-->
+			</div>
 			{:else}
 			<p class="text-warning">Click the connect button above to connect your wallet</p>
 			{/if}

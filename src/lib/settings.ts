@@ -30,12 +30,7 @@ function createStore() {
       })
   
       if (stxAddress) {
-        const callData = {
-          path: '/v2/accounts/' + stxAddress,
-          httpMethod: 'get',
-          postData: null
-        }
-        const res = await ChainUtils.postToApi('/v2/accounts', callData);
+        const res = await ChainUtils.getFromApi('/v2/accounts/' + stxAddress);
         res.balance = ChainUtils.fromMicroAmount(res.balance);
         res.locked = ChainUtils.fromMicroAmount(res.locked);
         daoData.accountInfo = res;

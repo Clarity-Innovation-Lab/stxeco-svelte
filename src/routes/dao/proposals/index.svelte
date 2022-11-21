@@ -17,7 +17,7 @@ const toggleModal = () => {
   showModal = !showModal;
 }
 let componentKey = 0;
-const titleFilters: any[] = ['908Z1.edp015-sip-activation'];
+const titleFilters: any[] = ['SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation'];
 let filter = 'All Proposals';
 let proposal:ProposalType;
 let sourceCode: string|undefined = '';

@@ -4,6 +4,7 @@ import settings from '$lib/settings';
 import { contractPrincipalCV } from 'micro-stacks/clarity';
 import { PostConditionMode } from 'micro-stacks/transactions';
 import { getOpenContractCall } from '@micro-stacks/svelte';
+import FormatUtils from '$lib/service/FormatUtils';
 import ChainUtils from '$lib/service/ChainUtils';
 import type { ProposalType } from "../../../../types/stxeco.type";
 import DaoUtils from '$lib/service/DaoUtils';
@@ -87,11 +88,11 @@ const concludeVote = async () => {
       </div>
     {:else if stacksTipHeight < proposalData.startBlockHeight}
       <h4 class={'text-' + proposal.status.color}>Voting Opens Soon</h4>
-      <div class=" text-white">Voting starts in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
-      <Countdown endBlock={proposalData.startBlockHeight - stacksTipHeight} />
+      <div class=" text-white">Voting starts at {FormatUtils.fmtNumber(proposalData.startBlockHeight)} in {proposalData.startBlockHeight - stacksTipHeight} blocks</div>
+      <!-- <Countdown endBlock={proposalData.startBlockHeight - stacksTipHeight} /> -->
     {:else}
       <h4 class={'text-' + proposal.status.color}>Voting Open</h4>
-      <p class="text-white">Voting closes in {proposalData.endBlockHeight - stacksTipHeight} blocks;</p>
+      <p class="text-white">Voting closes in {FormatUtils.fmtNumber(proposalData.endBlockHeight - stacksTipHeight)} blocks;</p>
       <Countdown endBlock={proposalData.endBlockHeight - stacksTipHeight} />
       <!--
       <div class={'mt-5 d-flex justify-content-around text-' + proposal.status.color}>
@@ -115,8 +116,8 @@ const concludeVote = async () => {
         </div>
       </div>
       <div class="d-flex justify-content-between text-white">
-        <div>{ proposalData.startBlockHeight }</div>
-        <div>{ proposalData.endBlockHeight }</div>
+        <div>{ FormatUtils.fmtNumber(proposalData.startBlockHeight) }</div>
+        <div>{ FormatUtils.fmtNumber(proposalData.endBlockHeight) }</div>
       </div>
     {/if}
 </div>

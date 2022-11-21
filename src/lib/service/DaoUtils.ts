@@ -30,7 +30,7 @@ const DaoUtils = {
         } else {
           status = { name: 'voting', color: 'info', colorCode: info };
         }
-      } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting-v3') {
+      } else if (proposal.votingContract === 'ede007-snapshot-proposal-voting-v5') {
         status = { name: 'voting', color: 'info', colorCode: info };
       } else if (proposal.votingContract === 'ede004-emergency-execute') {
         status = { name: 'voting', color: 'info', colorCode: info };
@@ -50,7 +50,7 @@ const DaoUtils = {
         if (pd.concluded) return 'vote concluded';
         else return 'voting ended';
       } else if (stacksTipHeight < pd.startBlockHeight) {
-        return 'Voting starts in ' + (pd.startBlockHeight - stacksTipHeight) + ' blocks';
+        return 'Voting starts at ( ' + pd.startBlockHeight + ' ) in ' + (pd.startBlockHeight - stacksTipHeight) + ' blocks';
       } else {
         return (pd.endBlockHeight - stacksTipHeight) + ' blocks to go!'
       }

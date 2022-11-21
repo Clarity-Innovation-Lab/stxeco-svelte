@@ -12,6 +12,9 @@ const FormatUtils = {
     if (currency === 'stx') {
       return formatter.format(amount).replace('$', '') // &#931;
     }
+  },
+  fmtNumber: function (amount:number|undefined) {
+    if (amount) return new Intl.NumberFormat().format(amount);
   }
 }
 export default FormatUtils

@@ -6,9 +6,9 @@ import MetaData from '$lib/components/nft/MetaData.svelte';
 import Canvas from '$lib/shared/Canvas.svelte';
 import DaoUtils from '$lib/service/DaoUtils';
     
-const json = localStorage.getItem('VOTED_FLAG');
-let voted: any;
-if (json) voted = JSON.parse(json);
+// const json = localStorage.getItem('VOTED_FLAG');
+const voted = true;
+// if (json) voted = JSON.parse(json);
 
 const account = getAccount();
 const network = getNetwork();
@@ -16,7 +16,6 @@ let currentNetork = ($network.isMainnet) ? 'mainnet' : 'testnet';
 let votes: any[] = [];
 let assetIdList: any[] = [];
 let assetId:any;
-let hasVotes = true;
 $: offset = 0;
 $: holdings = {
   total: 0,
@@ -92,7 +91,6 @@ onMount(async () => {
   res = await fetch(url);
   if (res.ok) {
     votes = await res.json();
-    hasVotes = votes?.length > 0;
   }
 })
 </script>
@@ -107,6 +105,7 @@ onMount(async () => {
   <div class="">
     <div class="container text-white">
       <h1 class="text-info"><span class="strokeme-info">Badge</span> Pickup</h1>
+      {#if voted || votes.length > 0}<h2 class="text-center text-info my-4 mb-5">Thank you so much on voting on Stacks 2.1 Upgrade. <br/>You are now part of Stacks' history! 🎉</h2>{/if}
       {#if assetIdList.length > 0}
       {#if !canvasMode}
       <div class="mb-5">
@@ -120,8 +119,7 @@ onMount(async () => {
       {/if}
       {#if voted || votes.length > 0}
       <div>
-        <p>Thanks for voting on this proposal!</p>
-        <p>To make a badge;</p>
+        <p>To make a badge (you need to connect your wallet via a desktop browser);</p>
         <ol>
           <li>Select a collection from your wallet and click an NFT</li>
           <li>Align the I voted banner and background NFT image how you like</li>

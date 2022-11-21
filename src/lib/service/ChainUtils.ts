@@ -19,8 +19,22 @@ const ChainUtils = {
     else if (network === 'testnet') 'testnet'; //return new StacksTestnet();
     else return 'mocknet' // new StacksMocknet();
   },  
-  postToApi: async (path:string, data:unknown) => {
+  getFromApi: async (path:string) => {
+    const url = import.meta.env.VITE_APP_STACKS_API + path;
+    const response = await fetch(url);
+    return response.json();
+  },  
+  postToDaoApi: async (path:string, data:unknown) => {
     const url = import.meta.env.VITE_CLARITYLAB_API + '/daoapi' + path;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return response.json();
+  },  
+  postToApi: async (path:string, data:unknown) => {
+    const url = import.meta.env.VITE_APP_STACKS_API + path;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -107,6 +121,19 @@ const ChainUtils = {
       arr[i] = (str.charCodeAt(i).toString(16)).slice(-4)
     }
     return '0x' + arr.join('')
+  },
+  callContractReadOnly: async (data:any) => {
+      const url = import.meta.env.VITE_APP_STACKS_API + '/v2/contracts/call-read/' + data.contractAddress + '/' + data.contractName + '/' + data.functionName
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          arguments: data.functionArgs,
+          sender: data.contractAddress,
+        })
+      });
+      const val = response.json();
+      return val;
   }
 }
 export default ChainUtils
