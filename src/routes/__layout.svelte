@@ -54,7 +54,7 @@ afterNavigate((nav) => {
 
   if (!$auth.isSignedIn && !$auth.isRequestPending) {
     const pname = nav.to?.pathname||'/';
-    if (pname.indexOf('/dao/proposals/') > -1 || pname.indexOf('/dao/voting') > -1) {
+    if (pname.indexOf('/dao/proposals/') > -1) {
       console.log('to: ', nav.to);
       //goto(`/401`, { replaceState: true })
       four01 = true;

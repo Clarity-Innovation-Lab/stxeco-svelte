@@ -16,7 +16,7 @@ export let homepage:boolean;
 	</div>
 </div>
 -->
-<nav class="navbar navbar-expand-md navbar-light transparent py-1 mt-2 mb-3">
+<nav id="page-header" class="navbar navbar-expand-md navbar-light transparent py-1 mt-2 mb-3">
 	<div class="container-fluid mt-4 mx-5">
 	  	<a class="navbar-brand mx-0 px-0" href="/">
 			{#if homepage}

@@ -109,7 +109,11 @@
           canv.setDimensions({width:400, height:400})
           if (hasVotes && bannerImageSrc.length > 0) {
             fabric.Image.fromURL(bannerImageSrc, function(img) {
-              img2 = img.set({scaleX: (canv.width / img.width), scaleY: ((canv.height * 0.22) / img.height), left: 10, top: 280, angle: 0});
+              if (bannerImageSrc.indexOf('white') > -1) {
+                img2 = img.set({scaleX: (canv.width / (img.width * 1.1)), scaleY: ((canv.height * 0.27) / img.height), left: 10, top: 280, angle: 0});
+              } else {
+                img2 = img.set({scaleX: (canv.width / img.width), scaleY: ((canv.height * 0.22) / img.height), left: 10, top: 280, angle: 0});
+              }
               //img2 = img.set({left: 0, top: 300, angle: 0});
               canv.add(img2).renderAll();
               canv.remove(text).renderAll();

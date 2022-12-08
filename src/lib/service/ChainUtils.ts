@@ -79,7 +79,18 @@ const ChainUtils = {
       if (!gftPrecision) gftPrecision = 6;
       const val = (Math.round(amountMicroStx) / 1000000).toFixed(6)
       const parts = val.split('.');
-      return '<span class="text-warning" style="font-size: 1.2rem;">' + parts[0] + '</span>.<span class="part1">' + parts[1] + '</span>'
+      return '<span class="text-warning">' + parts[0] + '</span>.<span class="part1">' + parts[1] + '</span>'
+    } catch {
+      return 0
+    }
+  },
+  fromOnChainAmount1: function (amountMicroStx: number, gftPrecision?: number|undefined) {
+    try {
+      if (amountMicroStx === 0) return 0;
+      if (!gftPrecision) gftPrecision = 6;
+      //const val = (Math.round(amountMicroStx) / 1000000).toFixed(6)
+      //const parts = val.split('.');
+      return Math.floor((Math.round(amountMicroStx) / 1000000));
     } catch {
       return 0
     }
@@ -107,6 +118,7 @@ const ChainUtils = {
     return Math.round(amount * precision) / precision // amount.toFixed(2)
   },
   fromMicroAmount: function (amountMicroStx: number) {
+    if (amountMicroStx === 0) return 0;
     try {
       if (amountMicroStx === 0) return 0
       const val = Math.round(amountMicroStx) / (precision)

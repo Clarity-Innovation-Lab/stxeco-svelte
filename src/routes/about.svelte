@@ -1,8 +1,8 @@
 <script>
 // @ts-nocheck
 import settings from '$lib/settings'
-import { getAccount } from '@micro-stacks/svelte';
-import { getAuth } from "@micro-stacks/svelte";
+import { getAuth, getAccount } from '@micro-stacks/svelte';
+import { c32ToB58 } from "micro-stacks/crypto";
 import {onMount} from 'svelte'
 import ChainUtils from '$lib/service/ChainUtils';
 import { serializeCV, uintCV, standardPrincipalCV, cvToJSON, deserializeCV } from "micro-stacks/clarity";
@@ -13,6 +13,8 @@ const account = getAccount();
 const explorerUrl = function (address) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + address + '/?chain=' + import.meta.env.VITE_NETWORK;;
 }
+const decodeAddr = c32ToB58($account.stxAddress);
+//const recodeAddr = b58ToC32(c32ToB58($account.stxAddress));
 let historicLocked = null;
 let historicTotal = null;
 let historicVotingCap = null;
@@ -79,7 +81,7 @@ onMount(async () => {
 			{#if $auth.isSignedIn}
 			<h4>Logged in as</h4>
 			<p class="text-warning">
-				<a class="text-warning" href={explorerUrl($account.stxAddress)} target="_blank">{$account.stxAddress}</a> 
+				<a class="text-warning" href={explorerUrl($account.stxAddress)} target="_blank">{$account.stxAddress} / {decodeAddr}</a> 
 			</p>
 			<h6>Balance</h6>
 			<div class="form-field mb-3">

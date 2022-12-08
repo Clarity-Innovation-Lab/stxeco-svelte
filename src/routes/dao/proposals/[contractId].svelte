@@ -160,7 +160,7 @@ onMount(async () => {
     <div class="cols-12 text-end mb-3">
       <p class="w-100 text-right">
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/badge/${contractId}`) }}>badge</button>
-        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/${contractId}`) }}>voting</button>
+        <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/dao/voting/results/${contractId}`) }}>results</button>
         <!--
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { openSourceModal() }}>clarity</button>
         <button class={'btn btn-outline-info'} on:click|preventDefault={() => { goto(`/forum`) }}>forum</button>

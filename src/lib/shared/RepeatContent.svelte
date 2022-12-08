@@ -47,10 +47,4 @@ const filter = (text) => {
 </section>
 
 <style>
-h2 {
-  color: #4786cd !important;
-}
-h4 {
-	text-transform: none;
-}
 </style>

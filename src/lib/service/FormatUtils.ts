@@ -14,6 +14,7 @@ const FormatUtils = {
     }
   },
   fmtNumber: function (amount:number|undefined) {
+    if (amount === 0) return 0;
     if (amount) return new Intl.NumberFormat().format(amount);
   }
 }
