@@ -63,9 +63,11 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
 
 <section class="bg-card my-5 p-4">
   <div class="row">
-    <div class="cols-12"><h1 class={'text-' + color}><span>Method 3: Liquid STX Balance</span>
-      <span class="css-1wdxw4w"><svg viewBox="0 0 812 812" focusable="false" class="chakra-icon css-1wdxw4w"><path fill-rule="evenodd" clip-rule="evenodd" d="M406 812C630.228 812 812 630.228 812 406C812 181.772 630.228 0 406 0C181.772 0 0 181.772 0 406C0 630.228 181.772 812 406 812ZM583 394.451V351.353H477.186L551.494 239H495.317L405.851 374.536L316.683 239H260.506L334.814 351.353H229V394.748H583V394.451ZM550.305 593L475.106 479.161H583V436.36H229V479.458H336.894L261.695 593H317.574L405.851 459.247L494.128 593H550.305Z" fill="white"></path></svg></span>
-    </h1></div>
+    <div class="cols-12">
+      <h1 class={'text-' + color}><span>Method 3: Liquid STX Balance</span>
+        <span class="css-1wdxw4w"><svg viewBox="0 0 812 812" focusable="false" class="chakra-icon css-1wdxw4w"><path fill-rule="evenodd" clip-rule="evenodd" d="M406 812C630.228 812 812 630.228 812 406C812 181.772 630.228 0 406 0C181.772 0 0 181.772 0 406C0 630.228 181.772 812 406 812ZM583 394.451V351.353H477.186L551.494 239H495.317L405.851 374.536L316.683 239H260.506L334.814 351.353H229V394.748H583V394.451ZM550.305 593L475.106 479.161H583V436.36H229V479.458H336.894L261.695 593H317.574L405.851 459.247L494.128 593H550.305Z" fill="white"></path></svg></span>
+      </h1>
+    </div>
     <div class="cols-12"><h4 class="text-white">Total voting power is <span class="text-warning">{totalVotePower}</span> with votes cast from <span class="text-warning">{contractEvents.length}</span> accounts.</h4></div>
     <div class="cols-12"><p class="text-white"><a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation">Not too late to vote</a> - voting ends at block 87,319.</p></div>
   </div>
