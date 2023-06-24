@@ -111,7 +111,6 @@ onMount(async () => {
 						<div class="card-text py-2">Liquid Balance: {liquidAtHeight}</div>
 					</div>
 				</div>
-				<!--
 				<div class="col-md-6 col-sm-12">
 					<h6>Data From POX Contract (via Voting contract)</h6>
 					<div class="card text-dark my-3 p-4">
@@ -120,6 +119,7 @@ onMount(async () => {
 						<div class="card-text py-2">Voting Cap: {historicVotingCap}</div>
 					</div>
 				</div>
+				<!--
 				-->
 			</div>
 			{:else}

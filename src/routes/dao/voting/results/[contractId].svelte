@@ -71,7 +71,7 @@ const scrollTo = (section: number) => {
 const inFavour3 = (proposal.proposalData && (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst) > 0) ? Number(((proposal.proposalData.votesFor / (proposal.proposalData.votesFor + proposal.proposalData.votesAgainst)) * 100).toFixed(2)) : 0;
 //const inFavour2 = (method2) ? Number(((method2.metadata.totalAmounts.yes / (method2.metadata.totalAmounts.yes + method2.metadata.totalAmounts.no)) * 100).toFixed(2)) : 0;
 const inFavour2 = (method2a) ? Number(((method2a.countFor / (method2a.countFor + method2a.countAgainst)) * 100).toFixed(2)) : 0;
-const inFavour1 = 100; //(method2) ? Number(((method2.metadata.totalAmounts.yes / (method2.metadata.totalAmounts.yes + method2.metadata.totalAmounts.no)) * 100).toFixed(2)) : 0;
+const inFavour1 = 100.00; //(method2) ? Number(((method2.metadata.totalAmounts.yes / (method2.metadata.totalAmounts.yes + method2.metadata.totalAmounts.no)) * 100).toFixed(2)) : 0;
 
 </script>
 

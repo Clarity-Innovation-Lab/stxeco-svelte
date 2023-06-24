@@ -69,7 +69,7 @@ $: sortedEvents = votes.sort(DaoUtils.dynamicSort(sortDir + sortField));
       </h1>
     </div>
     <div class="cols-12"><h4 class="text-white">Total voting power is <span class="text-warning">{totalVotePower}</span> with votes cast from <span class="text-warning">{contractEvents.length}</span> accounts.</h4></div>
-    <div class="cols-12"><p class="text-white"><a href="/dao/proposals/SP3JP0N1ZXGASRJ0F7QAHWFPGTVK9T2XNXDB908Z.edp015-sip-activation">Not too late to vote</a> - voting ends at block 87,319.</p></div>
+    <div class="cols-12"><p class="text-white">Voting now closed.</p></div>
   </div>
   <div class="bg-card py-4 px-5 mb-3">
     <VotingResults {proposal} {stacksTipHeight} {totalAccountsAgainst} {totalAccountsFor}/>

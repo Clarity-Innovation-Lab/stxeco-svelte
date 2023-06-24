@@ -8,7 +8,7 @@ import WalletConnectButton from '$lib/header/WalletConnectButton.svelte'
 	<p class="mt-3 text-warning">Please connect your Stacks Wallet to continue</p>
 	<p class="text-warning"><WalletConnectButton /></p>
 
-	<p class="mt-5">Download <a href="https://wallet.hiro.so/#download" target="_blank">Hiro web wallet</a></p>
+	<p class="mt-5">Download <a href="https://wallet.hiro.so/#download" target="_blank">Stacks web wallet</a></p>
 	<p class="">Download <a href="https://www.xverse.app/" target="_blank">Xverse wallet</a></p>
 
 	<p class="mt-5">There are several types</p>
